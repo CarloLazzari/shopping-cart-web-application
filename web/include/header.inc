@@ -31,6 +31,15 @@
         margin-left: 80px;
     }
 
+    #content {
+        position:relative;
+    }
+    #content img{
+        position: absolute;
+        bottom: -40px;
+        right: 10px;
+    }
+
 </style>
 
 <header class="clearfix">
@@ -41,6 +50,11 @@
         <% } %>
     </h1>
 
+    <%if(loggedOn){%>
+    <div id="content">
+        <img alt="hair" src="images/hair.png" width="100" height="125">
+    </div>
+    <%}%>
 
     <form name ="logoutForm" action="Dispatcher" method="post">
         <input type="hidden" name="controllerAction" value="HomeManagement.logout"/>
@@ -80,8 +94,10 @@
             </li>
             <% } %>
         </ul>
+        <%if(loggedOn){%>
         <a id ="logout" href = "javascript:logoutForm.submit()">Logout </a>
         <br/>
+        <%}%>
     </nav>
 
     <%if(!loggedOn){%>

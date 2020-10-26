@@ -135,6 +135,13 @@
 				f.submit();
 			}
 
+         function mainOnLoadHandler(){
+             document.getElementById("searchImage").addEventListener("click",search);
+         }
+
+         window.addEventListener("load",mainOnLoadHandler);
+
+
 		</script>
 	</head>
 		<body>
@@ -179,7 +186,9 @@
 
 					</script>
 					<section style="margin-top: 3px;">
-						<img alt="search" id="searchImage" src="images/search.png" onclick="window.search()" width="22" height="22">
+						<a onclick="window.search()">
+							<img alt="search" id="searchImage" src="images/search.png" width="22" height="22">
+						</a>
 					</section>
 
 					<section id="fumetti" class="clearfix">

@@ -30,6 +30,7 @@
 	</title>
 
 	<script lang="javascript">
+
        function goback() {
            document.backForm.submit();
        }

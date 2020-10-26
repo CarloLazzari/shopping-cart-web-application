@@ -11,7 +11,9 @@
     applicationMessage="<%=applicationMessage%>";
   <%}%>
   function onLoadHandler() {
-    headerOnLoadHandler();
+    <%if(!loggedOn) { %>
+       headerOnLoadHandler();
+    <% } %>
     try { mainOnLoadHandler(); } catch (e) {}
     if (applicationMessage!==undefined) alert(applicationMessage);
   }

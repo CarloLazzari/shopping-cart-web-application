@@ -31,6 +31,10 @@
     </title>
     <script lang="javascript">
 
+        function goback() {
+            document.backForm.submit();
+        }
+
         function addToCart(ISBN){
             const f = document.addToCartForm;
             f.ISBN.value = ISBN;
@@ -63,7 +67,8 @@
 
         #buy {
             float:right;
-            padding-bottom: 20px;
+            margin-top: 8px;
+
         }
         #flushCart {
             padding-left: 15px;
@@ -84,7 +89,7 @@
         <% } %>
         </br>
         <a href="javascript:flushCart()">
-            <img alt="flushCart" id="flushCart" src="images/flush_cart.png" width="100" height="100">
+            <img alt="flushCart" id="flushCart" src="images/flush.png" width="100" height="100">
         </a>
         <a href="javascript:buy()">
             <img alt="buy" id="buy" src="images/buy.png" width="100" height="100">
@@ -131,13 +136,15 @@
             <input type="hidden" name="controllerAction" value="CartManagement.flushCart"/>
         </form>
 
+        <form name="backForm" method="post" action="Dispatcher">
+            <input type="hidden" name="controllerAction" value="ProductsManagement.view"/>
+        </form>
+
         <div class="clearfix"></div>
         </br>
-        <section>
-            <form id ="backForm">
-                <input type="button" value="Go back!" onclick="history.back()">
-            </form>
-        </section>
+
+        <input type="button" name="backButton" class="button" onclick="goback()" value="Go back"/>
+
     </main>
     <%@include file="/include/footer.inc"%>
 </body>

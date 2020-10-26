@@ -104,12 +104,14 @@
 
       </section>
 
+      <%if(loggedOn){%>
       Aggiungi al carrello:
       <span>
          <a href="javascript:addToCart(<%=fumetto.getISBN()%>)">
             <img id=addToCart alt="addToCart" src="images/cart_plus.png" width="25" height="25">
          </a>
       </span>
+      <% } %>
 
       </br>
       </br>

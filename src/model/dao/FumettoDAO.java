@@ -23,5 +23,6 @@ public interface FumettoDAO {
     public ArrayList<Fumetto> freeSearch(String searchString);
     public ArrayList<Fumetto> freeSearchUnblocked(String searchString);
     public ArrayList<Fumetto> findInCart(String username);
+    public Fumetto findByFumettoISBNNotYetCreated(String ISBN);
 
 }

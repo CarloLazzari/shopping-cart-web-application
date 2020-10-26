@@ -41,8 +41,13 @@
 		    f.submit();
 		}
 
+      function goback() {
+          document.backForm.submit();
+      }
+
 		function mainOnLoadHandler(){
 		    document.confirmOrderForm.addEventListener("submit",submitOrder);
+          document.confirmOrderForm.backButton.addEventListener("click", goback);
 		}
 
 	</script>
@@ -86,7 +91,13 @@
         </br>
         </br>
 
+		<form name="backForm" method="post" action="Dispatcher">
+			<input type="hidden" name="controllerAction" value="ProductsManagement.view"/>
+		</form>
+
 	</main>
+
+
 
     <%@include file="/include/footer.inc"%>
 

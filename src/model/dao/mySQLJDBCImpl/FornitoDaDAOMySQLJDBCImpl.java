@@ -336,28 +336,76 @@ public class FornitoDaDAOMySQLJDBCImpl implements FornitoDaDAO {
         PreparedStatement ps;
         FornitoDa fornitoDa;
         ArrayList<FornitoDa> fornitoDaArrayList = new ArrayList<>();
+        String sql;
+        ResultSet resultSet;
 
         try {
-            String sql
+
+            switch(searchMode){
+                case "TITOLO":
+                sql
                     = " SELECT * "
                     + " FROM fornito_da "
                     + " JOIN fumetto ON ISBN_FUMETTO_REFERENZIATO = ISBN JOIN contenuto_nel_magazzino cnm on fumetto.ISBN = cnm.ISBN_FUMETTO"
-                    + " WHERE ? = ? AND DELETED='N'";
+                    + " WHERE TITOLO = ? AND DELETED='N'";
 
-            ps = conn.prepareStatement(sql);
+                ps = conn.prepareStatement(sql);
 
-            int i = 1;
-            ps.setString(i++,searchMode);
-            ps.setString(i++,searchString);
+                int i = 1;
+                ps.setString(i++, searchString);
+                resultSet = ps.executeQuery();
 
-            ResultSet resultSet = ps.executeQuery();
+                while (resultSet.next()) {
+                    fornitoDa = read(resultSet);
+                    fornitoDaArrayList.add(fornitoDa);
+                }
+                resultSet.close();
+                ps.close();
+                break;
 
-            while(resultSet.next()){
-                fornitoDa = read(resultSet);
-                fornitoDaArrayList.add(fornitoDa);
+            case "AUTORE":
+                sql
+                        = " SELECT * "
+                        + " FROM fornito_da "
+                        + " JOIN fumetto ON ISBN_FUMETTO_REFERENZIATO = ISBN JOIN contenuto_nel_magazzino cnm on fumetto.ISBN = cnm.ISBN_FUMETTO"
+                        + " WHERE AUTORE = ? AND DELETED='N'";
+
+                ps = conn.prepareStatement(sql);
+
+                i = 1;
+                ps.setString(i++, searchString);
+                resultSet = ps.executeQuery();
+
+                while (resultSet.next()) {
+                    fornitoDa = read(resultSet);
+                    fornitoDaArrayList.add(fornitoDa);
+                }
+                resultSet.close();
+                ps.close();
+                break;
+
+            case "NUMERO":
+                sql
+                        = " SELECT * "
+                        + " FROM fornito_da "
+                        + " JOIN fumetto ON ISBN_FUMETTO_REFERENZIATO = ISBN JOIN contenuto_nel_magazzino cnm on fumetto.ISBN = cnm.ISBN_FUMETTO"
+                        + " WHERE NUMERO = ? AND DELETED='N'";
+
+                ps = conn.prepareStatement(sql);
+
+                i = 1;
+                ps.setString(i++, searchString);
+                resultSet = ps.executeQuery();
+
+                while (resultSet.next()) {
+                    fornitoDa = read(resultSet);
+                    fornitoDaArrayList.add(fornitoDa);
+                }
+                resultSet.close();
+                ps.close();
+                break;
+
             }
-            resultSet.close();
-            ps.close();
 
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -372,29 +420,75 @@ public class FornitoDaDAOMySQLJDBCImpl implements FornitoDaDAO {
         PreparedStatement ps;
         FornitoDa fornitoDa;
         ArrayList<FornitoDa> fornitoDaArrayList = new ArrayList<>();
+        String sql;
+        ResultSet resultSet;
 
         try {
-            String sql
-                    = " SELECT * "
-                    + " FROM fornito_da "
-                    + " JOIN fumetto ON ISBN_FUMETTO_REFERENZIATO = ISBN JOIN contenuto_nel_magazzino cnm on fumetto.ISBN = cnm.ISBN_FUMETTO"
-                    + " WHERE ? = ?"
-                    + " AND BLOCCATO = 'N' AND DELETED = 'N'";
+            switch(searchMode){
+                case "TITOLO":
+                    sql
+                        = " SELECT * "
+                        + " FROM fornito_da "
+                        + " JOIN fumetto ON ISBN_FUMETTO_REFERENZIATO = ISBN JOIN contenuto_nel_magazzino cnm on fumetto.ISBN = cnm.ISBN_FUMETTO"
+                        + " WHERE TITOLO = ? AND DELETED='N' AND BLOCCATO ='N'";
 
-            ps = conn.prepareStatement(sql);
+                    ps = conn.prepareStatement(sql);
 
-            int i = 1;
-            ps.setString(i++,searchMode);
-            ps.setString(i++,searchString);
+                    int i = 1;
+                    ps.setString(i++, searchString);
+                    resultSet = ps.executeQuery();
 
-            ResultSet resultSet = ps.executeQuery();
+                    while (resultSet.next()) {
+                        fornitoDa = read(resultSet);
+                        fornitoDaArrayList.add(fornitoDa);
+                    }
+                    resultSet.close();
+                    ps.close();
+                    break;
 
-            while(resultSet.next()){
-                fornitoDa = read(resultSet);
-                fornitoDaArrayList.add(fornitoDa);
+                case "AUTORE":
+                    sql
+                        = " SELECT * "
+                        + " FROM fornito_da "
+                        + " JOIN fumetto ON ISBN_FUMETTO_REFERENZIATO = ISBN JOIN contenuto_nel_magazzino cnm on fumetto.ISBN = cnm.ISBN_FUMETTO"
+                        + " WHERE AUTORE = ? AND DELETED='N' AND BLOCCATO ='N'";
+
+                    ps = conn.prepareStatement(sql);
+
+                    i = 1;
+                    ps.setString(i++, searchString);
+                    resultSet = ps.executeQuery();
+
+                    while (resultSet.next()) {
+                        fornitoDa = read(resultSet);
+                        fornitoDaArrayList.add(fornitoDa);
+                    }
+                    resultSet.close();
+                    ps.close();
+                    break;
+
+                case "NUMERO":
+                    sql
+                        = " SELECT * "
+                        + " FROM fornito_da "
+                        + " JOIN fumetto ON ISBN_FUMETTO_REFERENZIATO = ISBN JOIN contenuto_nel_magazzino cnm on fumetto.ISBN = cnm.ISBN_FUMETTO"
+                        + " WHERE NUMERO = ? AND DELETED='N' AND BLOCCATO ='N'";
+
+                    ps = conn.prepareStatement(sql);
+
+                    i = 1;
+                    ps.setString(i++, searchString);
+                    resultSet = ps.executeQuery();
+
+                    while (resultSet.next()) {
+                        fornitoDa = read(resultSet);
+                        fornitoDaArrayList.add(fornitoDa);
+                    }
+                    resultSet.close();
+                    ps.close();
+                    break;
+
             }
-            resultSet.close();
-            ps.close();
 
         } catch (SQLException e) {
             throw new RuntimeException(e);
