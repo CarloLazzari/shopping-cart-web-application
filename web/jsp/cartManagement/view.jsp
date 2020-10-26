@@ -62,7 +62,7 @@
     <style>
 
         #addToCart, #removeFromCart {
-            position:relative;
+            float: right;
         }
 
         #buy {
@@ -77,6 +77,17 @@
 
         }
 
+        table {
+            border-collapse: collapse;
+            width: 80%;
+        }
+
+        td, th {
+            border: 1px solid #dddddd;
+            text-align: left;
+            width: 100px;
+            padding: 8px;
+        }
 
     </style>
 </head>
@@ -100,21 +111,25 @@
         </section>
         <% } else {%>
             Prezzo totale: <%=totalPrice%>
+            </br>
+            </br>
         <% } %>
         <% for(i=0; i<cartItems.size(); i++){ %>
-            <section>
-                <p/>
-                    Prodotto: <%=cartItems.get(i).getFumetto().getISBN()%>  (<%=fumetti.get(i).getTitolo()%>, <%=fumetti.get(i).getAutore()%>, <%=fumetti.get(i).getPrezzo()%> Euro) |
-                    Quantita: <%=cartItems.get(i).getQuantita()%>
-
-                Aggiungi/rimuovi quantita' al/dal carrello:
-                <a href="javascript:addToCart(<%=cartItems.get(i).getFumetto().getISBN()%>)">
-                   <img id=addToCart alt="addToCart" src="images/cart_plus.png" width="22" height="22">
-                </a>
-                <a href="javascript:removeFromCart(<%=cartItems.get(i).getFumetto().getISBN()%>)">
-                    <img id=removeFromCart alt="removeFromCart" src="images/remove_cart.png" width="22" height="22">
-                </a>
-            </section>
+        <table>
+            <tr>
+                <th><%=cartItems.get(i).getFumetto().getISBN()%></th>
+                <th><%=fumetti.get(i).getTitolo()%></th>
+                <th><%=fumetti.get(i).getAutore()%></th>
+                <th><%=fumetti.get(i).getPrezzo()%> Euro</th>
+                <th><%=cartItems.get(i).getQuantita()%>
+                    <a href="javascript:addToCart(<%=cartItems.get(i).getFumetto().getISBN()%>)">
+                        <img id=addToCart alt="addToCart" src="images/cart_plus.png" width="25" height="25">
+                    </a>
+                    <a href="javascript:removeFromCart(<%=cartItems.get(i).getFumetto().getISBN()%>)">
+                        <img id=removeFromCart alt="removeFromCart" src="images/remove_cart.png" width="25" height="25">
+                    </a>
+                </th>
+        </table>
         <% } %>
 
         <form name="buyForm" method="post" action="Dispatcher">
