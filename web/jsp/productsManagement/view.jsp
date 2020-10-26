@@ -69,8 +69,8 @@
 			}
 
 			#fumetti {
-				 margin-top: 30px;
-				 margin-left: 80px;
+				 margin-top: 15px;
+				 margin-left: 71px;
 			}
 
 			#prodotti {
