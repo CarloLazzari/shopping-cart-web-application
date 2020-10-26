@@ -32,6 +32,18 @@
 	</title>
 	<style>
 
+       table {
+           border-collapse: collapse;
+           width: 100%;
+       }
+
+       td, th {
+           border: 1px solid #dddddd;
+           text-align: left;
+           width: 100px;
+           padding: 8px;
+       }
+
 	</style>
 	<script lang="JavaScript">
 
@@ -67,10 +79,15 @@
 		<% } %>
 		</br>
 		<% for(i=0; i<cartItems.size(); i++) { %>
-		<section>
-			Prodotto: <%=cartItems.get(i).getFumetto().getISBN()%>  (<%=fumetti.get(i).getTitolo()%>, <%=fumetti.get(i).getAutore()%>, <%=fumetti.get(i).getPrezzo()%> Euro) |
-			Quantità presente nel carrello: <%=cartItems.get(i).getQuantita()%>
-		</section>
+		<table>
+			<tr>
+				<th><%=cartItems.get(i).getFumetto().getISBN()%></th>
+				<th><%=fumetti.get(i).getTitolo()%></th>
+				<th><%=fumetti.get(i).getAutore()%></th>
+				<th><%=fumetti.get(i).getPrezzo()%> Euro </th>
+				<th><%=cartItems.get(i).getQuantita()%></th>
+			</tr>
+		</table>
 		<% } %>
 		</br>
 
@@ -88,7 +105,6 @@
 				<input type="hidden" name="controllerAction" value="ConfirmOrderManagement.confirmOrder"/>
 			</form>
 			<% } %>
-        </br>
         </br>
 
 		<form name="backForm" method="post" action="Dispatcher">
