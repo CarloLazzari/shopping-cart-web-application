@@ -1,0 +1,181 @@
+
+.clearfix:after {
+    content: ".";
+    visibility: hidden;
+    display: block;
+    height: 0;
+    clear: both;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+}
+
+ol, ul {
+    list-style: none;
+}
+
+body {
+    background: url(../images/sfondo_grigio.jpg);
+    align-content: center;
+    font-family: "Trebuchet MS",Arial,Helvetica,sans-serif;
+    font-size: 1em;
+    width:1366px;
+    margin:0 auto;
+    box-shadow:0 0 0 2px #222222;
+}
+
+/* Header Section */
+header {
+
+    background: #2196f3;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    margin-bottom: 10px;
+}
+
+#mangaLogo{
+
+    display: block;
+    margin: 0 auto;
+
+}
+
+.logo {
+    padding-top: 20px;
+    padding-left: 14px;
+    font-size: 2.2em;
+    font-weight: 900;
+    color: white;
+    text-shadow: #0b5058;
+
+}
+
+#logout{
+    color: #d9d9d9;
+}
+
+/* Navigation Menu */
+header nav {
+    float: left;
+    padding-top: 15px;
+    padding-left: 14px;
+}
+
+header nav ul {
+    padding: 0;
+    margin-left: 5px;
+}
+
+a:link, a:active, a:visited {
+    color: #ffbc00;
+    text-decoration: none;
+}
+
+
+header nav ul > li:hover, nav ul > li.active {
+    color:mediumpurple;
+}
+
+header nav ul > li:hover > a {
+    color: #d9d0c1;
+}
+
+/* Login Section */
+#login {
+    float: right;
+    padding-top: 14px;
+    margin-right: 20px;
+}
+
+#login label[for="username"] {
+    color:#fff;;
+    float:left;
+    padding:2px 6px 0 18px;
+    font-size: 0.8em;
+}
+
+#login label[for="password"] {
+    color:#fff;;
+    float:left;
+    padding:2px 6px 0 18px;
+    font-size: 0.8em;
+}
+
+#login form input[type="text"], #login form input[type="password"] {
+    float:left;
+    height:18px;
+    width:125px;
+    border: 1px solid #357bff;
+    border-radius: 4px;
+}
+
+#login form input[type="text"]:focus, #login form input[type="password"]:focus {
+    outline: none;
+}
+
+
+#login form input[type="submit"] {
+    text-align: center;
+    margin-left: 8px;
+    /*background-color: #2b5add;*/
+    /*color: #FFFFFF;*/
+    cursor:pointer;
+    float:left;
+    overflow:hidden;
+    padding:4px 4px 4px 6px;
+    width:26px;
+    font-size: 11px;
+}
+
+/* Main Section */
+
+main {
+    background-color: #f8f8ff;
+    margin-top: -10px;
+    padding: 10px 18px;
+}
+
+#pageTitle {
+    margin: 12px 0;
+}
+
+#pageTitle h1 {
+    font-size: 1.3em;
+    font-weight: normal;
+}
+
+.button {
+    padding: 5px 10px;
+    background-color: #357bff;
+    color: #ffffff;
+    border-radius: 8px;
+    cursor: pointer;
+    border: none;
+}
+
+/* Footer Section */
+footer {
+    color: white;
+    padding:20px 40px;
+    text-decoration-color: white;
+    text-align:right;
+    font-size:11px;
+    background-color: #2196f3;
+}
+
+footer a{
+    text-decoration:none;
+    color: #e3e1ef;
+}
+
+footer #privacy {
+    float:right;
+}
+
+footer a:hover {
+    color: white;
+}
+
+

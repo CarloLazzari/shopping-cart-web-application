@@ -1,0 +1,6 @@
+<glassfish-web-app>
+    <jsp-config>
+        <property name="compilerSourceVM" value="8" />
+        <property name="compilerTargetVM" value="8" />
+    </jsp-config>
+</glassfish-web-app>
