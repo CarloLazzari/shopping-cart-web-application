@@ -15,6 +15,7 @@
 
 	String applicationMessage = (String) request.getAttribute("applicationMessage");
 	String menuActiveLink = "Users";
+	String whichUserUsername = (String) request.getAttribute("whichUserUsername");
 
 	ArrayList<User> users = (ArrayList<User>) request.getAttribute("users");
 	ArrayList<Integer> usersOrdersCount = (ArrayList<Integer>) request.getAttribute("usersOrdersCount");
@@ -25,19 +26,35 @@
 <html>
 	<head>
 		<%@include file="/include/htmlHead.inc"%>
-		<title>FumettiDB: <%=menuActiveLink%></title>
-
+		<title>
+			FumettiDB: <%=menuActiveLink%>
+		</title>
 		<style>
 
-			p>a:hover {
+			th>a:hover {
 				 color:black;
 				 text-decoration: underline;
 			}
 
+         table {
+             border-collapse: collapse;
+             width: 100%;
+         }
+
+         td, th {
+             border: 1px solid #dddddd;
+             text-align: left;
+				 width: 100px;
+             padding: 8px;
+         }
+
+			#block, #unblock {
+				 float: right;
+			}
+
 		</style>
 
-		<script lang="JavaScript">
-
+		<script>
 			function blockUser(Username){
 				const f = document.blockUserForm;
 				f.whichUserUsername.value = Username;
@@ -56,12 +73,6 @@
 				f.submit();
 			}
 
-			function mainOnLoadHandler(){
-				 document.querySelector("#block").addEventListener("click",blockUser.bind(this));
-				 document.querySelector("#unblock").addEventListener("click",unblockUser.bind(this));
-				 document.querySelector("#viewOrders").addEventListener("click",viewOrders.bind(this))
-			}
-
          function testBlock(Username) {
              try {
                  blockUser(Username);
@@ -77,7 +88,6 @@
                  console.log(e);
              }
          }
-
 		</script>
 
 	</head>
@@ -88,40 +98,40 @@
 			<section id="pageTitle">
 				<h1> Utenti </h1>
 			</section>
-			<% for(i=0; i<users.size(); i++) { %>
-			<section id="users">
-			   <p <%if(loggedUser.getUsername().equals(users.get(i).getUsername())){%> style="color: blueviolet" <% } %>>
-					Username: <%=users.get(i).getUsername()%> -
-					Name: <%=users.get(i).getFirstname()%> -
-					Surname: <%=users.get(i).getSurname()%> -
-					Email: <%=users.get(i).getEmail()%> -
-					Date: <%=users.get(i).getData()%> -
-					Address: <%=users.get(i).getIndirizzo()%> -
-					Blocked: <%=users.get(i).getBlocked()%> -
-					<%if(usersOrdersCount.size()>i){%>
-					<a id="viewOrders" href="javascript:viewOrders(<%=users.get(i).getUsername()%>)">#ORDINI:</a> <%=usersOrdersCount.get(i)%>
-					<% } else {%>
-					#ORDINI: 0
-					<% } %>
 
-				</p>
-				<% if(!(loggedUser.getUsername().equals(users.get(i).getUsername()))){ %>
-					<% if(users.get(i).getBlocked().equals("N")) { %>
-						<a href="javascript:blockUser(<%=users.get(i).getUsername()%>)">
-							<img alt="block" id="block" src="images/block_icon.png" width="22" height="22"/>
-						</a>
-					<% } else { %>
-						<a href="javascript:unblockUser(<%=users.get(i).getUsername()%>)">
-							<img alt="unblock" id="unblock" src="images/unblock.png" width="22" height="22"/>
-						</a>
-					<% } %>
-				<% } else {%>
-				</br>
-				<% } %>
-			</section>
-			</br>
+			<% for(i=0; i<users.size(); i++) { %>
+			<table id="users">
+			   <tr <%if(loggedUser.getUsername().equals(users.get(i).getUsername())){%> style="color: blueviolet" <% } %>>
+					<th style="width: 120px" ><%=users.get(i).getUsername()%>
+						<% if(!(loggedUser.getUsername().equals(users.get(i).getUsername()))){ %>
+						<% if(users.get(i).getBlocked().equals("N")) { %>
+						<span>
+							<a href="javascript:blockUser('<%=users.get(i).getUsername()%>')">
+								<img alt="block" id="block" src="images/block_icon.png" width="22" height="22"/>
+							</a>
+						</span>
+						<% } else { %>
+						<span>
+							<a href="javascript:unblockUser('<%=users.get(i).getUsername()%>')">
+								<img alt="unblock" id="unblock" src="images/unblock.png" width="22" height="22"/>
+							</a>
+						</span>
+						<% } %>
+						<% } %>
+					</th>
+					<th style="width: 100px;" ><%=users.get(i).getFirstname()%></th>
+					<th style="width: 100px;" ><%=users.get(i).getSurname()%></th>
+					<th style="width: 150px;" ><%=users.get(i).getEmail()%></th>
+					<th style="width: 80px;" ><%=users.get(i).getData()%></th>
+					<th style="width: 150px;" ><%=users.get(i).getIndirizzo()%></th>
+					<th style="text-align: center; width: 10px" ><%=users.get(i).getBlocked()%></th>
+					<th style="text-align: center; width: 100px;" ><a id="viewOrders" href="javascript:viewOrders('<%=users.get(i).getUsername()%>')">#ORDINI:</a> <%=usersOrdersCount.get(i)%></th>
+				</tr>
+
+
+			</table>
+
 		   <% } %>
-			<br/>
 
 			<form name="blockUserForm" method="post" action="Dispatcher">
 				<input type="hidden" name="whichUserUsername"/>

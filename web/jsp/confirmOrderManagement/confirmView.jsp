@@ -27,20 +27,22 @@
 <html>
 <head>
 	<%@include file="/include/htmlHead.inc"%>
-	<title id="pageTitle">Compra</title>
+	<title>
+		FumettiDB: <%=menuActiveLink%>
+	</title>
 	<style>
 
 	</style>
 	<script lang="JavaScript">
 
-		function confirmOrder(cartItems){
-			const f=document.confirmOrderForm;
-			f.cartItems.value=cartItems;
-			f.submit();
+		function submitOrder(){
+		    let f;
+		    f = document.confirmOrderForm;
+		    f.submit();
 		}
 
-		function goback() {
-			document.backForm.submit();
+		function mainOnLoadHandler(){
+		    document.confirmOrderForm.addEventListener("submit",submitOrder);
 		}
 
 	</script>
@@ -68,14 +70,12 @@
 		</br>
 
 			<% if(cartItems.size()>0){%>
-			<form name="confirmOrderForm" method="post" action="Dispatcher">
-				<label for="indirizzoSpedizione">
-					Inserisci l'indirizzo: <input type="text" id="indirizzoSpedizione" name="indirizzoSpedizione" required maxlength="45">
-				</label>
+			<form name="confirmOrderForm" action="Dispatcher" method="post">
+				<label for="indirizzoSpedizione"></label>
+				Inserisci l'indirizzo: <input type="text" id="indirizzoSpedizione" name="indirizzoSpedizione" required maxlength="45"/>
 				</br>
-				<label for="metodoPagamento">
-					Inserisci il numero di carta di credito: <input type="tel" id="metodoPagamento" name="metodoPagamento" maxlength="19" required placeholder="XXXX-XXXX-XXXX-XXXX">
-				</label>
+				<label for="metodoPagamento"></label>
+				Inserisci il numero di carta di credito: <input type="tel" id="metodoPagamento" name="metodoPagamento" maxlength="19" required placeholder="XXXX-XXXX-XXXX-XXXX"/>
 				</br>
 				</br>
 				<input type="submit" class="button" value="Conferma"/>

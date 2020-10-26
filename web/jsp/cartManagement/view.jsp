@@ -26,7 +26,9 @@
 <html>
 <head>
     <%@include file="/include/htmlHead.inc"%>
-    <title id="pageTitle">Carrello</title>
+    <title>
+        FumettiDB: <%=menuActiveLink%>
+    </title>
     <script lang="javascript">
 
         function addToCart(ISBN){

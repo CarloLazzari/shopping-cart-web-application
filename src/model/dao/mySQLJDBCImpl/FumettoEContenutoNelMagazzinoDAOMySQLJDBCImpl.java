@@ -493,7 +493,7 @@ public class FumettoEContenutoNelMagazzinoDAOMySQLJDBCImpl implements ContenutoN
 
 
     @Override
-    public ArrayList<ContenutoNelMagazzino> findByCNM(String modalitaRicerca, String searchString) {
+    public ArrayList<ContenutoNelMagazzino> findByCNM(String searchMode, String searchString) {
 
         PreparedStatement ps;
         ContenutoNelMagazzino contenutoNelMagazzino;
@@ -509,7 +509,7 @@ public class FumettoEContenutoNelMagazzinoDAOMySQLJDBCImpl implements ContenutoN
 
             ps = conn.prepareStatement(sql);
             int i = 1;
-            ps.setString(i++, modalitaRicerca);
+            ps.setString(i++, searchMode);
             ps.setString(i++, searchString);
             ResultSet resultSet = ps.executeQuery();
 
@@ -530,7 +530,7 @@ public class FumettoEContenutoNelMagazzinoDAOMySQLJDBCImpl implements ContenutoN
     }
 
     @Override
-    public ArrayList<ContenutoNelMagazzino> findByCNMUnblocked(String modalitaRicerca, String searchString) {
+    public ArrayList<ContenutoNelMagazzino> findByCNMUnblocked(String searchMode, String searchString) {
 
         PreparedStatement ps;
         ContenutoNelMagazzino contenutoNelMagazzino;
@@ -547,7 +547,7 @@ public class FumettoEContenutoNelMagazzinoDAOMySQLJDBCImpl implements ContenutoN
 
             ps = conn.prepareStatement(sql);
             int i = 1;
-            ps.setString(i++, modalitaRicerca);
+            ps.setString(i++, searchMode);
             ps.setString(i++, searchString);
             ResultSet resultSet = ps.executeQuery();
 
@@ -590,12 +590,13 @@ public class FumettoEContenutoNelMagazzinoDAOMySQLJDBCImpl implements ContenutoN
                     = " SELECT ISBN "
                     + " FROM fumetto "
                     + " WHERE "
-                    + " ISBN = ?";
+                    + " ISBN = ? AND NUMERO = ?";
 
             ps = conn.prepareStatement(sql);
 
             int i = 1;
             ps.setString(i++, fumetto.getISBN());
+            ps.setInt(i++,fumetto.getNumero());
 
             ResultSet resultSet = ps.executeQuery();
 
@@ -624,9 +625,9 @@ public class FumettoEContenutoNelMagazzinoDAOMySQLJDBCImpl implements ContenutoN
             i = 1;
             ps.setString(i++, fumetto.getTitolo());
             ps.setString(i++, fumetto.getAutore());
+            ps.setInt(i++, fumetto.getNumero());
             ps.setString(i++, fumetto.getFormato());
             ps.setString(i++, fumetto.getRilegatura());
-            ps.setInt(i++, fumetto.getNumero());
             ps.setFloat(i++, fumetto.getPrezzo());
             ps.setFloat(i++, fumetto.getPeso());
             ps.setString(i++, fumetto.getBlocked());;
@@ -692,9 +693,9 @@ public class FumettoEContenutoNelMagazzinoDAOMySQLJDBCImpl implements ContenutoN
             i = 1;
             ps.setString(i++, fumetto.getTitolo());
             ps.setString(i++, fumetto.getAutore());
+            ps.setInt(i++, fumetto.getNumero());
             ps.setString(i++, fumetto.getFormato());
             ps.setString(i++, fumetto.getRilegatura());
-            ps.setInt(i++, fumetto.getNumero());
             ps.setFloat(i++, fumetto.getPrezzo());
             ps.setFloat(i++, fumetto.getPeso());
             ps.setString(i++, fumetto.getBlocked());
@@ -825,7 +826,7 @@ public class FumettoEContenutoNelMagazzinoDAOMySQLJDBCImpl implements ContenutoN
 
 
     @Override
-    public ArrayList<Fumetto> findBy(String modalitaRicerca, String searchString) {
+    public ArrayList<Fumetto> findBy(String searchMode, String searchString) {
 
         PreparedStatement ps;
         Fumetto fumetto;
@@ -841,7 +842,7 @@ public class FumettoEContenutoNelMagazzinoDAOMySQLJDBCImpl implements ContenutoN
                     + " ? = ? AND DELETED = 'N'";
 
             ps = conn.prepareStatement(sql);
-            ps.setString(1, modalitaRicerca);
+            ps.setString(1, searchMode);
             ps.setString(2, searchString);
 
             ResultSet resultSet = ps.executeQuery();
@@ -862,7 +863,7 @@ public class FumettoEContenutoNelMagazzinoDAOMySQLJDBCImpl implements ContenutoN
     }
 
     @Override
-    public ArrayList<Fumetto> findByUnblocked(String modalitaRicerca, String searchString) {
+    public ArrayList<Fumetto> findByUnblocked(String searchMode, String searchString) {
 
         PreparedStatement ps;
         Fumetto fumetto;
@@ -879,7 +880,7 @@ public class FumettoEContenutoNelMagazzinoDAOMySQLJDBCImpl implements ContenutoN
                     + " AND BLOCCATO = 'N' AND DELETED = 'N'";
 
             ps = conn.prepareStatement(sql);
-            ps.setString(1, modalitaRicerca);
+            ps.setString(1, searchMode);
             ps.setString(2, searchString);
 
             ResultSet resultSet = ps.executeQuery();

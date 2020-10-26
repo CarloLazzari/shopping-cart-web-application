@@ -331,7 +331,7 @@ public class FornitoDaDAOMySQLJDBCImpl implements FornitoDaDAO {
     }
 
     @Override
-    public ArrayList<FornitoDa> findBy(String modalitaRicerca, String searchString) {
+    public ArrayList<FornitoDa> findBy(String searchMode, String searchString) {
 
         PreparedStatement ps;
         FornitoDa fornitoDa;
@@ -347,7 +347,7 @@ public class FornitoDaDAOMySQLJDBCImpl implements FornitoDaDAO {
             ps = conn.prepareStatement(sql);
 
             int i = 1;
-            ps.setString(i++,modalitaRicerca);
+            ps.setString(i++,searchMode);
             ps.setString(i++,searchString);
 
             ResultSet resultSet = ps.executeQuery();
@@ -367,7 +367,7 @@ public class FornitoDaDAOMySQLJDBCImpl implements FornitoDaDAO {
     }
 
     @Override
-    public ArrayList<FornitoDa> findByUnblocked(String modalitaRicerca, String searchString) {
+    public ArrayList<FornitoDa> findByUnblocked(String searchMode, String searchString) {
 
         PreparedStatement ps;
         FornitoDa fornitoDa;
@@ -384,7 +384,7 @@ public class FornitoDaDAOMySQLJDBCImpl implements FornitoDaDAO {
             ps = conn.prepareStatement(sql);
 
             int i = 1;
-            ps.setString(i++,modalitaRicerca);
+            ps.setString(i++,searchMode);
             ps.setString(i++,searchString);
 
             ResultSet resultSet = ps.executeQuery();

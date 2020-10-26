@@ -91,9 +91,16 @@ public class ConfirmOrderManagement {
             daoFactory = DAOFactory.getDAOFactory(Configuration.DAO_IMPL,null);
             daoFactory.beginTransaction();
 
-            String ISBN = (request.getParameter("ISBN"));
+            String ISBN = request.getParameter("ISBN");
+            String nomeFornitore = request.getParameter("nomeFornitore");
+            String nomeMagazzino = request.getParameter("nomeMagazzino");
             FumettoDAO fumettoDAO = daoFactory.getFumettoDAO();
+            FornitoDaDAO fornitoDaDAO = daoFactory.getFornitoDaDAO();
+            ContenutoNelMagazzinoDAO contenutoNelMagazzinoDAO = daoFactory.getContenutoNelMagazzinoDAO();
+
             Fumetto fumetto = fumettoDAO.showFumetto(ISBN);
+            FornitoDa fornitoDa = fornitoDaDAO.findByFumettoISBNandCentroVenditaRef(ISBN,nomeFornitore);
+            ContenutoNelMagazzino contenutoNelMagazzino = contenutoNelMagazzinoDAO.findByFumettoISBNRefAndMagazzinoRef(ISBN,nomeMagazzino);
 
             daoFactory.commitTransaction();
             sessionDAOFactory.commitTransaction();
@@ -101,6 +108,8 @@ public class ConfirmOrderManagement {
             request.setAttribute("loggedOn",loggedUser!=null);
             request.setAttribute("loggedUser", loggedUser);
             request.setAttribute("fumetto",fumetto);
+            request.setAttribute("fornitoDa",fornitoDa);
+            request.setAttribute("contenutoNelMagazzino",contenutoNelMagazzino);
             request.setAttribute("viewUrl", "productsManagement/viewDetails");
 
         } catch (Exception e) {
@@ -126,7 +135,7 @@ public class ConfirmOrderManagement {
         DAOFactory sessionDAOFactory= null;
         DAOFactory daoFactory = null;
         User loggedUser;
-        String applicationMessage;
+        String applicationMessage = null;
         Logger logger = LogService.getApplicationLogger();
 
         try {
@@ -174,20 +183,16 @@ public class ConfirmOrderManagement {
             User user = userDAO.findByUsername(loggedUser.getUsername());
             Carta carta = cartaDAO.findByNumeroCarta(metodoPagamento);
 
-            /* Setto la data dell'ordine a quella corrente, cosi non avrò mai duplicati*/
-            Date in = new Date();
-            LocalDateTime LDT = LocalDateTime.ofInstant(in.toInstant(), ZoneId.systemDefault());
-            Date out = Date.from(LDT.atZone(ZoneId.systemDefault()).toInstant());
+            /* Setto la data dell'ordine a quella corrente*/
+            java.sql.Date sqlDate = new java.sql.Date(System.currentTimeMillis());
 
             /* Controllo della disponibilita' di magazzino*/
             StringBuilder errorMessage = new StringBuilder();
             int i;
             for(i=0; i< cartItems.size(); i++){
 
-                Carrello carrello = carrelloDAO.findByISBNAndUsername(cartItems.get(i).getFumetto().getISBN(), loggedUser.getUsername());
-
-                if((contenutoNelMagazzinoDAO.getAvailability(cartItems.get(i).getFumetto().getISBN(),contenutoNelMagazzinoArrayList.get(i).getMagazzino().getNomeMagazzino()) >= (carrelloDAO.getQuantity(cartItems.get(i).getFumetto().getISBN(),loggedUser.getUsername())))){
-
+                if((contenutoNelMagazzinoDAO.getAvailability(cartItems.get(i).getFumetto().getISBN(),contenutoNelMagazzinoArrayList.get(i).getMagazzino().getNomeMagazzino()) >= cartItems.get(i).getQuantita())){
+                    /*Do nothing*/
                 }
                 else  errorMessage.append(cartItems.get(i).getFumetto().getISBN()).append(" non e' disponibile\n");
 
@@ -202,26 +207,33 @@ public class ConfirmOrderManagement {
                 request.setAttribute("loggedOn", true);
                 request.setAttribute("loggedUser", loggedUser);
                 request.setAttribute("applicationMessage",applicationMessage);
-                request.setAttribute("viewUrl", "ProductsManagement/view");
+                request.setAttribute("viewUrl", "homeManagement/view");
             }
 
             /* Se non ho nessun messaggio di errore */
             /* E il metodo di pagamento è valido e la carta non è scaduta, procedo con l'ordine*/
-            else if(errorMessage.length()==0 && carta != null && (carta.getDataScadenza().compareTo(out))>0) {
+            else if(carta != null && carta.getDataScadenza().compareTo(sqlDate) > 0) {
                 try {
 
                     /* Creo un singolo ordine, poi lo prendo come parametro, e lo uso per costruirci su - */
-                    /* Le righe nel database di contenutoNellOrdine che contiene i vari prodotti nel singolo ordine */
-                    /* Per ogni singolo ordine il nome del fornitore può non essere unico, è da spostarlo in contenutoNellOrdine */
+                    /* - le righe nel database di "contenutoNellOrdine" che contiene i vari prodotti nel singolo ordine */
 
-                    ordineDAO.create(user, indirizzoSpedizione, newOrderID, carta, "IN PREPARAZIONE", (java.sql.Date) out);
+                    ordineDAO.create(user, indirizzoSpedizione, newOrderID, carta, "In preparazione", sqlDate);
 
                     Ordine ordine = ordineDAO.findByOrderIdentificativo(newOrderID);
-                    for (Carrello cartItem : cartItems) {
+                    for (i=0; i<cartItems.size(); i++) {
 
                         CentroVendita centroVendita = centroVenditaDAO.findByNomeCentro(fornitoDaArrayList.get(i).getCentroVendita().getNomeCentro());
                         Magazzino magazzino = magazzinoDAO.findByNomeMagazzino(contenutoNelMagazzinoArrayList.get(i).getMagazzino().getNomeMagazzino());
-                        contenutoNellOrdineDAO.create(ordine, cartItem.getFumetto(), cartItem.getQuantita(),centroVendita, magazzino);
+                        contenutoNellOrdineDAO.create(ordine, cartItems.get(i).getFumetto(), cartItems.get(i).getQuantita(),centroVendita, magazzino);
+                        /* Devo rimuovere anche i prodotti comprati dal magazzino */
+                        /* Per ogni prodotto nel carrello rimuovo di una certa quantità nel magazzino */
+                        /* Questa quantità è pari alla quantità presente nel carrello quindi ciclo su essa*/
+                        int index;
+                        for(index=0; index<carrelloDAO.getQuantity(loggedUser.getUsername(),cartItems.get(i).getFumetto().getISBN()); index++) {
+                            ContenutoNelMagazzino contenutoNelMagazzino = contenutoNelMagazzinoDAO.findByFumettoISBNRefAndMagazzinoRef(cartItems.get(i).getFumetto().getISBN(), contenutoNelMagazzinoArrayList.get(i).getMagazzino().getNomeMagazzino());
+                            contenutoNelMagazzinoDAO.removeQuantityFromWarehouse(contenutoNelMagazzino);
+                        }
                     }
                     carrelloDAO.flushCart(loggedUser.getUsername());
                     applicationMessage = "L'effettuazione dell'ordine è andata a buon fine.";
@@ -234,8 +246,16 @@ public class ConfirmOrderManagement {
                 request.setAttribute("loggedOn", true);
                 request.setAttribute("loggedUser", loggedUser);
                 request.setAttribute("applicationMessage",applicationMessage);
-                request.setAttribute("viewUrl", "OrderManagement/confirmView");
+                request.setAttribute("viewUrl", "homeManagement/view");
+
+            } else {
+                applicationMessage = "Errore nella conferma dell'ordine. La carta di credito non esiste o è scaduta.";
+                request.setAttribute("loggedOn", true);
+                request.setAttribute("loggedUser", loggedUser);
+                request.setAttribute("applicationMessage",applicationMessage);
+                request.setAttribute("viewUrl", "confirmOrderManagement/view");
             }
+
 
             daoFactory.commitTransaction();
             sessionDAOFactory.commitTransaction();

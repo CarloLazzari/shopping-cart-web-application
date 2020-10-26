@@ -35,6 +35,7 @@ public class OrdineEContenutoNellOrdineDAOMySQLJDBCImpl implements OrdineDAO, Co
 
         ordine.setUser(user);
         ordine.setCarta(carta);
+        ordine.setStato(stato);
         ordine.setIndirizzoDestinazione(indirizzoDest);
         ordine.setOrderID(orderID);
         ordine.setData(data);
@@ -77,6 +78,7 @@ public class OrdineEContenutoNellOrdineDAOMySQLJDBCImpl implements OrdineDAO, Co
             ps.setString(i++, ordine.getStato());
 
             ps.executeUpdate();
+            ps.close();
 
         } catch (SQLException | DuplicatedObjectException e) {
             throw new RuntimeException(e);
@@ -189,8 +191,8 @@ public class OrdineEContenutoNellOrdineDAOMySQLJDBCImpl implements OrdineDAO, Co
         try {
             String sql
                     = " SELECT * "
-                    + " FROM ordine JOIN user u on u.USERNAME = ordine.NOME_EFFETTUANTE"
-                    + " JOIN carta c on c.NUMERO_CARTA = ordine.MODALITA_PAGAMENTO";
+                    + " FROM ordine "
+                    + " order by ID_ORDINE ASC";
 
 
             ps = conn.prepareStatement(sql);

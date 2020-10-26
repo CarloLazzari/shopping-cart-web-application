@@ -14,8 +14,6 @@
 
     String applicationMessage = (String) request.getAttribute("applicationMessage");
     String menuActiveLink = "Products";
-    String searchString =  request.getParameter("searchString");
-    String modalitaRicerca = request.getParameter("modalitaRicerca");
     String ISBN =  request.getParameter("ISBN");
 
     List<Fumetto> fumetti = (List<Fumetto>) request.getAttribute("fumetti");
@@ -31,7 +29,7 @@
 	<head>
 		<%@include file="/include/htmlHead.inc"%>
 		<title>
-			Fumetti
+			FumettiDB: <%=menuActiveLink%>
 		</title>
 		<style>
 
@@ -57,6 +55,10 @@
 
 			#delete, #block, #addToCart, #viewDetails, #viewDetails, #unblock, #modify {
 				float:left;
+			}
+
+			#addToCart {
+				 margin-left: 12px;
 			}
 
 			input[id=searchString] {
@@ -97,13 +99,6 @@
 				document.insertProductForm.submit();
 			}
 
-			function search(searchString,modalitaRicerca){
-				const f = document.searchForm;
-				f.searchString.value = searchString;
-				f.modalitaRicerca.value = modalitaRicerca;
-				f.submit();
-			}
-
 			function modifyProduct(ISBN){
 				const f = document.modifyForm;
 				f.ISBN.value = ISBN;
@@ -140,18 +135,6 @@
 				f.submit();
 			}
 
-			function mainOnLoadHandler(){
-				document.querySelector("#newProductImage").addEventListener("click",insertProduct);
-				document.querySelector("#addToCart").addEventListener("click",addToCart);
-				document.querySelector("#block").addEventListener("click",blockProduct);
-				document.querySelector("#unblock").addEventListener("click",unblockProduct);
-				document.querySelector("#delete").addEventListener("click",deleteProduct);
-				document.querySelector("#modify").addEventListener("click",modifyProduct);
-			}
-
-			const searchInput = $('input[name=searchString]', '#search').val()
-			const optionInput = $('input[name=modalitaRicerca]:checked', '#modalitaRicercaForm').val()
-
 		</script>
 	</head>
 		<body>
@@ -168,23 +151,35 @@
 							<h1> Prodotti </h1>
 					</section>
 
-					<form id="search">
-						<label for="searchString">
-							<input type="text" id="searchString" name="searchString" maxlength="20"> </br>
-						</label>
-					</form>
-					<form id="modalitaRicercaForm" style="margin-top: 3px;">
-						<label>
-							<input type="radio" name="modalitaRicerca" value="Titolo"/>Titolo
-							<input type="radio" name="modalitaRicerca" value="Autore"/>Autore
-							<input type="radio" name="modalitaRicerca" value="Numero"/>Numero
-						</label>
-					</form>
+					<label for="searchString">
+						<input type="text" id="searchString" name="searchString" maxlength="20"> </br>
+					</label>
 
+					<section id="searchMode" style="margin-top: 3px; margin-bottom: 2px">
+						<input type="radio" id="Titolo" name="searchMode" value="Titolo"/>
+							<label for="Titolo">Titolo</label>
+						<input type="radio" id="Autore" name="searchMode" value="Autore"/>
+							<label for="Autore">Autore</label>
+						<input type="radio" id="Numero" name="searchMode" value="Numero"/>
+							<label for="Numero">Numero</label>
+					</section>
+
+					<script lang="javascript">
+
+						function search(){
+                      let s = document.getElementById("searchString").value;
+                      let opt = document.querySelector('input[name="searchMode"]:checked');
+                      if(opt)
+                          opt=opt.getAttribute('value');
+                      const f = document.searchForm;
+                      f.searchString.value = s;
+                      f.searchMode.value = opt;
+                      f.submit();
+						}
+
+					</script>
 					<section style="margin-top: 3px;">
-					<a href="javascript:search(searchInput,optionInput)">
-						<img alt="search" id="searchImage" src="images/search.png" width="22" height="22">
-					</a>
+						<img alt="search" id="searchImage" src="images/search.png" onclick="window.search()" width="22" height="22">
 					</section>
 
 					<section id="fumetti" class="clearfix">
@@ -259,8 +254,8 @@
 						<input type="hidden" name="controllerAction" value="ProductsManagement.viewDetails"/>
 					</form>
 					<form name="searchForm" method="post" action="Dispatcher">
-						<input type="hidden" name="modalitaRicerca"/>
 						<input type="hidden" name="searchString"/>
+						<input type="hidden" name="searchMode"/>
 						<input type="hidden" name="controllerAction" value="ProductsManagement.view"/>
 					</form>
 

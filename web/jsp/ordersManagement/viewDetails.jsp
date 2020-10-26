@@ -25,43 +25,95 @@
 <html>
 <head>
 	<%@include file="/include/htmlHead.inc"%>
-	<title>Dettagli dell'ordine</title>
-	<style>
+	<title>
+		FumettiDB: <%=menuActiveLink%>
+	</title>
 
-	</style>
 	<script lang="javascript">
+       function goback() {
+           document.backForm.submit();
+       }
 
+       function mainOnLoadHandler() {
+           document.backForm.backButton.addEventListener("click", goback);
+       }
+
+       function viewDetails(ISBN){
+           const f = document.viewDetailsForm;
+           f.ISBN.value = ISBN;
+           f.submit();
+		 }
 	</script>
+
+	<style>
+       table {
+           border-collapse: collapse;
+           width: 100%;
+       }
+
+       td, th {
+           border: 1px solid #dddddd;
+           text-align: left;
+           width: 100px;
+           padding: 8px;
+       }
+
+       th>a:hover {
+           color:black;
+           text-decoration: underline;
+       }
+	</style>
+
 </head>
 <body>
 	<%@include file="/include/header.inc"%>
 	<main>
 		<section id="pageTitle">
-			Dettagli dell'ordine <%=contenutoNellOrdineList.get(1).getOrdine().getOrderID()%>
+			<h3>Dettagli dell'ordine <%=contenutoNellOrdineList.get(0).getOrdine().getOrderID()%></h3>
 		</section>
 
 		Prezzo totale = <%=prezzo%> Euro
+		</br>
+		</br>
+
+		<table>
+			<tr>
+				<th style="color:#ffbc00">ISBN</th>
+				<th style="color:#ffbc00">Quantità</th>
+				<th style="color:#ffbc00">Magazzino</th>
+				<th style="color:#ffbc00">Centro vendita</th>
+				<th style="color:#ffbc00">Prezzo</th>
+			</tr>
+		</table>
 
 		<%for(i=0; i<contenutoNellOrdineList.size(); i++) { %>
-			<section>
-				<p>
-					ISBN: <%=contenutoNellOrdineList.get(i).getFumetto().getISBN()%> -
-					Quantità: <%=contenutoNellOrdineList.get(i).getQuantita()%> -
-					Magazzino: <%=contenutoNellOrdineList.get(i).getMagazzino().getNomeMagazzino()%> -
-					Centro vendita: <%=contenutoNellOrdineList.get(i).getCentroVendita().getNomeCentro()%> -
+			<table>
+				<tr>
+					<th><a href="javascript:viewDetails(<%=contenutoNellOrdineList.get(i).getFumetto().getISBN()%>)"> <%=contenutoNellOrdineList.get(i).getFumetto().getISBN()%></a></th>
+					<th><%=contenutoNellOrdineList.get(i).getQuantita()%></th>
+					<th><%=contenutoNellOrdineList.get(i).getMagazzino().getNomeMagazzino()%></th>
+					<th><%=contenutoNellOrdineList.get(i).getCentroVendita().getNomeCentro()%></th>
 					<%if(prices.size()>i){%>
-					Prezzo totale: <%=prices.get(i)%>
+					<th><%=prices.get(i)%> Euro</th>
 					<% } %>
-				</p>
-			</section>
+				</tr>
+			</table>
 
 		<% } %>
 		</br>
-		<section>
-			<form id ="backForm">
-				<input type="button" value="Go back!" onclick="history.back()">
-			</form>
-		</section>
+
+		<input type="button" name="backButton" class="button" onclick="goback()" value="Go back"/>
+
+		<form name="backForm" method="post" action="Dispatcher">
+			<input type="hidden" name="controllerAction" value="OrdersManagement.view"/>
+		</form>
+
+		<form name="viewDetailsForm" method="post" action="Dispatcher">
+			<input type="hidden" name="controllerAction" value="ProductsManagement.viewDetails"/>
+			<input type="hidden" name="ISBN"/>
+			<input type="hidden" name="nomeFornitore" value="Quinta Dimensione"/>
+			<input type="hidden" name="nomeMagazzino" value="QD Magazzino"/>
+		</form>
 
 	</main>
 	<%@include file="/include/footer.inc"%>

@@ -24,84 +24,108 @@
 <head>
 
   <%@include file="/include/htmlHead.inc"%>
-    <style>
+   <title>
+      FumettiDB: <%=menuActiveLink%>
+   </title>
+   <style>
 
-        .field {
-            margin: 5px 0;
-        }
+      .field {
+         margin: 5px 0;
+      }
 
-        label {
-            float: left;
-            width: 56px;
-            font-size: 0.8em;
-            margin-right: 10px;
-            padding-top: 3px;
-            text-align: left;
-        }
+      label {
+         float: left;
+         width: 56px;
+         font-size: 0.8em;
+         margin-right: 10px;
+         padding-top: 3px;
+         text-align: left;
+      }
 
-        p {
-            border: none;
-            border-radius: 4px;
-            padding: 3px;
-            background-color: #e8eeef;
-            color:#8a97a0;
-            box-shadow: 0 1px 0 rgba(0,0,0,0.03) inset;
-        }
+      p {
+         border: none;
+         border-radius: 4px;
+         padding: 3px;
+         background-color: #e8eeef;
+         color:#8a97a0;
+         box-shadow: 0 1px 0 rgba(0,0,0,0.03) inset;
+      }
 
-    </style>
+   </style>
 
-    <script language="JavaScript">
+   <script lang="JavaScript">
+      function goback() {
+         document.backForm.submit();
+      }
 
-        function goback() {
-            document.backForm.submit();
-        }
+      function mainOnLoadHandler() {
+         document.backForm.backButton.addEventListener("click", goback);
+      }
 
-        function mainOnLoadHandler() {
-            document.backForm.backButton.addEventListener("click", goback);
+      function addToCart(ISBN){
+         const f = document.addToCartForm;
+         f.ISBN.value = ISBN;
+         f.submit();
+      }
 
-        }
-
-
-
-    </script>
+   </script>
 
 </head>
 <body>
    <%@include file="/include/header.inc"%>
-    <main>
-        <section id="pageTitle">
-            <h1>
-                Fumetti: visualizza dettagli
-            </h1>
-        </section>
-        <section id="Product">
-                <div class="field clearfix">
-                    <p> Titolo: <%=fumetto.getTitolo()%> </p>
-                </div>
-                <div class="field clearfix">
-                    <p> Autore: <%=fumetto.getAutore()%> </p>
-                </div>
-                <div class="field clearfix">
-                    <p> Numero: <%=fumetto.getNumero()%> </p>
-                </div>
-                <div class="field clearfix">
-                    <p> Formato: <%=fumetto.getFormato()%> </p>
-                </div>
-                <div class="field clearfix">
-                    <p> Rilegatura: <%=fumetto.getRilegatura()%> </p>
-                </div>
-                <div class="field clearfix">
-                    <p> Prezzo: <%=fumetto.getPrezzo()%> Euro </p>
-                </div>
-                <div class="field clearfix">
-                    <p> Peso: <%=fumetto.getPeso()%>kg </p>
-                </div>
-                <form id ="backForm">
-                    <input type="button" value="Indietro" onclick="history.back()">
-                </form>
-        </section>
+   <main>
+      <section id="pageTitle">
+         <h1>
+             Fumetti: visualizza dettagli
+         </h1>
+      </section>
+      <section id="Product">
+         <div class="field clearfix">
+            <p> Titolo: <%=fumetto.getTitolo()%> </p>
+         </div>
+         <div class="field clearfix">
+            <p> Autore: <%=fumetto.getAutore()%> </p>
+         </div>
+         <div class="field clearfix">
+            <p> Numero: <%=fumetto.getNumero()%> </p>
+         </div>
+         <div class="field clearfix">
+            <p> Formato: <%=fumetto.getFormato()%> </p>
+         </div>
+         <div class="field clearfix">
+            <p> Rilegatura: <%=fumetto.getRilegatura()%> </p>
+         </div>
+         <div class="field clearfix">
+            <p> Prezzo: <%=fumetto.getPrezzo()%> Euro </p>
+         </div>
+         <div class="field clearfix">
+            <p> Peso: <%=fumetto.getPeso()%>kg </p>
+         </div>
 
-    </main>
+      </section>
+
+      Aggiungi al carrello:
+      <span>
+         <a href="javascript:addToCart(<%=fumetto.getISBN()%>)">
+            <img id=addToCart alt="addToCart" src="images/cart_plus.png" width="25" height="25">
+         </a>
+      </span>
+
+      </br>
+      </br>
+
+      <input type="button" name="backButton" class="button" onclick="goback()" value="Go back"/>
+
+      <form name="backForm" method="post" action="Dispatcher">
+         <input type="hidden" name="controllerAction" value="ProductsManagement.view"/>
+      </form>
+
+      <form name="addToCartForm" method="post" action="Dispatcher">
+         <input type="hidden" name="ISBN"/>
+         <input type="hidden" name="controllerAction" value="ProductsManagement.addToCart"/>
+      </form>
+
+   </main>
 <%@include file="/include/footer.inc"%>
 </body>
 </html>

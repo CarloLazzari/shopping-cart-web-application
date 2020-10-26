@@ -4,7 +4,7 @@
 <%@ page import="java.util.Objects" %>
 
 
-<%
+<% int i = 0;
 
   boolean loggedOn = (Boolean) request.getAttribute("loggedOn");
   User loggedUser = (User) request.getAttribute("loggedUser");
@@ -22,13 +22,33 @@
 	<head>
 		<%@include file="/include/htmlHead.inc"%>
 		<title>
-			Ordini
+			FumettiDB: <%=menuActiveLink%>
 		</title>
 		<style>
 
+			table {
+				border-collapse: collapse;
+				width: 100%;
+			}
+
+			td, th {
+				border: 1px solid #dddddd;
+				text-align: left;
+				width: 100px;
+				padding: 8px;
+			}
 
 			#changeState {
 				 position: relative;
+			}
+
+			#changeStateImage, #viewDetailsImage {
+				 float: right;
+			}
+
+			#changeStateImage {
+				 padding-top: 0px;
+				 margin-top: 2px;
 			}
 
 		</style>
@@ -48,8 +68,6 @@
 			    f.submit();
 			}
 
-
-
 		</script>
 
 	</head>
@@ -60,71 +78,95 @@
 					<% if(loggedUser!=null){%>
 					<h3>
 						<%if((loggedOn)&&(loggedUser.getAdmin().equals(("Y")))&&(whichUserUsername!=null)) { %>
-						Ordini effettuati dall'utente <%=whichUserUsername%>.
-						<% } else if((loggedOn)&&(loggedUser.getAdmin().equals(("Y")))){%>
+							<%if(prices.size()==0) {%>
+								Non sono ancora stati effettuati ordini dall'utente <%=whichUserUsername%>.
+							<% } else { %>
+								Ordini effettuati dall'utente <%=whichUserUsername%>.
+							<% } %>
+						<% } else if((loggedOn)&&(loggedUser.getAdmin().equals(("Y")))) {%>
 						Ordini effettuati da tutti gli utenti.
-						<%} else if(loggedOn) {%>
+						<% } else if(loggedOn) { %>
 						Ordini effettuati dall'utente <%=loggedUser.getUsername()%>.
-						<%} %>
+						<% } %>
 					</h3>
 					<% } %>
 				</section>
+
+				<%if((loggedOn)&&(loggedUser!=null)&&(loggedUser.getAdmin().equals("Y"))&&(prices.size()!=0)){%>
+				<label for="changeState">Seleziona lo stato che vuoi assegnare all'ordine: </label>
+					<select id="changeState">
+						<option value="In preparazione">In preparazione</option>
+						<option value="Spedito">Spedito</option>
+						<option value="Completato">Completato</option>
+					</select>
+				<% } %>
 				</br>
-					<% for(int i=0; i<ordini.size(); i++) { %>
-						<section>
-							<p>
-								<%=ordini.get(i).getOrderID()%> -
-								<%=ordini.get(i).getData()%> -
-								<%=ordini.get(i).getIndirizzoDestinazione()%> -
-								<%=ordini.get(i).getUser().getUsername()%> -
-								<%=ordini.get(i).getCarta().getNumeroCarta()%> -
-								<%=ordini.get(i).getStato()%> -
-								(Prezzo totale = <%=prices.get(i)%> Euro)
-							</p>
-							<% if((loggedOn)&&(Objects.requireNonNull(loggedUser).getAdmin().equals(("Y")))){%>
+				</br>
+				</br>
 
-							<label for="changeState">
-								<select id="changeState">
-									<option value="In preparazione">In preparazione</option>
-									<option value="Spedito">Spedito</option>
-									<option value="Completato">Completato</option>
-								</select>
-							</label>
+				<%if(ordini.size()>0){%>
+				<table>
+					<tr>
+						<th style="color:#ffbc00">ID Ordine</th>
+						<th style="color:#ffbc00">Data</th>
+						<th style="color:#ffbc00">Indirizzo Spedizione</th>
+						<th style="color:#ffbc00">Effettuante</th>
+						<th style="color:#ffbc00">Metodo pagamento</th>
+						<th style="color:#ffbc00">Stato</th>
+						<th style="color:#ffbc00">Prezzo</th>
+					</tr>
+				</table>
+				<%}%>
 
-							<script>
-								var x = document.getElementById("changeState");
-							</script>
-							<span style="margin-top: 2px">
+				<% for( i=0; i<ordini.size(); i++) { %>
+				<table>
+					<tr>
+						<th><%=ordini.get(i).getOrderID()%>
+						<% if((loggedOn)&&(Objects.requireNonNull(loggedUser).getAdmin().equals(("Y")))){%>
+						<script>
+							 var x = document.getElementById("changeState");
+						</script>
+						<span style="margin-top: 2px">
 							<a href="javascript:changeState(x.value,<%=ordini.get(i).getOrderID()%>)">
-								<img alt="changeState" src="images/edit_icon.png" width="22" height="22">
+								<img alt="changeState" id="changeStateImage" src="images/pencil.svg" width="18" height="18">
 							</a>
-							</span>
+						</span>
 							<% } %>
 
-							<span style="margin-top: 2px">
+						<span style="margin-top: 2px">
 							<a href="javascript:viewDetails(<%=ordini.get(i).getOrderID()%>)">
-								<img alt="viewDetails" src="images/view_details.png" width="22" height="22">
+								<img alt="viewDetails" id="viewDetailsImage" src="images/view_details.png" width="22" height="22">
 							</a>
-							</span>
-						</section>
-						<br/>
+						</span>
+						</th>
+						<th><%=ordini.get(i).getData()%></th>
+						<th><%=ordini.get(i).getIndirizzoDestinazione()%></th>
+						<th><%=ordini.get(i).getUser().getUsername()%></th>
+						<th><%=ordini.get(i).getCarta().getNumeroCarta()%></th>
+						<th><%=ordini.get(i).getStato()%></th>
+						<th><%=prices.get(i)%> Euro</th>
+					</tr>
 
+				</table>
+				<%	} %>
 
-					<%	} %>
-					<div class="clearfix"></div>
+				<div class="clearfix"></div>
 
-					</br>
-					<section>
-						<form name="changeStateForm" method="post" action="Dispatcher">
-							<input type="hidden" name="ORDER_ID"/>
-							<input type="hidden" name="STATO"/>
-							<input type="hidden" name="controllerAction" value="OrdersManagement.modifyStatus"/>
-						</form>
-						<form name="viewDetailsForm" method="post" action="Dispatcher">
-							<input type="hidden" name="ORDER_ID"/>
-							<input type="hidden" name="controllerAction" value="OrdersManagement.viewDetails"/>
-						</form>
-					</section>
+				</br>
+				<section>
+					<form name="changeStateForm" method="post" action="Dispatcher">
+						<input type="hidden" name="ORDER_ID"/>
+						<input type="hidden" name="STATO"/>
+						<%if(whichUserUsername!=null) { %>
+						<input type="hidden" name="whichUserUsername" value="<%=whichUserUsername%>"/>
+						<% } %>
+						<input type="hidden" name="controllerAction" value="OrdersManagement.modifyStatus"/>
+					</form>
+					<form name="viewDetailsForm" method="post" action="Dispatcher">
+						<input type="hidden" name="ORDER_ID"/>
+						<input type="hidden" name="controllerAction" value="OrdersManagement.viewDetails"/>
+					</form>
+				</section>
 
 			</main>
 

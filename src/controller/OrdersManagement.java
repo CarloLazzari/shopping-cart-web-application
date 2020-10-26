@@ -43,7 +43,13 @@ public class OrdersManagement {
             daoFactory = DAOFactory.getDAOFactory(Configuration.DAO_IMPL,null);
             daoFactory.beginTransaction();
 
+            String whichUserUsername = request.getParameter("whichUserUsername");
+            request.setAttribute("whichUserUsername",whichUserUsername);
+
             commonView(daoFactory, sessionDAOFactory, request);
+
+            daoFactory.commitTransaction();
+            sessionDAOFactory.commitTransaction();
 
             request.setAttribute("loggedOn",loggedUser!=null);
             request.setAttribute("loggedUser",loggedUser);
@@ -102,6 +108,8 @@ public class OrdersManagement {
 
             prices = contenutoNellOrdineDAO.calculatePriceCNOforWhichOrderID(ORDER_ID);
 
+            daoFactory.commitTransaction();
+            sessionDAOFactory.commitTransaction();
 
             request.setAttribute("loggedOn",loggedUser!=null);
             request.setAttribute("loggedUser",loggedUser);
@@ -164,6 +172,9 @@ public class OrdersManagement {
                 applicationMessage="Error in updating the order status.";
             }
 
+            String whichUserUsername = request.getParameter("whichUserUsername");
+            request.setAttribute("whichUserUsername",whichUserUsername);
+
             commonView(daoFactory, sessionDAOFactory, request);
 
             daoFactory.commitTransaction();
@@ -224,6 +235,7 @@ public class OrdersManagement {
 
         request.setAttribute("ordini", ordini);
         request.setAttribute("prices", prices);
+        request.setAttribute("whichUserUsername",whichUserUsername);
 
     }
 

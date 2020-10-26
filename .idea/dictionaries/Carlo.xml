@@ -5,10 +5,13 @@
       <w>aggiungere</w>
       <w>aggiungi</w>
       <w>aggiungo</w>
+      <w>all'ordine</w>
       <w>amministratore</w>
       <w>anche</w>
+      <w>ancora</w>
       <w>andata</w>
       <w>annulla</w>
+      <w>assegnare</w>
       <w>attributi</w>
       <w>attributo</w>
       <w>attualmente</w>
@@ -30,7 +33,9 @@
       <w>centri</w>
       <w>centro</w>
       <w>cerca</w>
+      <w>certa</w>
       <w>chiamo</w>
+      <w>ciclo</w>
       <w>classe</w>
       <w>clearfix</w>
       <w>clicca</w>
@@ -38,6 +43,7 @@
       <w>colonne</w>
       <w>completato</w>
       <w>compra</w>
+      <w>comprati</w>
       <w>concetto</w>
       <w>conferma</w>
       <w>contatto</w>
@@ -49,6 +55,7 @@
       <w>cookieimpl</w>
       <w>corrente</w>
       <w>cosi</w>
+      <w>costo</w>
       <w>costruirci</w>
       <w>creazione</w>
       <w>credito</w>
@@ -60,8 +67,10 @@
       <w>degli</w>
       <w>dell'ordine</w>
       <w>dell'utente</w>
+      <w>delle</w>
       <w>destinazione</w>
       <w>dettagli</w>
+      <w>devo</w>
       <w>dimensione</w>
       <w>dispacther</w>
       <w>disponibile</w>
@@ -83,11 +92,13 @@
       <w>esistente</w>
       <w>essenziali</w>
       <w>essere</w>
+      <w>faremo</w>
       <w>formato</w>
       <w>fornito</w>
       <w>fornitore</w>
       <w>fornitori</w>
       <w>fornitura</w>
+      <w>forniture</w>
       <w>forse</w>
       <w>fumetti</w>
       <w>fumetto</w>
@@ -120,6 +131,7 @@
       <w>l'ordine</w>
       <w>lavorazione</w>
       <w>lazzari</w>
+      <w>lista</w>
       <w>loggato</w>
       <w>magazzini</w>
       <w>magazzino</w>
@@ -189,7 +201,9 @@
       <w>richiesta</w>
       <w>righe</w>
       <w>rilegatura</w>
+      <w>rimuovere</w>
       <w>rimuovi</w>
+      <w>rimuovo</w>
       <w>ritorna</w>
       <w>rubrica</w>
       <w>saranno</w>
@@ -197,6 +211,7 @@
       <w>sbloccato</w>
       <w>scadenza</w>
       <w>scaduta</w>
+      <w>seleziona</w>
       <w>seleziono</w>
       <w>sennò</w>
       <w>setto</w>
@@ -239,6 +254,7 @@
       <w>vendita</w>
       <w>visualizza</w>
       <w>voglio</w>
+      <w>vuoi</w>
       <w>vuoto</w>
       <w>xxxx</w>
     </words>

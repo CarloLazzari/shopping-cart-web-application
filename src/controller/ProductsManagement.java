@@ -43,6 +43,11 @@ public class ProductsManagement {
             daoFactory = DAOFactory.getDAOFactory(Configuration.DAO_IMPL,null);
             daoFactory.beginTransaction();
 
+            String searchMode = request.getParameter("searchMode");
+            String searchString = request.getParameter("searchString");
+            request.setAttribute("searchMode",searchMode);
+            request.setAttribute("searchString",searchString);
+
             commonView(daoFactory, sessionDAOFactory, request);
 
             daoFactory.commitTransaction();
@@ -216,6 +221,7 @@ public class ProductsManagement {
             String nomeFornitore = request.getParameter("nomeFornitore");
             String ISBN = request.getParameter("ISBN");
 
+
             /* Richiesta di tutti i parametri */
             String titolo = request.getParameter("Titolo");
             String autore = request.getParameter("Autore");
@@ -232,6 +238,7 @@ public class ProductsManagement {
             Fumetto fumetto = fumettoDAO.findByFumettoISBN(ISBN);
             Magazzino magazzino = magazzinoDAO.findByNomeMagazzino(nomeMagazzino);
             CentroVendita centroVendita = centroVenditaDAO.findByNomeCentro(nomeFornitore);
+
 
             try {
 
@@ -261,7 +268,7 @@ public class ProductsManagement {
                         deleted);
 
             }  catch (DuplicatedObjectException e) {
-                applicationMessage = "Fumetto già esistente!";
+                applicationMessage = "Fumetto già esistente in magazzino!";
                 logger.log(Level.INFO, "Tentativo di inserimento di prodotto già esistente in magazzino.");
             }
 
@@ -270,13 +277,14 @@ public class ProductsManagement {
             try {
                 fornitoDaDAO.create(fumetto, centroVendita);
             } catch (DuplicatedObjectException e) {
-                applicationMessage = "Fumetto già esistente!";
+                applicationMessage = "Fumetto già esistente nella lista delle forniture!";
                 logger.log(Level.INFO, "Tentativo di inserimento di prodotto già fornito.");
             }
 
 
             daoFactory.commitTransaction();
             sessionDAOFactory.commitTransaction();
+
 
             request.setAttribute("loggedOn",loggedUser!=null);
             request.setAttribute("loggedUser", loggedUser);
@@ -367,7 +375,7 @@ public class ProductsManagement {
             FumettoDAO fumettoDAO = daoFactory.getFumettoDAO();
             Fumetto fumetto = fumettoDAO.findByFumettoISBN(ISBN);
             fumettoDAO.block(fumetto);
-            String applicationMessage= "Fumetto " +ISBN +" bloccato.";
+            String applicationMessage= "Fumetto "+ISBN +" bloccato.";
 
             /* Chiamo la common view */
             commonView(daoFactory, sessionDAOFactory, request);
@@ -429,7 +437,7 @@ public class ProductsManagement {
             fumettoDAO.unblock(fumetto);
 
             String applicationMessage;
-            applicationMessage = "Fumetto"+ISBN+" sbloccato.";
+            applicationMessage = "Fumetto "+ISBN+" sbloccato.";
 
             commonView(daoFactory, sessionDAOFactory, request);
 
@@ -545,11 +553,14 @@ public class ProductsManagement {
             /* Richiesta dei parametri essenziali */
             String ISBN = (request.getParameter("ISBN"));
             String nomeMagazzino = request.getParameter("nomeMagazzino");
+            String nomeFornitore = request.getParameter("nomeFornitore");
 
             FumettoDAO fumettoDAO = daoFactory.getFumettoDAO();
             Fumetto fumetto = fumettoDAO.findByFumettoISBN(ISBN);
             ContenutoNelMagazzinoDAO contenutoNelMagazzinoDAO = daoFactory.getContenutoNelMagazzinoDAO();
             ContenutoNelMagazzino contenutoNelMagazzino = contenutoNelMagazzinoDAO.findByFumettoISBNRefAndMagazzinoRef(ISBN, nomeMagazzino);
+            FornitoDaDAO fornitoDaDAO = daoFactory.getFornitoDaDAO();
+            FornitoDa fornitoDa = fornitoDaDAO.findByFumettoISBNandCentroVenditaRef(ISBN,nomeFornitore);
 
             fumetto.setTitolo(request.getParameter("Titolo"));
             fumetto.setAutore(request.getParameter("Autore"));
@@ -563,16 +574,20 @@ public class ProductsManagement {
             contenutoNelMagazzino.setQuantita(Integer.parseInt(request.getParameter("Quantita")));
             contenutoNelMagazzino.setDeleted(request.getParameter("Deleted"));
 
+            /* Inserisco il nuovo fumetto nella tabella di MySQL in : */
+            /* La tabella dei fumetti, la tabella della fornitura, e la tabella di disponibilita' di magazzino effettiva */
+            try {
+                fumettoDAO.update(fumetto);
+            } catch (DuplicatedObjectException e) {
+                applicationMessage = "Fumetto già esistente.";
+                logger.log(Level.INFO, "Tentativo di inserimento di un fumetto già esistente.");
+            }
 
             try {
-                /* Inserisco il nuovo fumetto nella tabella di MySQL in : */
-                /* La tabella dei fumetti, la tabella della fornitura, e la tabella di disponibilita' di magazzino effettiva */
-                fumettoDAO.update(fumetto);
                 contenutoNelMagazzinoDAO.updateWarehouse(contenutoNelMagazzino);
-
             } catch (DuplicatedObjectException e) {
-                applicationMessage = "Fumetto già esistente";
-                logger.log(Level.INFO, "Tentativo di inserimento di un fumetto già esistente");
+                applicationMessage = "Fumetto già esistente in magazzino.";
+                logger.log(Level.INFO, "Tentativo di inserimento di un fumetto già esistente in magazzino.");
             }
 
             commonView(daoFactory, sessionDAOFactory, request);
@@ -680,12 +695,13 @@ public class ProductsManagement {
 
             String ISBN = request.getParameter("ISBN");
             String nomeFornitore = request.getParameter("nomeFornitore");
+            String magazzino = request.getParameter("nomeMagazzino");
             FumettoDAO fumettoDAO = daoFactory.getFumettoDAO();
             FornitoDaDAO fornitoDaDAO = daoFactory.getFornitoDaDAO();
             FornitoDa fornitoDa = fornitoDaDAO.findByFumettoISBNandCentroVenditaRef(ISBN,nomeFornitore);
 
             Fumetto fumetto  = fumettoDAO.findByFumettoISBN(ISBN);
-            String magazzino = request.getParameter("nomeMagazzino");
+
             ContenutoNelMagazzinoDAO contenutoNelMagazzinoDAO = daoFactory.getContenutoNelMagazzinoDAO();
             ContenutoNelMagazzino contenutoNelMagazzino = contenutoNelMagazzinoDAO.findByFumettoISBNRefAndMagazzinoRef(ISBN, magazzino);
 
@@ -752,11 +768,11 @@ public class ProductsManagement {
 
             String ISBN = request.getParameter("ISBN");
             String nomeFornitore = request.getParameter("nomeFornitore");
+            String magazzino = request.getParameter("nomeMagazzino");
             FumettoDAO fumettoDAO = daoFactory.getFumettoDAO();
             FornitoDaDAO fornitoDaDAO = daoFactory.getFornitoDaDAO();
             FornitoDa fornitoDa = fornitoDaDAO.findByFumettoISBNandCentroVenditaRef(ISBN,nomeFornitore);
             Fumetto fumetto  = fumettoDAO.findByFumettoISBN(ISBN);
-            String magazzino = request.getParameter("nomeMagazzino");
             ContenutoNelMagazzinoDAO contenutoNelMagazzinoDAO = daoFactory.getContenutoNelMagazzinoDAO();
             ContenutoNelMagazzino contenutoNelMagazzino = contenutoNelMagazzinoDAO.findByFumettoISBNRefAndMagazzinoRef(ISBN, magazzino);
 
@@ -868,6 +884,7 @@ public class ProductsManagement {
         UserDAO sessionUserDAO = sessionDAOFactory.getUserDAO();
         User loggedUser = sessionUserDAO.findLoggedUser();
 
+        /* DAO */
         FumettoDAO fumettoDAO = daoFactory.getFumettoDAO();
         ContenutoNelMagazzinoDAO contenutoNelMagazzinoDAO = daoFactory.getContenutoNelMagazzinoDAO();
         FornitoDaDAO fornitoDaDAO = daoFactory.getFornitoDaDAO();
@@ -875,7 +892,7 @@ public class ProductsManagement {
         ArrayList<Fumetto> fumetti = new ArrayList<>();
         ArrayList<ContenutoNelMagazzino> contenutoNelMagazzinoArrayList = new ArrayList<>();
         ArrayList<FornitoDa> fornitoDaArrayList = new ArrayList<>();
-        String modalitaRicerca = request.getParameter("modalitaRicerca");
+        String searchMode = request.getParameter("searchMode");
         String searchString = request.getParameter("searchString");
 
         /* Se sono admin voglio vedere anche i prodotti che ho bloccato */
@@ -885,21 +902,21 @@ public class ProductsManagement {
         }
 
         /* Ricerca */
-        if ((!(modalitaRicerca == null))) {
+        if ((!(searchMode == null))) {
             if(!(searchString==null)) {
-                switch (modalitaRicerca) {
+                switch (searchMode) {
                     case "Titolo":
                     case "Autore":
                     case "Numero":
                         if(isAdmin) {
-                            fumetti = fumettoDAO.findBy(modalitaRicerca, searchString);
-                            contenutoNelMagazzinoArrayList = contenutoNelMagazzinoDAO.findByCNM(modalitaRicerca, searchString);
-                            fornitoDaArrayList = fornitoDaDAO.findBy(modalitaRicerca, searchString);
+                            fumetti = fumettoDAO.findBy(searchMode, searchString);
+                            contenutoNelMagazzinoArrayList = contenutoNelMagazzinoDAO.findByCNM(searchMode, searchString);
+                            fornitoDaArrayList = fornitoDaDAO.findBy(searchMode, searchString);
                         }
                         else {
-                            fumetti = fumettoDAO.findByUnblocked(modalitaRicerca, searchString);
-                            contenutoNelMagazzinoArrayList = contenutoNelMagazzinoDAO.findByCNMUnblocked(modalitaRicerca, searchString);
-                            fornitoDaArrayList = fornitoDaDAO.findByUnblocked(modalitaRicerca, searchString);
+                            fumetti = fumettoDAO.findByUnblocked(searchMode, searchString);
+                            contenutoNelMagazzinoArrayList = contenutoNelMagazzinoDAO.findByCNMUnblocked(searchMode, searchString);
+                            fornitoDaArrayList = fornitoDaDAO.findByUnblocked(searchMode, searchString);
                         }
                         break;
                     default:
@@ -908,15 +925,15 @@ public class ProductsManagement {
             }
             else {
                 if(isAdmin) {
-                    fumetti = fumettoDAO.findBy(modalitaRicerca, null);
-                    contenutoNelMagazzinoArrayList = contenutoNelMagazzinoDAO.findByCNM(modalitaRicerca, null);
-                    fornitoDaArrayList = fornitoDaDAO.findBy(modalitaRicerca, null);
+                    fumetti = fumettoDAO.findBy(searchMode, null);
+                    contenutoNelMagazzinoArrayList = contenutoNelMagazzinoDAO.findByCNM(searchMode, null);
+                    fornitoDaArrayList = fornitoDaDAO.findBy(searchMode, null);
 
                 }
                 else {
-                    fumetti = fumettoDAO.findByUnblocked(modalitaRicerca, null);
-                    contenutoNelMagazzinoArrayList = contenutoNelMagazzinoDAO.findByCNMUnblocked(modalitaRicerca, null);
-                    fornitoDaArrayList = fornitoDaDAO.findByUnblocked(modalitaRicerca, null);
+                    fumetti = fumettoDAO.findByUnblocked(searchMode, null);
+                    contenutoNelMagazzinoArrayList = contenutoNelMagazzinoDAO.findByCNMUnblocked(searchMode, null);
+                    fornitoDaArrayList = fornitoDaDAO.findByUnblocked(searchMode, null);
                 }
             }
         } else if(searchString!=null){
@@ -943,8 +960,6 @@ public class ProductsManagement {
             }
         }
 
-        request.setAttribute("modalitaRicerca",modalitaRicerca);
-        request.setAttribute("searchString",searchString);
         request.setAttribute("fumetti",fumetti);
         request.setAttribute("contenutoNelMagazzinoArrayList",contenutoNelMagazzinoArrayList);
         request.setAttribute("fornitoDaArrayList",fornitoDaArrayList);

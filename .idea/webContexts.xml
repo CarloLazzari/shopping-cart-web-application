@@ -8,6 +8,7 @@
         <entry key="file://$PROJECT_DIR$/web/jsp/confirmOrderManagement/confirmView.jsp" value="file://$PROJECT_DIR$/web/jsp/confirmOrderManagement" />
         <entry key="file://$PROJECT_DIR$/web/jsp/homeManagement/view.jsp" value="file://$PROJECT_DIR$/web/jsp/homeManagement" />
         <entry key="file://$PROJECT_DIR$/web/jsp/ordersManagement/view.jsp" value="file://$PROJECT_DIR$/web/jsp/ordersManagement" />
+        <entry key="file://$PROJECT_DIR$/web/jsp/ordersManagement/viewDetails.jsp" value="file://$PROJECT_DIR$/web/jsp/ordersManagement" />
         <entry key="file://$PROJECT_DIR$/web/jsp/productsManagement/insView.jsp" value="file://$PROJECT_DIR$/web/jsp/productsManagement" />
         <entry key="file://$PROJECT_DIR$/web/jsp/productsManagement/view.jsp" value="file://$PROJECT_DIR$/web" />
         <entry key="file://$PROJECT_DIR$/web/jsp/productsManagement/viewDetails.jsp" value="file://$PROJECT_DIR$/web/jsp/productsManagement" />

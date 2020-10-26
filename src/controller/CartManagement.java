@@ -269,7 +269,7 @@ public class CartManagement {
             daoFactory.beginTransaction();
 
 
-            /*--------------------- */
+            /*-------------------- */
             List<Carrello> cartItems;
             CarrelloDAO carrelloDAO = sessionDAOFactory.getCarrelloDAO();
             cartItems = carrelloDAO.viewCart(loggedUser.getUsername());

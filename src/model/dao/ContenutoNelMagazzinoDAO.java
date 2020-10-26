@@ -26,8 +26,8 @@ public interface ContenutoNelMagazzinoDAO {
     public ArrayList<ContenutoNelMagazzino> findInCartCNM(String username);
     public ArrayList<ContenutoNelMagazzino> freeSearchCNM(String searchString);
     public ArrayList<ContenutoNelMagazzino> freeSearchCNMUnblocked(String searchString);
-    public ArrayList<ContenutoNelMagazzino> findByCNM(String modalitaRicerca, String searchString);
-    public ArrayList<ContenutoNelMagazzino> findByCNMUnblocked(String modalitaRicerca, String searchString);
+    public ArrayList<ContenutoNelMagazzino> findByCNM(String searchMode, String searchString);
+    public ArrayList<ContenutoNelMagazzino> findByCNMUnblocked(String searchMode, String searchString);
 
 
 }

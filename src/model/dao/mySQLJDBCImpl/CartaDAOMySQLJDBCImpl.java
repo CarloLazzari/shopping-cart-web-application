@@ -31,7 +31,7 @@ public class CartaDAOMySQLJDBCImpl implements CartaDAO {
                     = " SELECT *"
                     + " FROM carta "
                     + " WHERE NUMERO_CARTA = ? "
-                    + " AND DELETED='0'";
+                    + " AND DELETED = 'N'";
 
             ps = conn.prepareStatement(sql);
             ps.setString(1, numeroCarta);

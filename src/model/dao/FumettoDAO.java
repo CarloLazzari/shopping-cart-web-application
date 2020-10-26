@@ -16,8 +16,8 @@ public interface FumettoDAO {
     public Fumetto create(String ISBN, String titolo, String autore, int numero, String formato, String rilegatura, Float prezzo, Float peso, String bloccato) throws DuplicatedObjectException;
     public Fumetto showFumetto(String ISBN);
     public Fumetto findByFumettoISBN(String ISBN);
-    public ArrayList<Fumetto> findBy(String modalitaRicerca, String searchString);
-    public ArrayList<Fumetto> findByUnblocked(String modalitaRicerca, String searchString);
+    public ArrayList<Fumetto> findBy(String searchMode, String searchString);
+    public ArrayList<Fumetto> findByUnblocked(String searchMode, String searchString);
     public ArrayList<Fumetto> findAllFumetti();
     public ArrayList<Fumetto> findAllUnblockedFumetti();
     public ArrayList<Fumetto> freeSearch(String searchString);

@@ -6,7 +6,7 @@ public class Carta {
 
     private String numeroCarta; //cardNumber
     private String intestatario; //who owns the cart
-    private Date dataScadenza; //expire date
+    private java.sql.Date dataScadenza; //expire date
 
     /* N:1 */
     private User user;
@@ -22,12 +22,12 @@ public class Carta {
     public String getIntestatario(){
         return intestatario;
     }
-    public Date getDataScadenza(){ return dataScadenza; }
+    public java.sql.Date getDataScadenza(){ return dataScadenza; }
 
     public void setUser(User user){ this.user = user;}
     public void setOrdini(Ordine[] ordini) { this.ordini = ordini;  }
     public void setOrdini(Ordine ordini, int index) { this.ordini[index] = ordini;  }
-    public void setDataScadenza(Date dataScadenza){
+    public void setDataScadenza(java.sql.Date dataScadenza){
         this.dataScadenza = dataScadenza;
     }
     public void setNumeroCarta(String numeroCarta){

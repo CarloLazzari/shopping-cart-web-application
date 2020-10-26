@@ -150,7 +150,7 @@ public class UsersManagement {
             UserDAO userDAO = daoFactory.getUserDAO();
             User user = userDAO.findByUsername(whichUserUsername);
 
-            userDAO.unblock(user);
+                userDAO.unblock(user);
 
             applicationMessage = "Utente "+ whichUserUsername + " bloccato";
 
@@ -181,49 +181,6 @@ public class UsersManagement {
         }
     }
 
-    public static void viewOrders(HttpServletRequest request, HttpServletResponse response){
-
-        DAOFactory sessionDAOFactory = null;
-        DAOFactory daoFactory;
-        User loggedUser;
-
-        Logger logger = LogService.getApplicationLogger();
-
-        try{
-
-            Map sessionFactoryParameters = new HashMap<String, Object>();
-            sessionFactoryParameters.put("request",request);
-            sessionFactoryParameters.put("response",response);
-            sessionDAOFactory = DAOFactory.getDAOFactory(Configuration.COOKIE_IMPL,sessionFactoryParameters);
-            sessionDAOFactory.beginTransaction();
-
-            UserDAO sessionUserDao = sessionDAOFactory.getUserDAO();
-            loggedUser = sessionUserDao.findLoggedUser();
-
-            String whichUserUsername = request.getParameter("whichUserUsername");
-
-            request.setAttribute("loggedOn",loggedUser!=null);
-            request.setAttribute("loggedUser",loggedUser);
-            request.setAttribute("whichUserUsername",whichUserUsername);
-            request.setAttribute("viewUrl","ordersManagement/view");
-
-        } catch(Exception e){
-            logger.log(Level.SEVERE, "Controller error",e);
-            try{
-                if(sessionDAOFactory != null) sessionDAOFactory.rollbackTransaction();
-            } catch (Throwable t){
-
-            }
-            throw new RuntimeException(e);
-        } finally {
-            try{
-                if(sessionDAOFactory != null) sessionDAOFactory.closeTransaction();
-            } catch (Throwable t){
-
-            }
-        }
-
-    }
 
     public static void commonView(DAOFactory daoFactory, DAOFactory sessionDAOFactory, HttpServletRequest request){
 

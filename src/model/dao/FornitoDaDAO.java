@@ -20,8 +20,8 @@ public interface FornitoDaDAO {
 
     public ArrayList<FornitoDa> freeSearch(String searchString);
     public ArrayList<FornitoDa> freeSearchUnblocked(String searchString);
-    public ArrayList<FornitoDa> findBy(String modalitaRicerca, String searchString);
-    public ArrayList<FornitoDa> findByUnblocked(String modalitaRicerca, String searchString);
+    public ArrayList<FornitoDa> findBy(String searchMode, String searchString);
+    public ArrayList<FornitoDa> findByUnblocked(String searchMode, String searchString);
 
     /**/
 

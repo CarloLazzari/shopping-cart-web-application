@@ -56,9 +56,9 @@ public class UserDAOMySQLJDBCImpl implements UserDAO {
         try {
             String sql
                     = " SELECT count(ID_ORDINE) "
-                    + " FROM user "
-                    + " JOIN ordine ON USERNAME = NOME_EFFETTUANTE "
-                    + " GROUP BY USERNAME ";
+                    + " FROM ordine "
+                    + " RIGHT JOIN user ON NOME_EFFETTUANTE = USERNAME  "
+                    + " GROUP BY USERNAME ORDER BY USERNAME asc";
 
             ps = conn.prepareStatement(sql);
             ResultSet resultSet = ps.executeQuery();

@@ -13,7 +13,9 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>Utenti</title>
+        <title>
+            FumettiDB: <%=menuActiveLink%>
+        </title>
         <%@include file="/include/htmlHead.inc"%>
     </head>
     <body>

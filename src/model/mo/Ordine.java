@@ -11,7 +11,7 @@ public class Ordine {
 
     private String modalitaPagamento; //payment method
     private String stato; //state
-    private Date data;
+    private java.sql.Date data;
 
     /* N:1 */
     private User user;
@@ -36,7 +36,7 @@ public class Ordine {
     public String getNomeEffettuante(){ return nomeEffettuante; }
     public int getOrderID() { return orderID; }
     public String getStato() { return stato; }
-    public Date getData() {  return data; }
+    public java.sql.Date getData() {  return data; }
 
     /*Setters*/
     public void setUser(User user){this.user = user;}
@@ -50,7 +50,7 @@ public class Ordine {
     public void setIndirizzoDestinazione(String indirizzoDestinazione) { this.indirizzoDestinazione = indirizzoDestinazione; }
     public void setNomeEffettuante(String nomeEffettuante) { this.nomeEffettuante = nomeEffettuante; }
     public void setStato(String stato) { this.stato = stato; }
-    public void setData(Date data) {  this.data = data; }
+    public void setData(java.sql.Date data) {  this.data = data; }
     public void setOrderID(int orderID) { this.orderID = orderID; }
 
 }

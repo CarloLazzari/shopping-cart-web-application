@@ -28,90 +28,95 @@
 %>
 <html>
 <head>
-    <%@include file="/include/htmlHead.inc"%>
-    <style>
 
-        .field {
-            margin: 5px 0;
-        }
+	<%@include file="/include/htmlHead.inc"%>
+	<title>
+		FumettiDB: <%=menuActiveLink%>
+	</title>
+	<style>
 
-        label {
-            float: left;
-            width: 56px;
-            font-size: 0.8em;
-            margin-right: 10px;
-            padding-top: 3px;
-            text-align: left;
-        }
+		.field {
+			margin: 5px 0;
+		}
 
-        input[type="text"], input[type="titolo"], input[type="autore"], input[type="numero"], input[type="formato"], input[type="rilegatura"], input[type="prezzo"], input[type="peso"], input[type="peso"], input[type="nomeFornitore"] {
-            border: none;
-            border-radius: 4px;
-            padding: 3px;
-            background-color: #e8eeef;
-            color:#8a97a0;
-            box-shadow: 0 1px 0 rgba(0,0,0,0.03) inset;
-        }
+		label {
+			float: left;
+			width: 56px;
+			font-size: 0.8em;
+			margin-right: 10px;
+			padding-top: 3px;
+			text-align: left;
+		}
 
-        input[type="text"]:focus, input[type="titolo"]:focus, input[type="autore"]:focus, input[type="numero"]:focus, input[type="numero"]:focus, input[type="formato"]:focus, input[type="rilegatura"]:focus, input[type="prezzo"]:focus, input[type="peso"]:focus, input[type="nomeFornitore"]:focus {
-            background: #d2d9dd;
-            outline-color: #0c74f8;
-        }
+		input[type="text"], input[type="titolo"], input[type="autore"], input[type="numero"], input[type="formato"], input[type="rilegatura"], input[type="prezzo"], input[type="peso"], input[type="peso"], input[type="nomeFornitore"] {
+			border: none;
+			border-radius: 4px;
+			padding: 3px;
+			background-color: #e8eeef;
+			color:#8a97a0;
+			box-shadow: 0 1px 0 rgba(0,0,0,0.03) inset;
+		}
 
-        #addToWarehouse, #removeFromWarehouse {
+		input[type="text"]:focus, input[type="titolo"]:focus, input[type="autore"]:focus, input[type="numero"]:focus, input[type="numero"]:focus, input[type="formato"]:focus, input[type="rilegatura"]:focus, input[type="prezzo"]:focus, input[type="peso"]:focus, input[type="nomeFornitore"]:focus {
+			background: #d2d9dd;
+			outline-color: #0c74f8;
+		}
 
-            margin: 5px;
-        }
+		#addToWarehouse, #removeFromWarehouse {
 
+			margin: 5px;
+		}
 
+	</style>
 
-    </style>
+	<script lang="JavaScript">
 
-    <script lang="JavaScript">
+		const status = '<%=action%>';
 
-        const status = "<%=action%>";
+		function submitProduct() {
+			let f;
+			f = document.insModForm;
+			f.controllerAction.value = "ProductsManagement."+status;
+			f.submit();
+		}
 
-        function submitProduct() {
-            let f;
-            f = document.insModForm;
-            f.controllerAction.value = "ProductsManagement."+status;
-            f.submit();
-        }
+		function addToWarehouse(ISBN){
+			const f = document.addToWarehouseForm;
+			f.ISBN.value = ISBN;
+			f.submit();
+		}
 
-        function addToWarehouse(ISBN){
-            const f = document.addToWarehouseForm;
-            f.ISBN.value = ISBN;
-            f.submit();
-        }
+		function removeFromWarehouse(ISBN){
+			const f = document.removeFromWarehouseForm;
+			f.ISBN.value = ISBN;
+			f.submit();
+		}
 
-        function removeFromWarehouse(ISBN){
-            const f = document.removeFromWarehouseForm;
-            f.ISBN.value = ISBN;
-            f.submit();
-        }
+		function goback() {
+			document.backForm.submit();
+		}
 
-        function goback() {
-            document.backForm.submit();
-        }
+		function mainOnLoadHandler() {
+			document.insModForm.addEventListener("submit", submitProduct);
+			document.insModForm.backButton.addEventListener("click", goback);
+		}
 
-        function mainOnLoadHandler() {
-            document.insModForm.addEventListener("submit", submitProduct);
-            document.insModForm.backButton.addEventListener("click", goback);
-        }
-
-    </script>
+	</script>
 
 </head>
 <body>
     <%@include file="/include/header.inc"%>
 	<main>
 		<section id="pageTitle">
-            <h1>
-                Fumetti: <%=(action.equals("modify")) ? "Modifica Fumetto" : "Nuovo Fumetto"%>
-            </h1>
+			<h1>
+				 Fumetti: <%=(action.equals("modify")) ? "Modifica Fumetto" : "Nuovo Fumetto"%>
+			</h1>
 		</section>
+
 		<section id="insModFormSection">
+
 			<form name="insModForm" action="Dispatcher" method="post">
+
 				<div class="field clearfix">
 					<label for="ISBN">ISBN</label>
 					<input type="text" id="ISBN" name="ISBN"
@@ -185,14 +190,14 @@
 							required size="20" maxlength="45" <%if(action.equals("modify")){%>readonly<%}%>/>
 				</div>
 				<div class="field clearfix">
-				   <label for="nomeMagazzino">Nome Magazzino</label>
+				   <label for="nomeMagazzino">Magazzino</label>
 				   <input type="text" id="nomeMagazzino" name="nomeMagazzino"
 							value="<%=(action.equals("modify")) ? contenutoNelMagazzino.getMagazzino().getNomeMagazzino() : ""%>"
 							required size="20" maxlength="45" <%if(action.equals("modify")){%>readonly<%}%>/>
 				</div>
 
 				<label>&#160;</label>
-				<input type="submit" class="button" value="Invia"/>
+				<input type="submit" class="button" value="Conferma"/>
 				<input type="button" name="backButton" class="button" onclick="goback()" value="Annulla"/>
 				<input type="hidden" name="controllerAction" value="ProductsManagement.view">
 
@@ -205,6 +210,8 @@
 			</form>
 
 		</section>
+
+		</br>
 
 		<%if (action.equals("modify")) {%>
 		<section class="field clearfix">
