@@ -39,16 +39,21 @@
          table {
              border-collapse: collapse;
              width: 100%;
+				 table-layout: fixed;
          }
 
          td, th {
              border: 1px solid #dddddd;
              text-align: left;
-				 width: 100px;
+				 width: 150px;
              padding: 8px;
          }
 
 			#block, #unblock {
+				 float: right;
+			}
+
+			#admin{
 				 float: right;
 			}
 
@@ -101,8 +106,8 @@
 
 			<% for(i=0; i<users.size(); i++) { %>
 			<table id="users">
-			   <tr <%if(loggedUser.getUsername().equals(users.get(i).getUsername())){%> style="color: blueviolet" <% } %>>
-					<th style="width: 120px" ><%=users.get(i).getUsername()%>
+			   <tr <%if(users.get(i).getAdmin().equals("Y")){%> style="color: blueviolet" <% } %>>
+					<th style="width: 100px" ><%=users.get(i).getUsername()%>
 						<% if(!(loggedUser.getUsername().equals(users.get(i).getUsername()))){ %>
 						<% if(users.get(i).getBlocked().equals("N")) { %>
 						<span>
@@ -118,14 +123,17 @@
 						</span>
 						<% } %>
 						<% } %>
+						<%if(users.get(i).getAdmin().equals("Y")){%>
+							<img id="admin" alt="adminIcon" src="images/admin.png" width="20" height="20">
+						<% } %>
 					</th>
-					<th style="width: 100px;" ><%=users.get(i).getFirstname()%></th>
-					<th style="width: 100px;" ><%=users.get(i).getSurname()%></th>
-					<th style="width: 150px;" ><%=users.get(i).getEmail()%></th>
-					<th style="width: 80px;" ><%=users.get(i).getData()%></th>
-					<th style="width: 150px;" ><%=users.get(i).getIndirizzo()%></th>
-					<th style="text-align: center; width: 10px" ><%=users.get(i).getBlocked()%></th>
-					<th style="text-align: center; width: 100px;" ><a id="viewOrders" href="javascript:viewOrders('<%=users.get(i).getUsername()%>')">#ORDINI:</a> <%=usersOrdersCount.get(i)%></th>
+					<th style="width: 100px"><%=users.get(i).getFirstname()%></th>
+					<th style="width: 100px"><%=users.get(i).getSurname()%></th>
+					<th style="width: 150px"><%=users.get(i).getEmail()%></th>
+					<th style="width: 50px" ><%=users.get(i).getData()%></th>
+					<th style="width: 100px"  ><%=users.get(i).getIndirizzo()%></th>
+					<th style="width: 10px" ><%=users.get(i).getBlocked()%></th>
+					<th style="width: 50px"  ><a id="viewOrders" href="javascript:viewOrders('<%=users.get(i).getUsername()%>')">#ORDINI:</a> <%=usersOrdersCount.get(i)%></th>
 				</tr>
 
 
