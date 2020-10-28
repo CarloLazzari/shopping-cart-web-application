@@ -10,4 +10,4 @@ These were the **requirements** for the assignment:
 **5.** The site administrator can change the status of each order and can view all the orders placed by each speficic user/all users.  
 **6.** The site administrator can block/unblock other users, making them unable to login.   
 
-This project was done using IntelliJ Idea 2019, MySQLWorkBench and GLassFish 5.1.
+This project was done using IntelliJ Idea 2019, MySQLWorkBench and GlassFish 5.1.
