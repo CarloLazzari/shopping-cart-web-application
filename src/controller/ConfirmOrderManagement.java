@@ -163,11 +163,9 @@ public class ConfirmOrderManagement {
             UserDAO userDAO = daoFactory.getUserDAO();
             FornitoDaDAO fornitoDaDAO = daoFactory.getFornitoDaDAO();
 
-
             /* Lists */
             ArrayList<FornitoDa> fornitoDaArrayList = fornitoDaDAO.findInCart(loggedUser.getUsername());
             ArrayList<ContenutoNelMagazzino> contenutoNelMagazzinoArrayList = contenutoNelMagazzinoDAO.findInCartCNM(loggedUser.getUsername());
-
 
             /* Richiesta dei parametri */
             String indirizzoSpedizione = request.getParameter("indirizzoSpedizione");
@@ -190,12 +188,10 @@ public class ConfirmOrderManagement {
             StringBuilder errorMessage = new StringBuilder();
             int i;
             for(i=0; i< cartItems.size(); i++){
-
                 if((contenutoNelMagazzinoDAO.getAvailability(cartItems.get(i).getFumetto().getISBN(),contenutoNelMagazzinoArrayList.get(i).getMagazzino().getNomeMagazzino()) >= cartItems.get(i).getQuantita())){
                     /*Do nothing*/
                 }
                 else  errorMessage.append(cartItems.get(i).getFumetto().getISBN()).append(" non e' disponibile\n");
-
             }
 
             /* Se il messaggio di errore esiste, lo setto come attributo da passare alla view*/
@@ -211,7 +207,7 @@ public class ConfirmOrderManagement {
             }
 
             /* Se non ho nessun messaggio di errore */
-            /* E il metodo di pagamento è valido e la carta non è scaduta, procedo con l'ordine*/
+            /* .. il metodo di pagamento è valido, e la carta non è scaduta, procedo con l'ordine. */
             else if(carta != null && carta.getDataScadenza().compareTo(sqlDate) > 0) {
                 try {
 
@@ -230,7 +226,7 @@ public class ConfirmOrderManagement {
                         /* Per ogni prodotto nel carrello rimuovo di una certa quantità nel magazzino */
                         /* Questa quantità è pari alla quantità presente nel carrello quindi ciclo su essa*/
                         int index;
-                        for(index=0; index<carrelloDAO.getQuantity(loggedUser.getUsername(),cartItems.get(i).getFumetto().getISBN()); index++) {
+                        for(index=0; index<cartItems.get(i).getQuantita(); index++) {
                             ContenutoNelMagazzino contenutoNelMagazzino = contenutoNelMagazzinoDAO.findByFumettoISBNRefAndMagazzinoRef(cartItems.get(i).getFumetto().getISBN(), contenutoNelMagazzinoArrayList.get(i).getMagazzino().getNomeMagazzino());
                             contenutoNelMagazzinoDAO.removeQuantityFromWarehouse(contenutoNelMagazzino);
                         }
@@ -267,16 +263,15 @@ public class ConfirmOrderManagement {
 
             } else {
                 applicationMessage = "Errore nella conferma dell'ordine. La carta di credito non esiste o è scaduta.";
+                logger.log(Level.INFO,"Errore nella conferma dell'ordine. La carta di credito fornita non esiste o è scaduta.");
                 request.setAttribute("loggedOn", true);
                 request.setAttribute("loggedUser", loggedUser);
                 request.setAttribute("applicationMessage",applicationMessage);
                 request.setAttribute("viewUrl", "confirmOrderManagement/view");
             }
 
-
             daoFactory.commitTransaction();
             sessionDAOFactory.commitTransaction();
-
 
         } catch (Exception e) {
             logger.log(Level.SEVERE, "Controller Error", e);
