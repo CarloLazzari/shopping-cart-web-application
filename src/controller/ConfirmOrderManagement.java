@@ -175,13 +175,13 @@ public class ConfirmOrderManagement {
 
             ArrayList<Carrello> cartItems = carrelloDAO.viewCart(loggedUser.getUsername());
 
-            int max = ordineDAO.selectMaxOrderId();
+            int max = ordineDAO.selectMaxOrderID();
             int newOrderID = max+1;
             /* Seleziono l'id più grande, e aggiungo 1, in modo da non avere duplicati*/
 
             /* Setto i parametri*/
             User user = userDAO.findByUsername(loggedUser.getUsername());
-            Carta carta = cartaDAO.findByNumeroCarta(metodoPagamento);
+            Carta carta = cartaDAO.findByCardNumber(metodoPagamento);
 
             /* Setto la data dell'ordine a quella corrente*/
             java.sql.Date sqlDate = new java.sql.Date(System.currentTimeMillis());
@@ -207,7 +207,7 @@ public class ConfirmOrderManagement {
                 request.setAttribute("loggedOn", true);
                 request.setAttribute("loggedUser", loggedUser);
                 request.setAttribute("applicationMessage",applicationMessage);
-                request.setAttribute("viewUrl", "homeManagement/view");
+                request.setAttribute("viewUrl", "confirmOrderManagement/view");
             }
 
             /* Se non ho nessun messaggio di errore */
@@ -220,7 +220,7 @@ public class ConfirmOrderManagement {
 
                     ordineDAO.create(user, indirizzoSpedizione, newOrderID, carta, "In preparazione", sqlDate);
 
-                    Ordine ordine = ordineDAO.findByOrderIdentificativo(newOrderID);
+                    Ordine ordine = ordineDAO.findByOrderID(newOrderID);
                     for (i=0; i<cartItems.size(); i++) {
 
                         CentroVendita centroVendita = centroVenditaDAO.findByNomeCentro(fornitoDaArrayList.get(i).getCentroVendita().getNomeCentro());
@@ -243,8 +243,25 @@ public class ConfirmOrderManagement {
                     throw new RuntimeException(e);
                 }
 
+                int whichHalf = 0;
+
+                if(request.getParameter("whichHalf")!=null){
+                    whichHalf= Integer.parseInt(request.getParameter("whichHalf"));
+                }
+
+                FumettoDAO fumettoDAO = daoFactory.getFumettoDAO();
+
+                /* Lists */
+                ArrayList<Fumetto> fumettoArrayList = fumettoDAO.findRandomFumetti();
+                ArrayList<ContenutoNelMagazzino> contenutoNelMagazzinoArrayList_2 = contenutoNelMagazzinoDAO.findRandomContenutoNelMagazzino();
+                ArrayList<FornitoDa> fornitoDaArrayList_2 = fornitoDaDAO.findRandomFornitoDa();
+
                 request.setAttribute("loggedOn", true);
                 request.setAttribute("loggedUser", loggedUser);
+                request.setAttribute("fumettoArrayList",fumettoArrayList);
+                request.setAttribute("contenutoNelMagazzinoArrayList",contenutoNelMagazzinoArrayList_2);
+                request.setAttribute("fornitoDaArrayList", fornitoDaArrayList_2);
+                request.setAttribute("whichHalf",whichHalf);
                 request.setAttribute("applicationMessage",applicationMessage);
                 request.setAttribute("viewUrl", "homeManagement/view");
 
@@ -298,6 +315,5 @@ public class ConfirmOrderManagement {
         /* Passo tutti i prodotti nel carrello e calcolo la somma dei singoli prezzi per il prezzo totale*/
 
     }
-
-
+    
 }
