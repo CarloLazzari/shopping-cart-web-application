@@ -9,3 +9,5 @@ These were the **requirements** for the assignment:
 **4.** The user can add products to the shopping cart, purchase multiple quantities of each product and place an order in its speficic page, by adding the required delivery address and a payment mehod.  
 **5.** The site administrator can change the status of each order and can view all the orders placed by each speficic user/all users.  
 **6.** The site administrator can block/unblock other users, making them unable to login.   
+
+This project was done using IntelliJ Idea 2019, MySQLWorkBench and GLassFish 5.1.
