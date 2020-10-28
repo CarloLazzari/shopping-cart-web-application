@@ -17,7 +17,7 @@ ol, ul {
 }
 
 body {
-    background: url(../images/white_background.jpg);
+    background-color: ghostwhite;
     align-content: center;
     font-family: "Trebuchet MS",Arial,Helvetica,sans-serif;
     font-size: 1em;
@@ -33,6 +33,8 @@ header {
     padding-top: 10px;
     padding-bottom: 10px;
     margin-bottom: 10px;
+    border-top-right-radius: 10px;
+    border-top-left-radius: 10px;
 }
 
 #mangaLogo{
@@ -164,6 +166,8 @@ footer {
     text-align:right;
     font-size:11px;
     background-color: #2196f3;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
 }
 
 footer a{
