@@ -217,6 +217,7 @@ public class CartManagement {
             /*-----------------------------------------------------------------*/
             CarrelloDAO carrelloDAO = daoFactory.getCarrelloDAO();
             carrelloDAO.flushCart(loggedUser.getUsername());
+            applicationMessage="Carrello svuotato.";
 
             commonView(daoFactory, sessionDAOFactory, request);
 
@@ -225,6 +226,7 @@ public class CartManagement {
 
             request.setAttribute("loggedOn", true);
             request.setAttribute("loggedUser",loggedUser);
+            request.setAttribute("applicationMessage",applicationMessage);
             request.setAttribute("viewUrl","cartManagement/view");
 
         } catch(Exception e){
