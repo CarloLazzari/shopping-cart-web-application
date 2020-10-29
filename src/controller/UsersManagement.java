@@ -92,9 +92,12 @@ public class UsersManagement {
             UserDAO userDAO = daoFactory.getUserDAO();
             User user = userDAO.findByUsername(whichUserUsername);
 
-                userDAO.block(user);
+            userDAO.block(user);
 
-            applicationMessage = "Utente "+ whichUserUsername + " bloccato";
+            if(user.getAdmin().equals("Y"))
+                applicationMessage = "Utente amministratore "+ whichUserUsername + " bloccato";
+            else
+                applicationMessage = "Utente "+ whichUserUsername + " bloccato";
 
             commonView(daoFactory, sessionDAOFactory, request);
 
@@ -150,9 +153,12 @@ public class UsersManagement {
             UserDAO userDAO = daoFactory.getUserDAO();
             User user = userDAO.findByUsername(whichUserUsername);
 
-                userDAO.unblock(user);
+            userDAO.unblock(user);
 
-            applicationMessage = "Utente "+ whichUserUsername + " bloccato";
+            if(user.getAdmin().equals("Y"))
+                applicationMessage = "Utente amministratore "+ whichUserUsername + " sbloccato";
+            else
+                applicationMessage = "Utente "+ whichUserUsername + " sbloccato";
 
             commonView(daoFactory, sessionDAOFactory, request);
 
