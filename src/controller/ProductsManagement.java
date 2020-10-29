@@ -233,10 +233,8 @@ public class ProductsManagement {
             String bloccato = request.getParameter("Bloccato");
             String deleted = request.getParameter("Deleted");
 
-
             Magazzino magazzino = magazzinoDAO.findByNomeMagazzino(nomeMagazzino);
             CentroVendita centroVendita = centroVenditaDAO.findByNomeCentro(nomeFornitore);
-
 
             try {
 
@@ -250,6 +248,7 @@ public class ProductsManagement {
                         prezzo,
                         peso,
                         bloccato);
+                applicationMessage="Fumetto nuovo creato con successo.";
 
             } catch (DuplicatedObjectException e) {
                 applicationMessage = "Fumetto già esistente!";
@@ -265,6 +264,7 @@ public class ProductsManagement {
                         magazzino,
                         quantita,
                         deleted);
+                applicationMessage=applicationMessage+"Fumetto nuovo creato con successo in magazzino.";
 
             }  catch (DuplicatedObjectException e) {
                 applicationMessage = "Fumetto già esistente in magazzino!";
@@ -275,6 +275,7 @@ public class ProductsManagement {
 
             try {
                 fornitoDaDAO.create(fumetto, centroVendita);
+                applicationMessage=applicationMessage+"Fumetto nuovo creato con successo nella lista delle forniture.";
             } catch (DuplicatedObjectException e) {
                 applicationMessage = "Fumetto già esistente nella lista delle forniture!";
                 logger.log(Level.INFO, "Tentativo di inserimento di prodotto già fornito.");
