@@ -640,8 +640,14 @@ public class ProductsManagement {
             daoFactory.beginTransaction();
 
             String ISBN = (request.getParameter("ISBN"));
+            String nomeFornitore = request.getParameter("nomeFornitore");
+            String nomeMagazzino = request.getParameter("nomeMagazzino");
             FumettoDAO fumettoDAO = daoFactory.getFumettoDAO();
+            FornitoDaDAO fornitoDaDAO = daoFactory.getFornitoDaDAO();
+            ContenutoNelMagazzinoDAO contenutoNelMagazzinoDAO = daoFactory.getContenutoNelMagazzinoDAO();
             Fumetto fumetto = fumettoDAO.showFumetto(ISBN);
+            FornitoDa fornitoDa = fornitoDaDAO.findByFumettoISBNandCentroVenditaRef(ISBN,nomeFornitore);
+            ContenutoNelMagazzino contenutoNelMagazzino = contenutoNelMagazzinoDAO.findByFumettoISBNRefAndMagazzinoRef(ISBN,nomeMagazzino);
 
             daoFactory.commitTransaction();
             sessionDAOFactory.commitTransaction();
@@ -649,6 +655,8 @@ public class ProductsManagement {
             request.setAttribute("loggedOn",loggedUser!=null);
             request.setAttribute("loggedUser", loggedUser);
             request.setAttribute("fumetto",fumetto);
+            request.setAttribute("fornitoDa",fornitoDa);
+            request.setAttribute("contenutoNelMagazzino",contenutoNelMagazzino);
             request.setAttribute("viewUrl", "productsManagement/viewDetails");
 
         } catch (Exception e) {
