@@ -1,5 +1,7 @@
 <%@ page import="model.mo.User" %>
-<%@ page import="model.mo.Fumetto" %><%--
+<%@ page import="model.mo.Fumetto" %>
+<%@ page import="model.mo.FornitoDa" %>
+<%@ page import="model.mo.ContenutoNelMagazzino" %><%--
   Created by IntelliJ IDEA.
   User: Carlo
   Date: 27/09/2020
@@ -10,14 +12,15 @@
 
 <%
 
-    boolean loggedOn = (Boolean) request.getAttribute("loggedOn");
-    User loggedUser = (User) request.getAttribute("loggedUser");
+   boolean loggedOn = (Boolean) request.getAttribute("loggedOn");
+   User loggedUser = (User) request.getAttribute("loggedUser");
 
-    String applicationMessage = (String) request.getAttribute("applicationMessage");
-    String menuActiveLink = "View Details";
+   String applicationMessage = (String) request.getAttribute("applicationMessage");
+   String menuActiveLink = "View Details";
 
-    Fumetto fumetto = (Fumetto) request.getAttribute("fumetto");
-
+   Fumetto fumetto = (Fumetto) request.getAttribute("fumetto");
+   FornitoDa fornitoDa = (FornitoDa) request.getAttribute("fornitoDa");
+   ContenutoNelMagazzino contenutoNelMagazzino = (ContenutoNelMagazzino) request.getAttribute("contenutoNelMagazzino");
 
 %>
 <html>
@@ -43,12 +46,25 @@
       }
 
       p {
+         width: 50%;
          border: none;
          border-radius: 4px;
          padding: 3px;
          background-color: #e8eeef;
          color:#8a97a0;
          box-shadow: 0 1px 0 rgba(0,0,0,0.03) inset;
+      }
+
+      #prodotto {
+         float: right;
+      }
+
+      #immagine {
+         position: relative;
+      }
+      #immagine img {
+         position: absolute;
+         right: 20px;
       }
 
    </style>
@@ -79,6 +95,11 @@
              Fumetti: visualizza dettagli
          </h1>
       </section>
+
+      <div id="immagine" style="margin-top: 5px">
+         <img id="prodotto" alt="<%=fumetto.getISBN()%>" src="productImages/<%=fumetto.getISBN()%>.jpg" width="200" height="286">
+      </div>
+
       <section id="Product">
          <div class="field clearfix">
             <p> Titolo: <%=fumetto.getTitolo()%> </p>
@@ -100,6 +121,12 @@
          </div>
          <div class="field clearfix">
             <p> Peso: <%=fumetto.getPeso()%>kg </p>
+         </div>
+         <div class="field clearfix">
+            <p> Fornitore: <%=fornitoDa.getCentroVendita().getNomeCentro()%></p>
+         </div>
+         <div class="field clearfix">
+            <p> Magazzino: <%=contenutoNelMagazzino.getMagazzino().getNomeMagazzino()%></p>
          </div>
 
       </section>
