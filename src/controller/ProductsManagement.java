@@ -910,7 +910,20 @@ public class ProductsManagement {
             searchMode = sm.toUpperCase();
             searchString = ss;
         }
+        
+        File file = new File("C:\\Users\\Carlo\\IdeaProjects\\Fumetti\\web\\productImages");
+        ArrayList<File> fileImages = new ArrayList<>();
+        String[] fileList = file.list();
+        HashMap<String,File> fileImagesNamesHashMap = new HashMap<>();
 
+        assert fileList != null;
+        int index = 0;
+        /* An array List of pathnames */
+        for(index = 0; index<fileList.length; index+=1){
+            String newFileListName = "C:\\Users\\Carlo\\IdeaProjects\\Fumetti\\web\\productImages\\"+fileList[index];
+            fileImages.add(index, new File(newFileListName));
+            fileImagesNamesHashMap.put(fileList[index],fileImages.get(index));
+        }
 
         /* Se sono admin voglio vedere anche i prodotti che ho bloccato */
         boolean isAdmin = false;
@@ -980,6 +993,7 @@ public class ProductsManagement {
         request.setAttribute("fumetti",fumetti);
         request.setAttribute("contenutoNelMagazzinoArrayList",contenutoNelMagazzinoArrayList);
         request.setAttribute("fornitoDaArrayList",fornitoDaArrayList);
+        request.setAttribute("fileImagesNamesHashMap",fileImagesNamesHashMap)
 
     }
 
