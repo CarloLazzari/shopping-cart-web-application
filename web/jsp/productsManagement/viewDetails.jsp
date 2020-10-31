@@ -125,9 +125,17 @@
          <div class="field clearfix">
             <p> Fornitore: <%=fornitoDa.getCentroVendita().getNomeCentro()%></p>
          </div>
+         <%if(loggedUser!=null&&(loggedUser.getAdmin().equals("Y"))) { %>
          <div class="field clearfix">
             <p> Magazzino: <%=contenutoNelMagazzino.getMagazzino().getNomeMagazzino()%></p>
          </div>
+         <div class="field clearfix">
+            <p> Bloccato: <%=fumetto.getBlocked()%></p>
+         </div>
+         <div class="field clearfix">
+            <p> Cancellato: <%=contenutoNelMagazzino.getDeleted()%></p>
+         </div>
+         <% } %>
 
       </section>
 
