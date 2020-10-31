@@ -154,6 +154,7 @@ public class ConfirmOrderManagement {
 
             /* DAO */
             CarrelloDAO carrelloDAO = daoFactory.getCarrelloDAO();
+            FumettoDAO fumettoDAO = daoFactory.getFumettoDAO();
             ContenutoNellOrdineDAO contenutoNellOrdineDAO = daoFactory.getContenutoNellOrdineDAO();
             ContenutoNelMagazzinoDAO contenutoNelMagazzinoDAO = daoFactory.getContenutoNelMagazzinoDAO();
             OrdineDAO ordineDAO = daoFactory.getOrdineDao();
@@ -172,6 +173,8 @@ public class ConfirmOrderManagement {
             String metodoPagamento = request.getParameter("metodoPagamento");
 
             ArrayList<Carrello> cartItems = carrelloDAO.viewCart(loggedUser.getUsername());
+            ArrayList<Fumetto> comicsInCart = new ArrayList<>();
+            comicsInCart = fumettoDAO.findInCart(loggedUser.getUsername());
 
             int max = ordineDAO.selectMaxOrderID();
             int newOrderID = max+1;
@@ -191,7 +194,7 @@ public class ConfirmOrderManagement {
                 if((contenutoNelMagazzinoDAO.getAvailability(cartItems.get(i).getFumetto().getISBN(),contenutoNelMagazzinoArrayList.get(i).getMagazzino().getNomeMagazzino()) >= cartItems.get(i).getQuantita())){
                     /*Do nothing*/
                 }
-                else  errorMessage.append(cartItems.get(i).getFumetto().getISBN()).append(" non e' disponibile\n");
+                else  errorMessage.append(comicsInCart.get(i).getTitolo()).append(" ").append(comicsInCart.get(i).getNumero()).append(" non e' disponibile o non è disponibile con quella quantità.").append(" ");
             }
 
             /* Se il messaggio di errore esiste, lo setto come attributo da passare alla view*/
@@ -200,15 +203,18 @@ public class ConfirmOrderManagement {
                 errorMessage.append("Impossibile effettuare l'ordine.");
                 applicationMessage= String.valueOf(errorMessage);
 
+                commonView(daoFactory, sessionDAOFactory, request);
+
                 request.setAttribute("loggedOn", true);
                 request.setAttribute("loggedUser", loggedUser);
                 request.setAttribute("applicationMessage",applicationMessage);
-                request.setAttribute("viewUrl", "confirmOrderManagement/view");
+                request.setAttribute("viewUrl", "confirmOrderManagement/confirmView");
             }
 
             /* Se non ho nessun messaggio di errore */
-            /* .. il metodo di pagamento è valido, e la carta non è scaduta, procedo con l'ordine. */
-            else if(carta != null && carta.getDataScadenza().compareTo(sqlDate) > 0) {
+            /* .. il metodo di pagamento è valido, la carta non è scaduta */
+            /* e la carta appartiene effettivamente all'utente loggato, procedo con l'ordine. */
+            else if(carta != null && carta.getDataScadenza().compareTo(sqlDate) > 0 && carta.getIntestatario().equals(loggedUser.getUsername())) {
                 try {
 
                     /* Creo un singolo ordine, poi lo prendo come parametro, e lo uso per costruirci su - */
@@ -234,9 +240,11 @@ public class ConfirmOrderManagement {
                     carrelloDAO.flushCart(loggedUser.getUsername());
                     applicationMessage = "L'effettuazione dell'ordine è andata a buon fine.";
 
-                } catch (RuntimeException | DuplicatedObjectException e) {
+                } catch (RuntimeException e) {
                     logger.log(Level.INFO, "Errore nella conferma dell'ordine.");
                     throw new RuntimeException(e);
+                } catch (DuplicatedObjectException e) {
+                    e.printStackTrace();
                 }
 
                 int whichHalf = 0;
@@ -245,18 +253,16 @@ public class ConfirmOrderManagement {
                     whichHalf= Integer.parseInt(request.getParameter("whichHalf"));
                 }
 
-                FumettoDAO fumettoDAO = daoFactory.getFumettoDAO();
-
                 /* Lists */
                 ArrayList<Fumetto> fumettoArrayList = fumettoDAO.findRandomFumetti();
-                ArrayList<ContenutoNelMagazzino> contenutoNelMagazzinoArrayList_2 = contenutoNelMagazzinoDAO.findRandomContenutoNelMagazzino();
-                ArrayList<FornitoDa> fornitoDaArrayList_2 = fornitoDaDAO.findRandomFornitoDa();
+                ArrayList<ContenutoNelMagazzino> contents = contenutoNelMagazzinoDAO.findRandomContenutoNelMagazzino();
+                ArrayList<FornitoDa> forniture = fornitoDaDAO.findRandomFornitoDa();
 
                 request.setAttribute("loggedOn", true);
                 request.setAttribute("loggedUser", loggedUser);
                 request.setAttribute("fumettoArrayList",fumettoArrayList);
-                request.setAttribute("contenutoNelMagazzinoArrayList",contenutoNelMagazzinoArrayList_2);
-                request.setAttribute("fornitoDaArrayList", fornitoDaArrayList_2);
+                request.setAttribute("contenutoNelMagazzinoArrayList",contents);
+                request.setAttribute("fornitoDaArrayList", forniture);
                 request.setAttribute("whichHalf",whichHalf);
                 request.setAttribute("applicationMessage",applicationMessage);
                 request.setAttribute("viewUrl", "homeManagement/view");
@@ -264,10 +270,13 @@ public class ConfirmOrderManagement {
             } else {
                 applicationMessage = "Errore nella conferma dell'ordine. La carta di credito non esiste o è scaduta.";
                 logger.log(Level.INFO,"Errore nella conferma dell'ordine. La carta di credito fornita non esiste o è scaduta.");
+
+                commonView(daoFactory, sessionDAOFactory, request);
+
                 request.setAttribute("loggedOn", true);
                 request.setAttribute("loggedUser", loggedUser);
                 request.setAttribute("applicationMessage",applicationMessage);
-                request.setAttribute("viewUrl", "confirmOrderManagement/view");
+                request.setAttribute("viewUrl", "confirmOrderManagement/confirmView");
             }
 
             daoFactory.commitTransaction();
