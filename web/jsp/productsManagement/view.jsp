@@ -6,20 +6,21 @@
 <%@ page import="java.io.File" %>
 <%@ page import="model.mo.ContenutoNelMagazzino" %>
 <%@ page import="model.mo.FornitoDa" %>
+<%@ page import="java.util.HashMap" %>
 
 <% int i;
 
     boolean loggedOn = (Boolean) request.getAttribute("loggedOn");
     User loggedUser = (User) request.getAttribute("loggedUser");
 
-    String applicationMessage = (String) request.getAttribute("applicationMessage");
     String menuActiveLink = "Products";
-    String ISBN =  request.getParameter("ISBN");
+
+    String applicationMessage = (String) request.getAttribute("applicationMessage");
 
     List<Fumetto> fumetti = (List<Fumetto>) request.getAttribute("fumetti");
     List<ContenutoNelMagazzino> contenutoNelMagazzinoArrayList = (List<ContenutoNelMagazzino>) request.getAttribute("contenutoNelMagazzinoArrayList");
     List<FornitoDa> fornitoDaArrayList = (List<FornitoDa>) request.getAttribute("fornitoDaArrayList");
-    //List<File> imageUrlList = (List<File>) request.getAttribute("imageUrlList");
+    HashMap<String,File> fileImagesNamesHashMap = (HashMap<String,File>) request.getAttribute("fileImagesNamesHashMap");
 
 %>
 
@@ -33,64 +34,52 @@
 		</title>
 		<style>
 
-        #newProduct {
-            float: right;
+	  		#newProduct {
+				float: right;
 				margin-bottom: 10px;
-        }
-
-
-			#products article{
-          float: left;
-          width: 250px;
-			 height: 500px;
-          border-width: 1px;
-          border-style: solid;
-          border-radius: 10px;
-          border-color: #a6a6f5;
-          padding: 10px 8px 10px 20px;
-          margin: 0 18px 16px 0;
-          background: linear-gradient(to right, #ffffff, #e7f8ff);
-          box-shadow: 0 3px 2px #424e4e;
-			}
+	  		}
 
 			#delete, #block, #addToCart, #viewDetails, #viewDetails, #unblock, #modify {
-				float:left;
 			}
 
 			#addToCart {
-				 margin-left: 12px;
+		 		margin-left: 12px;
 			}
 
 			input[id=searchString] {
-				 background-color: white;
-				 background-position: 10px 10px;
-				 background-repeat: no-repeat;
-				 padding-left: 5px;
+				background-color: white;
+				background-position: 10px 10px;
+				background-repeat: no-repeat;
+				padding-left: 5px;
 			}
 
 			#fumetti {
-				 margin-top: 15px;
-				 margin-left: 71px;
+				margin-top: 15px;
 			}
 
 			#prodotti {
-				 text-align: center;
-				 float:left;
-				 height: 300px;
-				 width: 150px;
-				 margin: 10px 10px 10px 10px;
+				text-align: center;
+				float:left;
+				height: 300px;
+				width: 199px;
+				margin: 10px 10px 10px 10px;
 
 			}
 
-        .titolo, .autore, .numero {
-            font-size: 0.8em;
+	  		.titolo, .autore, .numero {
+				font-size: 0.8em;
 				text-align: center;
-        }
+	  		}
 
-		  .additionalInfo {
+	  		.additionalInfo {
 				font-size: 0.5em;
-		  }
+	  		}
 
+			<%if((loggedOn)&&(loggedUser.getAdmin().equals("Y"))){%>
+         #productFrame {
+             margin-top: -20px;
+         }
+			<%}%>
 
 		</style>
 			<script lang="JavaScript">
@@ -195,38 +184,47 @@
 						<% for(i=0; i<fumetti.size(); i++) {%>
 						<article id ="prodotti">
 							<%if(loggedOn){%>
-							<a href="javascript:addToCart(<%=fumetti.get(i).getISBN()%>)">
-								<img alt="addToCart" id="addToCart" src="images/cart_plus.png" width="20" height="20"/>
-							</a>
-							<%}%>
-							<a href="javascript:viewDetails(<%=fumetti.get(i).getISBN()%>)">
-								<img alt="viewDetails" id="viewDetails" src="images/details.png" width="20" height="20"/>
-							</a>
-							<%if((loggedOn)&&loggedUser.getAdmin().equals("Y")){%>
-							<a href="javascript:blockProduct(<%=fumetti.get(i).getISBN()%>)">
-								<img alt="block" id="block" src="images/block_icon.png" width="22" height="22"/>
-							</a>
+							<section id="productFrameIcons">
+								<a href="javascript:addToCart(<%=fumetti.get(i).getISBN()%>)">
+									<img alt="addToCart" id="addToCart" src="images/cart_plus.png" width="22" height="22"/>
+								</a>
+								<%}%>
+								<a href="javascript:viewDetails(<%=fumetti.get(i).getISBN()%>)">
+									<img alt="viewDetails" id="viewDetails" src="images/details.png" width="22" height="22"/>
+								</a>
+								<%if((loggedOn)&&loggedUser.getAdmin().equals("Y")){%>
+								<a href="javascript:blockProduct(<%=fumetti.get(i).getISBN()%>)">
+									<img alt="block" id="block" src="images/block_icon.png" width="22" height="22"/>
+								</a>
 
-							<a href="javascript:unblockProduct(<%=fumetti.get(i).getISBN()%>)">
-								<img alt="block" id="unblock" src="images/unblock.png" width="22" height="22"/>
-							</a>
+								<a href="javascript:unblockProduct(<%=fumetti.get(i).getISBN()%>)">
+									<img alt="block" id="unblock" src="images/unblock.png" width="22" height="22"/>
+								</a>
 
-							<a href="javascript:modifyProduct(<%=fumetti.get(i).getISBN()%>)">
-								<img alt="modify" id="modify" src="images/modify.png" width="22" height="22"/>
-							</a>
+								<a href="javascript:modifyProduct(<%=fumetti.get(i).getISBN()%>)">
+									<img alt="modify" id="modify" src="images/modify.png" width="22" height="22"/>
+								</a>
 
-							<a href="javascript:deleteProduct(<%=fumetti.get(i).getISBN()%>)">
-								<img alt="delete" id="delete" src="images/trashcan.png" width="22" height="22"/>
-							</a>
+								<a href="javascript:deleteProduct(<%=fumetti.get(i).getISBN()%>)">
+									<img alt="delete" id="delete" src="images/trashcan.png" width="22" height="22"/>
+								</a>
+							</section>
 
 							<% } %>
 							</br>
 
-							<section class="titolo"> <%=fumetti.get(i).getTitolo()%> - <%=fumetti.get(i).getNumero()%></section>
-							<section class="autore"> <%=fumetti.get(i).getAutore()%></section>
-							<section class="numero"> <%=fumetti.get(i).getPrezzo()%> Euro</section>
-							<section class="additionalInfo"><%=fornitoDaArrayList.get(i).getCentroVendita().getNomeCentro()%></section>
-							<section class="additionalInfo"><%=contenutoNelMagazzinoArrayList.get(i).getMagazzino().getNomeMagazzino()%></section>
+							<div id="productFrame">
+								<section class="titolo"> <%=fumetti.get(i).getTitolo()%> - <%=fumetti.get(i).getNumero()%></section>
+								<section class="autore"> <%=fumetti.get(i).getAutore()%></section>
+								<section class="numero"> <%=fumetti.get(i).getPrezzo()%> Euro</section>
+
+								<section style="margin-top: 5px">
+									<a href="javascript:viewDetails(<%=fumetti.get(i).getISBN()%>)">
+										<img id="prodotto" alt="<%=fumetti.get(i).getISBN()%>" src="productImages/<%=fumetti.get(i).getISBN()%>.jpg" width="150" height="215">
+									</a>
+								</section>
+							</div>
+
 						</article>
 							<% } %>
 					</section>
@@ -260,6 +258,8 @@
 					</form>
 					<form name="viewDetailsForm" method="post" action="Dispatcher">
 						<input type="hidden" name="ISBN"/>
+						<input type="hidden" name="nomeFornitore" value="Quinta Dimensione"/>
+						<input type="hidden" name="nomeMagazzino" value="QD Magazzino"/>
 						<input type="hidden" name="controllerAction" value="ProductsManagement.viewDetails"/>
 					</form>
 					<form name="searchForm" method="post" action="Dispatcher">
@@ -267,7 +267,6 @@
 						<input type="hidden" name="searchMode"/>
 						<input type="hidden" name="controllerAction" value="ProductsManagement.view"/>
 					</form>
-
 
 				</main>
 				<%@include file="/include/footer.inc"%>
