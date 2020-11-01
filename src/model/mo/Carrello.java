@@ -2,9 +2,9 @@ package model.mo;
 
 public class Carrello {
 
-    private String usernameUtente; //username of the user
-    private String ISBNFumetto; //ISBN of the comic
-    private int quantita; //quantity
+    private String usernameUtente; 
+    private String ISBNFumetto; 
+    private int quantita; 
 
     /* N:1 */
     private User user;
