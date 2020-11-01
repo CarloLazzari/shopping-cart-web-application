@@ -10,7 +10,7 @@ public class User {
     private String surname;
     private Date dataNascita;
     private String email;
-    private String indirizzo; //address
+    private String indirizzo;
     private String blocked;
     public String isAdmin;
 
