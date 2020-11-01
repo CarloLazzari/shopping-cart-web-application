@@ -2,11 +2,11 @@ package model.mo;
 
 public class ContenutoNellOrdine {
 
-    private String ISBNFumettoRef; //ISBN of the comic
-    private int IDOrdineRef; //Order ID
-    private int quantita; //quantity
+    private String ISBNFumettoRef; 
+    private int IDOrdineRef; 
+    private int quantita; 
     private String dispatcher;
-    private String magazzinoRef; //warehouse that will ship the order
+    private String magazzinoRef; 
 
     /* N:1 */
     private Ordine ordine;
@@ -36,7 +36,5 @@ public class ContenutoNellOrdine {
 
     public void setDispatcher(String dispatcher) { this.dispatcher = dispatcher; }
     public void setMagazzinoRef(String magazzinoRef) { this.magazzinoRef = magazzinoRef; }
-    //public Fumetto getFumetti(int index){ return this.fumetti[index];}
-    //public void setFumetti(Fumetto[] fumetti){ this.fumetti = fumetti;}
 
 }
