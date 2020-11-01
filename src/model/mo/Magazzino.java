@@ -2,9 +2,9 @@ package model.mo;
 
 public class Magazzino {
 
-    private String nomeMagazzino; //warehouse name
-    private String nomeCentroRef; //the centre at which this warehouse belongs to
-    public String indirizzo; //address
+    private String nomeMagazzino; 
+    private String nomeCentroRef;
+    public String indirizzo;
 
     /* N:1 */
     private CentroVendita centroVendita;
