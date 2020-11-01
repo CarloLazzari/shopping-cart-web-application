@@ -5,8 +5,8 @@ import java.util.GregorianCalendar;
 
 public class Ordine {
 
-    private String indirizzoDestinazione; //shipping address
-    private String nomeEffettuante; //user which carries out the order
+    private String indirizzoDestinazione; 
+    private String nomeEffettuante; 
     private int orderID;
 
     private String modalitaPagamento; //payment method
