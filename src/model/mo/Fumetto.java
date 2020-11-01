@@ -2,19 +2,16 @@ package model.mo;
 
 public class Fumetto {
 
-    private int numero; //number
-    private float prezzo; //price
-    private float peso; //weight
-    private String formato; //format
-    private String autore; //author
+    private int numero;
+    private float prezzo;
+    private float peso; 
+    private String formato; 
+    private String autore;
     private String ISBN;
-    private String titolo; //title
-    private String rilegatura; //book binding
-    //private String nomeFornitore; //name of the centre which offers this product
+    private String titolo; 
+    private String rilegatura; 
     private String blocked;
 
-    /* N:1 */
-    //private CentroVendita centroVendita;
     /* 1:N */
     private Carrello[] carrello;
     private ContenutoNelMagazzino[] contenutoNelMagazzino;
@@ -31,10 +28,7 @@ public class Fumetto {
     public String getTitolo() {  return titolo;}
     public String getRilegatura() { return rilegatura;}
     public String getBlocked(){ return blocked;};
-    //public String getNomeFornitore(){return nomeFornitore;}
-
-    //public CentroVendita getCentroVendita(){ return this.centroVendita;}
-
+  
     public Carrello[] getCarrello() { return carrello;}
     public ContenutoNelMagazzino[] getContenutoNelMagazzino(){ return this.contenutoNelMagazzino;}
     public ContenutoNellOrdine[] getContenutoNellOrdine() { return this.contenutoNellOrdine; }
@@ -56,8 +50,6 @@ public class Fumetto {
     public void setRilegatura(String rilegatura) {this.rilegatura = rilegatura;  }
     //public void setNomeFornitore(String nome_fornitore) {  this.nomeFornitore = nome_fornitore;  }
     public void setBlocked(String blocked){ this.blocked = blocked;}
-
-    //public void setCentroVendita(CentroVendita centroVendita){ this.centroVendita = centroVendita;}
 
     public void setCarrello(Carrello[] carrello){ this.carrello = carrello;}
     public void setContenutoNelMagazzino(ContenutoNelMagazzino[] contenutoNelMagazzino){ this.contenutoNelMagazzino = contenutoNelMagazzino;}
