@@ -214,7 +214,6 @@ public class CartManagement {
             daoFactory = DAOFactory.getDAOFactory(Configuration.DAO_IMPL,null);
             daoFactory.beginTransaction();
 
-            /*-----------------------------------------------------------------*/
             CarrelloDAO carrelloDAO = daoFactory.getCarrelloDAO();
             carrelloDAO.flushCart(loggedUser.getUsername());
             applicationMessage="Carrello svuotato.";
@@ -270,8 +269,6 @@ public class CartManagement {
             daoFactory = DAOFactory.getDAOFactory(Configuration.DAO_IMPL,null);
             daoFactory.beginTransaction();
 
-
-            /*-------------------- */
             List<Carrello> cartItems;
             CarrelloDAO carrelloDAO = sessionDAOFactory.getCarrelloDAO();
             cartItems = carrelloDAO.viewCart(loggedUser.getUsername());
