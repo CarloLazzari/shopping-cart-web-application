@@ -32,8 +32,11 @@
 		<style>
 
 			th>a:hover {
-				 color:black;
 				 text-decoration: underline;
+			}
+
+			th>a{
+				 color: #a6a6f5;
 			}
 
          table {
@@ -53,7 +56,7 @@
 				 float: right;
 			}
 
-			#admin{
+			#admin, #user{
 				 float: right;
 			}
 
@@ -104,6 +107,19 @@
 				<h1> Utenti </h1>
 			</section>
 
+			<table>
+				<tr>
+					<th style="width: 100px; color:#ffbc00">Username</th>
+					<th style="width: 100px; color:#ffbc00">Nome</th>
+					<th style="width: 100px; color:#ffbc00">Cognome</th>
+					<th style="width: 150px; color:#ffbc00">E-mail</th>
+					<th style="width: 50px; color:#ffbc00">Data Nascita</th>
+					<th style="width: 100px; color:#ffbc00">Indirizzo</th>
+					<th style="width: 10px; color:#ffbc00"><img src="images/block_icon.png" width="22" height="22" alt="block_icon"></th>
+					<th style="width: 50px; color:#ffbc00">Ordini</th>
+				</tr>
+			</table>
+
 			<% for(i=0; i<users.size(); i++) { %>
 			<table id="users">
 			   <tr <%if(users.get(i).getAdmin().equals("Y")){%> style="color: blueviolet" <% } %>>
@@ -125,6 +141,8 @@
 						<% } %>
 						<%if(users.get(i).getAdmin().equals("Y")){%>
 							<img id="admin" alt="adminIcon" src="images/admin.png" width="20" height="20">
+						<% } else {%>
+							<img id="user" alt="userIcon" src="images/user.png" width="20" height="20">
 						<% } %>
 					</th>
 					<th style="width: 100px"><%=users.get(i).getFirstname()%></th>
@@ -133,7 +151,7 @@
 					<th style="width: 50px" ><%=users.get(i).getData()%></th>
 					<th style="width: 100px"  ><%=users.get(i).getIndirizzo()%></th>
 					<th style="width: 10px" ><%=users.get(i).getBlocked()%></th>
-					<th style="width: 50px"  ><a id="viewOrders" href="javascript:viewOrders('<%=users.get(i).getUsername()%>')">#ORDINI:</a> <%=usersOrdersCount.get(i)%></th>
+					<th style="width: 50px"><a id="viewOrders" href="javascript:viewOrders('<%=users.get(i).getUsername()%>')">#ORDINI:</a> <%=usersOrdersCount.get(i)%></th>
 				</tr>
 
 
