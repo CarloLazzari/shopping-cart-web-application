@@ -3,7 +3,6 @@
 <%@ page import="java.util.List" %>
 <%@ page import="java.util.Objects" %>
 
-
 <% int i = 0;
 
   boolean loggedOn = (Boolean) request.getAttribute("loggedOn");
@@ -77,13 +76,13 @@
 				<section id="pageTitle">
 					<% if(loggedUser!=null){%>
 					<h3>
-						<%if((loggedOn)&&(loggedUser.getAdmin().equals(("Y")))&&(whichUserUsername!=null)) { %>
+						<%if((loggedOn)&&(loggedUser.getAdmin().equals(("Y")))&&(!(whichUserUsername.equals("")))){ %>
 							<%if(prices.size()==0) {%>
 								Non sono ancora stati effettuati ordini dall'utente <%=whichUserUsername%>.
 							<% } else { %>
 								Ordini effettuati dall'utente <%=whichUserUsername%>.
 							<% } %>
-						<% } else if((loggedOn)&&(loggedUser.getAdmin().equals(("Y")))) {%>
+						<% } else if((loggedOn)&&(loggedUser.getAdmin().equals(("Y")))){%>
 						Ordini effettuati da tutti gli utenti.
 						<% } else if(loggedOn) { %>
 						Ordini effettuati dall'utente <%=loggedUser.getUsername()%>.
@@ -100,7 +99,28 @@
 						<option value="Completato">Completato</option>
 					</select>
 				<% } %>
-				</br>
+
+				<script lang="javascript">
+
+                function search(){
+                    let s = document.getElementById("searchString").value;
+                    const f = document.viewUsersOrdersForm;
+                    f.whichUserUsername.value = s;
+                    f.submit();
+                }
+
+				</script>
+
+				<section>
+					<label>Digitare il nome dell'utente di cui si vogliono visualizzare gli ordini:</label>
+					<label for="searchString">
+						<input type="text" id="searchString" name="searchString" maxlength="20">
+					</label>
+					<a onclick="window.search()">
+						<img style="margin-top: -5px" alt="search" id="searchImage" src="images/search.png" width="22" height="22">
+					</a>
+				</section>
+
 				</br>
 				</br>
 
@@ -165,6 +185,10 @@
 					<form name="viewDetailsForm" method="post" action="Dispatcher">
 						<input type="hidden" name="ORDER_ID"/>
 						<input type="hidden" name="controllerAction" value="OrdersManagement.viewDetails"/>
+					</form>
+					<form name="viewUsersOrdersForm" method="post" action="Dispatcher">
+						<input type="hidden" name="whichUserUsername"/>
+						<input type="hidden" name="controllerAction" value="OrdersManagement.view"/>
 					</form>
 				</section>
 
