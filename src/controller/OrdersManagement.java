@@ -9,7 +9,6 @@ import services.logservice.LogService;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -43,7 +42,10 @@ public class OrdersManagement {
             daoFactory = DAOFactory.getDAOFactory(Configuration.DAO_IMPL,null);
             daoFactory.beginTransaction();
 
-            String whichUserUsername = request.getParameter("whichUserUsername");
+            String whichUserUsername = null;
+            if(request.getParameter("whichUserUsername")!=null){
+                whichUserUsername = request.getParameter("whichUserUsername");
+            };
             request.setAttribute("whichUserUsername",whichUserUsername);
 
             commonView(daoFactory, sessionDAOFactory, request);
@@ -100,7 +102,7 @@ public class OrdersManagement {
 
             int ORDER_ID = Integer.parseInt(request.getParameter("ORDER_ID"));
             ContenutoNellOrdineDAO contenutoNellOrdineDAO = daoFactory.getContenutoNellOrdineDAO();
-            ArrayList<ContenutoNellOrdine> contenutoNellOrdine = contenutoNellOrdineDAO.findByOrderID(ORDER_ID);
+            ArrayList<ContenutoNellOrdine> contenutoNellOrdine = contenutoNellOrdineDAO.findByOrderIDCNO(ORDER_ID);
 
             OrdineDAO ordineDAO = daoFactory.getOrdineDao();
             float prezzo = ordineDAO.calculatePrice(ORDER_ID);
@@ -163,7 +165,7 @@ public class OrdersManagement {
             String STATO = request.getParameter("STATO");
             int ORDER_ID = Integer.parseInt(request.getParameter("ORDER_ID"));
             OrdineDAO ordineDAO = daoFactory.getOrdineDao();
-            Ordine ordine = ordineDAO.findByOrderIdentificativo(ORDER_ID);
+            Ordine ordine = ordineDAO.findByOrderID(ORDER_ID);
 
             try {
                 ordineDAO.updateStatus(ordine,STATO);
@@ -215,27 +217,33 @@ public class OrdersManagement {
         ArrayList<Ordine> ordini;
         ArrayList<Float> prices = new ArrayList<>();
 
-        String whichUserUsername = request.getParameter("whichUserUsername");
+        String whichUserUsername=request.getParameter("whichUserUsername");
+        String wuu = "";
+        if(whichUserUsername!=null) {
+            if (!(whichUserUsername.equals(""))) {
+                wuu = whichUserUsername;
+            }
+        }
 
         if(user.getAdmin().equals("Y")){
-            if(whichUserUsername==null) {
+            if(wuu.equals("")) {
                 ordini = ordineDAO.findAllOrdini();
                 prices = contenutoNellOrdineDAO.calculatePriceCNO();
             }
             else {
-                prices = contenutoNellOrdineDAO.calculatePriceforWhichUsername(whichUserUsername);
-                ordini = ordineDAO.findAllOrdiniByNomeEffettuante(whichUserUsername);
+                prices = contenutoNellOrdineDAO.calculatePriceForWhichUsername(whichUserUsername);
+                ordini = ordineDAO.findAllOrdiniByUsername(whichUserUsername);
             }
 
         }
         else {
-            prices = contenutoNellOrdineDAO.calculatePriceforWhichUsername(loggedUser.getUsername());
-            ordini = ordineDAO.findAllOrdiniByNomeEffettuante(loggedUser.getUsername());
+            prices = contenutoNellOrdineDAO.calculatePriceForWhichUsername(loggedUser.getUsername());
+            ordini = ordineDAO.findAllOrdiniByUsername(loggedUser.getUsername());
         }
 
         request.setAttribute("ordini", ordini);
         request.setAttribute("prices", prices);
-        request.setAttribute("whichUserUsername",whichUserUsername);
+        request.setAttribute("whichUserUsername",wuu);
 
     }
 
