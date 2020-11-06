@@ -28,41 +28,42 @@
 	<title>
 		FumettiDB: <%=menuActiveLink%>
 	</title>
-
 	<script lang="javascript">
 
-       function goback() {
-           document.backForm.submit();
-       }
+		function goback() {
+			document.backForm.submit();
+		}
 
-       function mainOnLoadHandler() {
-           document.backForm.backButton.addEventListener("click", goback);
-       }
+		function mainOnLoadHandler() {
+			document.backForm.backButton.addEventListener("click", goback);
+		}
 
-       function viewDetails(ISBN){
-           const f = document.viewDetailsForm;
-           f.ISBN.value = ISBN;
-           f.submit();
-		 }
+		function viewDetails(ISBN){
+			const f = document.viewDetailsForm;
+			f.ISBN.value = ISBN;
+			f.submit();
+		}
+
 	</script>
-
 	<style>
-       table {
-           border-collapse: collapse;
-           width: 100%;
-       }
 
-       td, th {
-           border: 1px solid #dddddd;
-           text-align: left;
-           width: 100px;
-           padding: 8px;
-       }
+		table {
+			  border-collapse: collapse;
+			  width: 100%;
+		}
 
-       th>a:hover {
-           color:black;
-           text-decoration: underline;
-       }
+		td, th {
+			border: 1px solid #dddddd;
+			text-align: left;
+			width: 100px;
+			padding: 8px;
+		}
+
+		th>a:hover {
+			color:black;
+			text-decoration: underline;
+		}
+
 	</style>
 
 </head>
@@ -73,14 +74,14 @@
 			<h3>Dettagli dell'ordine <%=contenutoNellOrdineList.get(0).getOrdine().getOrderID()%></h3>
 		</section>
 
-		Prezzo totale = <%=prezzo%> Euro
+		Prezzo totale = <%=prezzo%> &euro;
 		</br>
 		</br>
 
 		<table>
 			<tr>
 				<th style="color:#ffbc00">ISBN</th>
-				<th style="color:#ffbc00">Quantità</th>
+				<th style="color:#ffbc00">Quantità acquistata</th>
 				<th style="color:#ffbc00">Magazzino</th>
 				<th style="color:#ffbc00">Centro vendita</th>
 				<th style="color:#ffbc00">Prezzo</th>
@@ -88,17 +89,17 @@
 		</table>
 
 		<%for(i=0; i<contenutoNellOrdineList.size(); i++) { %>
-			<table>
-				<tr>
-					<th><a href="javascript:viewDetails(<%=contenutoNellOrdineList.get(i).getFumetto().getISBN()%>)"> <%=contenutoNellOrdineList.get(i).getFumetto().getISBN()%></a></th>
-					<th><%=contenutoNellOrdineList.get(i).getQuantita()%></th>
-					<th><%=contenutoNellOrdineList.get(i).getMagazzino().getNomeMagazzino()%></th>
-					<th><%=contenutoNellOrdineList.get(i).getCentroVendita().getNomeCentro()%></th>
-					<%if(prices.size()>i){%>
-					<th><%=prices.get(i)%> Euro</th>
-					<% } %>
-				</tr>
-			</table>
+		<table>
+			<tr>
+				<th><a href="javascript:viewDetails(<%=contenutoNellOrdineList.get(i).getFumetto().getISBN()%>)"> <%=contenutoNellOrdineList.get(i).getFumetto().getISBN()%></a></th>
+				<th><%=contenutoNellOrdineList.get(i).getQuantita()%></th>
+				<th><%=contenutoNellOrdineList.get(i).getMagazzino().getNomeMagazzino()%></th>
+				<th><%=contenutoNellOrdineList.get(i).getCentroVendita().getNomeCentro()%></th>
+				<%if(prices.size()>i){%>
+				<th><%=prices.get(i)%>&nbsp€</th>
+				<% } %>
+			</tr>
+		</table>
 
 		<% } %>
 		</br>
