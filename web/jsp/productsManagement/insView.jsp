@@ -48,7 +48,7 @@
 			text-align: left;
 		}
 
-		input[type="text"], input[type="titolo"], input[type="autore"], input[type="numero"], input[type="formato"], input[type="rilegatura"], input[type="prezzo"], input[type="peso"], input[type="peso"], input[type="nomeFornitore"] {
+		input[type="text"], input[type="titolo"], input[type="autore"], input[type="numero"], input[type="formato"], input[type="rilegatura"], input[type="prezzo"], input[type="peso"], input[type="bloccato"], input[type="nomeFornitore"], input[type="nomeMagazzino"] {
 			border: none;
 			border-radius: 4px;
 			padding: 3px;
@@ -57,7 +57,7 @@
 			box-shadow: 0 1px 0 rgba(0,0,0,0.03) inset;
 		}
 
-		input[type="text"]:focus, input[type="titolo"]:focus, input[type="autore"]:focus, input[type="numero"]:focus, input[type="numero"]:focus, input[type="formato"]:focus, input[type="rilegatura"]:focus, input[type="prezzo"]:focus, input[type="peso"]:focus, input[type="nomeFornitore"]:focus {
+		input[type="text"]:focus, input[type="titolo"]:focus, input[type="autore"]:focus, input[type="numero"]:focus, input[type="formato"]:focus, input[type="rilegatura"]:focus, input[type="prezzo"]:focus, input[type="peso"]:focus, input[type="bloccato"]:focus, input[type="nomeFornitore"]:focus, input[type="nomeMagazzino"]:focus {
 			background: #d2d9dd;
 			outline-color: #0c74f8;
 		}
@@ -68,7 +68,6 @@
 		}
 
 	</style>
-
 	<script lang="JavaScript">
 
 		const status = '<%=action%>';
@@ -102,10 +101,9 @@
 		}
 
 	</script>
-
 </head>
 <body>
-    <%@include file="/include/header.inc"%>
+	<%@include file="/include/header.inc"%>
 	<main>
 		<section id="pageTitle">
 			<h1>
@@ -114,9 +112,7 @@
 		</section>
 
 		<section id="insModFormSection">
-
 			<form name="insModForm" action="Dispatcher" method="post">
-
 				<div class="field clearfix">
 					<label for="ISBN">ISBN</label>
 					<input type="text" id="ISBN" name="ISBN"
@@ -195,23 +191,19 @@
 							value="<%=(action.equals("modify")) ? contenutoNelMagazzino.getMagazzino().getNomeMagazzino() : ""%>"
 							required size="20" maxlength="45" <%if(action.equals("modify")){%>readonly<%}%>/>
 				</div>
-
 				<label>&#160;</label>
 				<input type="submit" class="button" value="Conferma"/>
 				<input type="button" name="backButton" class="button" onclick="goback()" value="Annulla"/>
 				<input type="hidden" name="controllerAction" value="ProductsManagement.view">
-
 				<%if (action.equals("modify")) {%>
 				<input type="hidden" name="ISBN" value="<%=fumetto.getISBN()%>"/>
 				<input type="hidden" name="nomeFornitore" value="<%=fornitoDa.getCentroVendita().getNomeCentro()%>"/>
 				<input type="hidden" name="nomeMagazzino" value="<%=contenutoNelMagazzino.getMagazzino().getNomeMagazzino()%>"/>
 				<% } %>
-
 			</form>
-
 		</section>
 
-		</br>
+		<br>
 
 		<%if (action.equals("modify")) {%>
 		<section class="field clearfix">
