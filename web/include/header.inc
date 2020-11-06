@@ -104,9 +104,9 @@
         <section id="login" class = "clearfix">
             <form name="logonForm" action="Dispatcher" method="post">
                 <label for="username">Username</label>
-                <input type="text" id="username" name="USERNAME" max="20" required>
+                <input type="text" id="username" name="Username" max="20" required>
                 <label for="password">Password</label>
-                <input type="password" id="password" name="PASSWORD" maxlength="20" required>
+                <input type="password" id="password" name="Password" maxlength="20" required>
                 <input type="hidden" name="controllerAction" value="HomeManagement.logon"/>
                 <input type="submit" value="OK">
             </form>
