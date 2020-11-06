@@ -1334,6 +1334,74 @@ public class FumettoEContenutoNelMagazzinoDAOMySQLJDBCImpl implements ContenutoN
 
         return fumetti;
     }
+    
+     public ArrayList<Fumetto> findRandomFumetti(){
+
+        PreparedStatement ps;
+        Fumetto fumetto;
+        ArrayList<Fumetto> fumetti = new ArrayList<>();
+
+        try {
+            String sql
+                    = " SELECT *"
+                    + " FROM fumetto"
+                    + " JOIN contenuto_nel_magazzino ON ISBN = ISBN_FUMETTO"
+                    + " WHERE DELETED = 'N'"
+                    + " ORDER BY RAND()"
+                    + " LIMIT 12";
+
+            ps = conn.prepareStatement(sql);
+            ResultSet resultSet = ps.executeQuery();
+
+            while(resultSet.next()){
+                fumetto = read_f(resultSet);
+                fumetti.add(fumetto);
+            }
+            resultSet.close();
+            ps.close();
+
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+        return fumetti;
+
+    }
+
+    public ArrayList<Fumetto> findRandomFumettiUnblocked(){
+
+        PreparedStatement ps;
+        Fumetto fumetto;
+        ArrayList<Fumetto> fumetti = new ArrayList<>();
+
+        try {
+            String sql
+                    = " SELECT *"
+                    + " FROM fumetto"
+                    + " JOIN contenuto_nel_magazzino ON ISBN = ISBN_FUMETTO"
+                    + " WHERE DELETED = 'N' AND BLOCCATO = 'N'"
+                    + " ORDER BY RAND()"
+                    + " LIMIT 12";
+
+            ps = conn.prepareStatement(sql);
+            ResultSet resultSet = ps.executeQuery();
+
+            while(resultSet.next()){
+                fumetto = read_f(resultSet);
+                fumetti.add(fumetto);
+            }
+            resultSet.close();
+            ps.close();
+
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+        return fumetti;
+
+    }
 
 
     ContenutoNelMagazzino read(ResultSet rs){
