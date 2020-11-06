@@ -1,10 +1,8 @@
 package controller;
 
+import com.sun.xml.internal.bind.v2.runtime.unmarshaller.XsiNilLoader;
 import model.dao.*;
-import model.mo.ContenutoNelMagazzino;
-import model.mo.FornitoDa;
-import model.mo.Fumetto;
-import model.mo.User;
+import model.mo.*;
 import services.config.Configuration;
 import services.logservice.LogService;
 
@@ -12,6 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Level;
@@ -36,12 +35,14 @@ public class HomeManagement {
             sessionFactoryParameters.put("request",request);
             sessionFactoryParameters.put("response",response);
             sessionDAOFactory = DAOFactory.getDAOFactory(Configuration.COOKIE_IMPL,sessionFactoryParameters);
+            assert sessionDAOFactory != null;
             sessionDAOFactory.beginTransaction();
 
             UserDAO sessionUserDao = sessionDAOFactory.getUserDAO();
             loggedUser = sessionUserDao.findLoggedUser();
 
             daoFactory = DAOFactory.getDAOFactory(Configuration.DAO_IMPL,null);
+            assert daoFactory != null;
             daoFactory.beginTransaction();
 
             int whichHalf = 0;
@@ -50,22 +51,12 @@ public class HomeManagement {
                 whichHalf= Integer.parseInt(request.getParameter("whichHalf"));
             }
 
-            FumettoDAO fumettoDAO = daoFactory.getFumettoDAO();
-            ContenutoNelMagazzinoDAO contenutoNelMagazzinoDAO = daoFactory.getContenutoNelMagazzinoDAO();
-            FornitoDaDAO fornitoDaDAO = daoFactory.getFornitoDaDAO();
-
-            /* Lists */
-            ArrayList<Fumetto> fumettoArrayList = fumettoDAO.findRandomFumetti();
-            ArrayList<ContenutoNelMagazzino> contenutoNelMagazzinoArrayList = contenutoNelMagazzinoDAO.findRandomContenutoNelMagazzino();
-            ArrayList<FornitoDa> fornitoDaArrayList = fornitoDaDAO.findRandomFornitoDa();
+            commonView(daoFactory, sessionDAOFactory, request);
 
             sessionDAOFactory.commitTransaction();
 
             request.setAttribute("loggedOn",loggedUser!=null);
             request.setAttribute("loggedUser",loggedUser);
-            request.setAttribute("fumettoArrayList",fumettoArrayList);
-            request.setAttribute("contenutoNelMagazzinoArrayList",contenutoNelMagazzinoArrayList);
-            request.setAttribute("fornitoDaArrayList", fornitoDaArrayList);
             request.setAttribute("whichHalf",whichHalf);
             request.setAttribute("viewUrl","homeManagement/view");
 
@@ -73,14 +64,14 @@ public class HomeManagement {
             logger.log(Level.SEVERE, "Controller error",e);
             try{
                 if(sessionDAOFactory != null) sessionDAOFactory.rollbackTransaction();
-            } catch (Throwable t){
+            } catch (Throwable ignored){
 
             }
             throw new RuntimeException(e);
         } finally {
             try{
                 if(sessionDAOFactory != null) sessionDAOFactory.closeTransaction();
-            } catch (Throwable t){
+            } catch (Throwable ignored){
 
             }
         }
@@ -102,6 +93,7 @@ public class HomeManagement {
             sessionFactoryParameters.put("request",request);
             sessionFactoryParameters.put("response",response);
             sessionDAOFactory = DAOFactory.getDAOFactory(Configuration.COOKIE_IMPL,sessionFactoryParameters);
+            assert sessionDAOFactory != null;
             sessionDAOFactory.beginTransaction();
 
             UserDAO sessionUserDAO = sessionDAOFactory.getUserDAO();
@@ -114,19 +106,12 @@ public class HomeManagement {
             }
 
             daoFactory = DAOFactory.getDAOFactory(Configuration.DAO_IMPL,null);
+            assert daoFactory != null;
             daoFactory.beginTransaction();
 
-            FumettoDAO fumettoDAO = daoFactory.getFumettoDAO();
-            ContenutoNelMagazzinoDAO contenutoNelMagazzinoDAO = daoFactory.getContenutoNelMagazzinoDAO();
-            FornitoDaDAO fornitoDaDAO = daoFactory.getFornitoDaDAO();
-
             /* Lists */
-            ArrayList<Fumetto> fumettoArrayList = fumettoDAO.findRandomFumetti();
-            ArrayList<ContenutoNelMagazzino> contenutoNelMagazzinoArrayList = contenutoNelMagazzinoDAO.findRandomContenutoNelMagazzino();
-            ArrayList<FornitoDa> fornitoDaArrayList = fornitoDaDAO.findRandomFornitoDa();
-
-            String username = request.getParameter("USERNAME");
-            String password = request.getParameter("PASSWORD");
+            String username = request.getParameter("Username");
+            String password = request.getParameter("Password");
 
             UserDAO userDAO = daoFactory.getUserDAO();
             User user = userDAO.findByUsername(username);
@@ -141,15 +126,14 @@ public class HomeManagement {
                 applicationMessage="Login effettuato.";
             }
 
+            commonView(daoFactory, sessionDAOFactory, request);
+
             daoFactory.commitTransaction();
             sessionDAOFactory.commitTransaction();
 
             request.setAttribute("loggedOn",loggedUser!=null);
             request.setAttribute("loggedUser", loggedUser);
             request.setAttribute("applicationMessage", applicationMessage);
-            request.setAttribute("fumettoArrayList",fumettoArrayList);
-            request.setAttribute("contenutoNelMagazzinoArrayList",contenutoNelMagazzinoArrayList);
-            request.setAttribute("fornitoDaArrayList", fornitoDaArrayList);
             request.setAttribute("whichHalf",whichHalf);
             request.setAttribute("viewUrl", "homeManagement/view");
 
@@ -158,7 +142,7 @@ public class HomeManagement {
             try {
                 if (daoFactory != null) daoFactory.rollbackTransaction();
                 if (sessionDAOFactory != null) sessionDAOFactory.rollbackTransaction();
-            } catch (Throwable t) {
+            } catch (Throwable ignored) {
             }
             throw new RuntimeException(e);
 
@@ -166,7 +150,7 @@ public class HomeManagement {
             try {
                 if (daoFactory != null) daoFactory.closeTransaction();
                 if (sessionDAOFactory != null) sessionDAOFactory.closeTransaction();
-            } catch (Throwable t) {
+            } catch (Throwable ignored) {
             }
         }
 
@@ -187,9 +171,11 @@ public class HomeManagement {
             sessionFactoryParameters.put("response",response);
 
             sessionDAOFactory = DAOFactory.getDAOFactory(Configuration.COOKIE_IMPL,sessionFactoryParameters);
+            assert sessionDAOFactory != null;
             sessionDAOFactory.beginTransaction();
 
             daoFactory = DAOFactory.getDAOFactory(Configuration.DAO_IMPL,null);
+            assert daoFactory != null;
             daoFactory.beginTransaction();
 
             int whichHalf = 0;
@@ -197,15 +183,6 @@ public class HomeManagement {
             if(request.getParameter("whichHalf")!=null){
                 whichHalf= Integer.parseInt(request.getParameter("whichHalf"));
             }
-
-            FumettoDAO fumettoDAO = daoFactory.getFumettoDAO();
-            ContenutoNelMagazzinoDAO contenutoNelMagazzinoDAO = daoFactory.getContenutoNelMagazzinoDAO();
-            FornitoDaDAO fornitoDaDAO = daoFactory.getFornitoDaDAO();
-
-            /* Lists */
-            ArrayList<Fumetto> fumettoArrayList = fumettoDAO.findRandomFumetti();
-            ArrayList<ContenutoNelMagazzino> contenutoNelMagazzinoArrayList = contenutoNelMagazzinoDAO.findRandomContenutoNelMagazzino();
-            ArrayList<FornitoDa> fornitoDaArrayList = fornitoDaDAO.findRandomFornitoDa();
 
             UserDAO sessionUserDAO = sessionDAOFactory.getUserDAO();
 
@@ -215,14 +192,13 @@ public class HomeManagement {
 
             sessionUserDAO.delete(null);
 
+            commonView(daoFactory, sessionDAOFactory, request);
+
             daoFactory.commitTransaction();
             sessionDAOFactory.commitTransaction();
 
             request.setAttribute("loggedOn",false);
             request.setAttribute("loggedUser", null);
-            request.setAttribute("fumettoArrayList",fumettoArrayList);
-            request.setAttribute("contenutoNelMagazzinoArrayList",contenutoNelMagazzinoArrayList);
-            request.setAttribute("fornitoDaArrayList", fornitoDaArrayList);
             request.setAttribute("whichHalf",whichHalf);
             request.setAttribute("viewUrl", "homeManagement/view");
 
@@ -230,16 +206,46 @@ public class HomeManagement {
             logger.log(Level.SEVERE, "Controller Error", e);
             try {
                 if (sessionDAOFactory != null) sessionDAOFactory.rollbackTransaction();
-            } catch (Throwable t) {
+            } catch (Throwable ignored) {
             }
             throw new RuntimeException(e);
 
         } finally {
             try {
                 if (sessionDAOFactory != null) sessionDAOFactory.closeTransaction();
-            } catch (Throwable t) {
+            } catch (Throwable ignored) {
             }
         }
+    }
+
+    public static void commonView(DAOFactory daoFactory,DAOFactory sessionDAOFactory,HttpServletRequest request){
+
+        FumettoDAO fumettoDAO = daoFactory.getFumettoDAO();
+        ContenutoNelMagazzinoDAO contenutoNelMagazzinoDAO = daoFactory.getContenutoNelMagazzinoDAO();
+        FornitoDaDAO fornitoDaDAO = daoFactory.getFornitoDaDAO();
+        ArrayList<Fumetto> fumettoArrayList;
+
+        User loggedUser;
+        UserDAO sessionUserDAO = sessionDAOFactory.getUserDAO();
+        loggedUser = sessionUserDAO.findLoggedUser();
+
+        /* Lists */
+        if(loggedUser!=null) {
+            if (loggedUser.getAdmin().equals("Y"))
+                fumettoArrayList = fumettoDAO.findRandomFumetti();
+            else
+                fumettoArrayList = fumettoDAO.findRandomFumettiUnblocked();
+        }
+        else
+            fumettoArrayList = fumettoDAO.findRandomFumetti();
+
+        ArrayList<ContenutoNelMagazzino> contenutoNelMagazzinoArrayList = contenutoNelMagazzinoDAO.findRandomContenutoNelMagazzino(fumettoArrayList);
+        ArrayList<FornitoDa> fornitoDaArrayList = fornitoDaDAO.findRandomFornitoDa(fumettoArrayList);
+
+        request.setAttribute("fumettoArrayList",fumettoArrayList);
+        request.setAttribute("contenutoNelMagazzinoArrayList",contenutoNelMagazzinoArrayList);
+        request.setAttribute("fornitoDaArrayList", fornitoDaArrayList);
+
     }
 
 }
