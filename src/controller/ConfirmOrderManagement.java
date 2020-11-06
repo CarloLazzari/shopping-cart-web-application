@@ -214,7 +214,7 @@ public class ConfirmOrderManagement {
             /* Se non ho nessun messaggio di errore */
             /* .. il metodo di pagamento è valido, la carta non è scaduta */
             /* e la carta appartiene effettivamente all'utente loggato, procedo con l'ordine. */
-            else if(carta != null && carta.getDataScadenza().compareTo(sqlDate) > 0 && carta.getIntestatario().equals(loggedUser.getUsername())) {
+            else if((carta != null) && (carta.getDataScadenza().compareTo(sqlDate) > 0) && (carta.getUser().getUsername().equals(loggedUser.getUsername()))) {
                 try {
 
                     /* Creo un singolo ordine, poi lo prendo come parametro, e lo uso per costruirci su - */
