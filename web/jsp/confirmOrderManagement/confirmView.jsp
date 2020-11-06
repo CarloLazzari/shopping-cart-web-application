@@ -12,37 +12,38 @@
 
 <% int i=0;
 
-    boolean loggedOn = (Boolean) request.getAttribute("loggedOn");
-    User loggedUser = (User) request.getAttribute("loggedUser");
-    String applicationMessage = (String) request.getAttribute("applicationMessage");
-    String menuActiveLink = "Compra";
+	boolean loggedOn = (Boolean) request.getAttribute("loggedOn");
+	User loggedUser = (User) request.getAttribute("loggedUser");
+	String applicationMessage = (String) request.getAttribute("applicationMessage");
+	String menuActiveLink = "Compra";
 
-    String ISBN = request.getParameter("ISBN");
+	String ISBN = request.getParameter("ISBN");
 
-    List<Carrello> cartItems = (List<Carrello>) request.getAttribute("cartItems");
-    List<Fumetto> fumetti = (List<Fumetto>) request.getAttribute("fumetti");
-    float totalPrice = (float) request.getAttribute("totalPrice");
+	List<Carrello> cartItems = (List<Carrello>) request.getAttribute("cartItems");
+	List<Fumetto> fumetti = (List<Fumetto>) request.getAttribute("fumetti");
+	float totalPrice = (float) request.getAttribute("totalPrice");
 
 %>
 <html>
 <head>
+
 	<%@include file="/include/htmlHead.inc"%>
 	<title>
 		FumettiDB: <%=menuActiveLink%>
 	</title>
 	<style>
 
-       table {
-           border-collapse: collapse;
-           width: 100%;
-       }
+		table {
+	  		border-collapse: collapse;
+	  		width: 100%;
+		}
 
-       td, th {
-           border: 1px solid #dddddd;
-           text-align: left;
-           width: 100px;
-           padding: 8px;
-       }
+		td, th {
+			border: 1px solid #dddddd;
+		  	text-align: left;
+		  	width: 100px;
+		  	padding: 8px;
+		}
 
 	</style>
 	<script lang="JavaScript">
@@ -68,52 +69,64 @@
 <body>
 	<%@include file="/include/header.inc"%>
 	<main>
+		<section id="pageTitle">
+			<h3>Conferma dell'ordine</h3>
+		</section>
 		<% if(cartItems.size()==0){%>
-		<section>
-			Il tuo carrello e' attualmente vuoto. Aggiungi prodotti al carrello per effettuare ordini.
-		</section>
+			<section>
+				Il tuo carrello e' attualmente vuoto. Aggiungi prodotti al carrello per effettuare ordini.
+			</section>
 		<% } else { %>
-		<section>
-			Prezzo Totale = <%=totalPrice%> Euro
-		</section>
+
+			<br>
+			<table>
+				<tr>
+					<th style="color:#ffbc00">ISBN</th>
+					<th style="color:#ffbc00">Titolo</th>
+					<th style="color:#ffbc00">Autore</th>
+					<th style="color:#ffbc00">Prezzo</th>
+					<th style="color:#ffbc00">Quantit&agrave</th>
+				</tr>
+			</table>
 		<% } %>
-		</br>
+
 		<% for(i=0; i<cartItems.size(); i++) { %>
-		<table>
-			<tr>
-				<th><%=cartItems.get(i).getFumetto().getISBN()%></th>
-				<th><%=fumetti.get(i).getTitolo()%></th>
-				<th><%=fumetti.get(i).getAutore()%></th>
-				<th><%=fumetti.get(i).getPrezzo()%> Euro </th>
-				<th><%=cartItems.get(i).getQuantita()%></th>
-			</tr>
-		</table>
+			<table>
+				<tr>
+					<th><%=cartItems.get(i).getFumetto().getISBN()%></th>
+					<th><%=fumetti.get(i).getTitolo()%> - <%=fumetti.get(i).getNumero()%></th>
+					<th><%=fumetti.get(i).getAutore()%></th>
+					<th><%=fumetti.get(i).getPrezzo()%> &euro;</th>
+					<th><%=cartItems.get(i).getQuantita()%></th>
+				</tr>
+			</table>
 		<% } %>
-		</br>
+		<br>
 
 			<% if(cartItems.size()>0){%>
+			<section>
+				Prezzo Totale = <%=totalPrice%> &euro;
+			</section>
 			<form name="confirmOrderForm" action="Dispatcher" method="post">
 				<label for="indirizzoSpedizione"></label>
 				Inserisci l'indirizzo: <input type="text" id="indirizzoSpedizione" name="indirizzoSpedizione" required maxlength="45"/>
-				</br>
+				<br>
 				<label for="metodoPagamento"></label>
 				Inserisci il numero di carta di credito: <input type="tel" id="metodoPagamento" name="metodoPagamento" maxlength="19" required placeholder="XXXX-XXXX-XXXX-XXXX"/>
-				</br>
-				</br>
+				<br>
+				<br>
 				<input type="submit" class="button" value="Conferma"/>
 				<input type="button" name="backButton" class="button" onclick="goback()" value="Annulla"/>
 				<input type="hidden" name="controllerAction" value="ConfirmOrderManagement.confirmOrder"/>
 			</form>
 			<% } %>
-        </br>
+        <br>
 
 		<form name="backForm" method="post" action="Dispatcher">
 			<input type="hidden" name="controllerAction" value="ProductsManagement.view"/>
 		</form>
 
 	</main>
-
-
 
     <%@include file="/include/footer.inc"%>
 
