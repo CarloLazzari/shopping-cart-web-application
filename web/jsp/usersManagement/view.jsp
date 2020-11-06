@@ -7,7 +7,7 @@
   Time: 20:43
   To change this template use File | Settings | File Templates.
 --%>
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page contentType="text/html;charset=UTF-8" %>
 <% int i;
 
 	boolean loggedOn = (Boolean) request.getAttribute("loggedOn");
@@ -24,82 +24,65 @@
 %>
 
 <html>
-	<head>
-		<%@include file="/include/htmlHead.inc"%>
-		<title>
-			FumettiDB: <%=menuActiveLink%>
-		</title>
-		<style>
+<head>
+	<%@include file="/include/htmlHead.inc"%>
+	<title>
+		FumettiDB: <%=menuActiveLink%>
+	</title>
+	<style>
 
-			th>a:hover {
-				 text-decoration: underline;
-			}
+		th>a:hover {
+			text-decoration: underline;
+		}
 
-			th>a{
-				 color: #a6a6f5;
-			}
+		th>a{
+			color: #97caff !important;
+		}
 
-         table {
-             border-collapse: collapse;
-             width: 100%;
-				 table-layout: fixed;
-         }
+		table {
+			 border-collapse: collapse;
+			 width: 100%;
+			 table-layout: fixed;
+		}
 
-         td, th {
-             border: 1px solid #dddddd;
-             text-align: left;
-				 width: 150px;
-             padding: 8px;
-         }
+		td, th {
+			border: 1px solid #dddddd;
+			text-align: left;
+			width: 150px;
+			padding: 8px;
+		}
 
-			#block, #unblock {
-				 float: right;
-			}
+		#block, #unblock {
+			float: right;
+		}
 
-			#admin, #user{
-				 float: right;
-			}
+		#admin, #user{
+			float: right;
+		}
 
-		</style>
+	</style>
+	<script>
 
-		<script>
-			function blockUser(Username){
-				const f = document.blockUserForm;
-				f.whichUserUsername.value = Username;
-				f.submit();
-			}
+		function blockUser(Username){
+			const f = document.blockUserForm;
+			f.whichUserUsername.value = Username;
+			f.submit();
+		}
 
-			function unblockUser(Username) {
-				const f = document.unblockUserForm;
-				f.whichUserUsername.value = Username;
-				f.submit();
-			}
+		function unblockUser(Username) {
+			const f = document.unblockUserForm;
+			f.whichUserUsername.value = Username;
+			f.submit();
+		}
 
-			function viewOrders(Username) {
-				const f = document.viewOrdersForm;
-				f.whichUserUsername.value = Username;
-				f.submit();
-			}
+		function viewOrders(Username) {
+			const f = document.viewOrdersForm;
+			f.whichUserUsername.value = Username;
+			f.submit();
+		}
 
-         function testBlock(Username) {
-             try {
-                 blockUser(Username);
-             } catch (e) {
-                 console.log(e);
-             }
-         }
-
-         function testUnblock(Username) {
-             try {
-                 unblockUser(Username);
-             } catch (e) {
-                 console.log(e);
-             }
-         }
-		</script>
-
-	</head>
-
+	</script>
+</head>
 	<body>
 	 	<%@include file="/include/header.inc"%>
 		<main>
@@ -122,7 +105,7 @@
 
 			<% for(i=0; i<users.size(); i++) { %>
 			<table id="users">
-			   <tr <%if(users.get(i).getAdmin().equals("Y")){%> style="color: blueviolet" <% } %>>
+			   <tr>
 					<th style="width: 100px" ><%=users.get(i).getUsername()%>
 						<% if(!(loggedUser.getUsername().equals(users.get(i).getUsername()))){ %>
 						<% if(users.get(i).getBlocked().equals("N")) { %>
@@ -150,11 +133,9 @@
 					<th style="width: 150px"><%=users.get(i).getEmail()%></th>
 					<th style="width: 50px" ><%=users.get(i).getData()%></th>
 					<th style="width: 100px"  ><%=users.get(i).getIndirizzo()%></th>
-					<th style="width: 10px" ><%=users.get(i).getBlocked()%></th>
+					<th style="width: 10px; text-align: center" ><%=users.get(i).getBlocked()%></th>
 					<th style="width: 50px"><a id="viewOrders" href="javascript:viewOrders('<%=users.get(i).getUsername()%>')">#ORDINI:</a> <%=usersOrdersCount.get(i)%></th>
 				</tr>
-
-
 			</table>
 
 		   <% } %>
