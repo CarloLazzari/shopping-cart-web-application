@@ -67,6 +67,14 @@
 			margin: 5px;
 		}
 
+      #immagine {
+          position: relative;
+      }
+      #immagine img {
+          position: absolute;
+          right: 20px;
+      }
+
 	</style>
 	<script lang="JavaScript">
 
@@ -110,6 +118,12 @@
 				 Fumetti: <%=(action.equals("modify")) ? "Modifica Fumetto" : "Nuovo Fumetto"%>
 			</h1>
 		</section>
+
+		<%if(action.equals("modify")){%>
+		<div id="immagine" style="margin-top: 5px">
+			<img id="prodotto" alt="<%=fumetto.getISBN()%>" src="productImages/<%=fumetto.getISBN()%>.jpg" width="269" height="385">
+		</div>
+		<%}%>
 
 		<section id="insModFormSection">
 			<form name="insModForm" action="Dispatcher" method="post">
