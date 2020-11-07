@@ -1,7 +1,9 @@
 package model.dao.mySQLJDBCImpl;
 
 import model.dao.CentroVenditaDAO;
+import model.dao.exception.DuplicatedObjectException;
 import model.mo.CentroVendita;
+import org.omg.PortableInterceptor.ORBInitInfoPackage.DuplicateName;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -15,9 +17,106 @@ public class CentroVenditaDAOMySQLJDBCImpl implements CentroVenditaDAO {
 
     public CentroVenditaDAOMySQLJDBCImpl(Connection conn){ this.conn = conn;}
 
-    /* Per l'admin */
     @Override
-    public CentroVendita findByNomeCentro(String nome_centro) {
+    public CentroVendita create(String nomeCentro, String indirizzo) throws DuplicatedObjectException {
+
+        PreparedStatement ps;
+
+        CentroVendita centroVendita = new CentroVendita();
+        centroVendita.setNomecentro(nomeCentro);
+        centroVendita.setIndirizzo(indirizzo);
+
+        try {
+            String sql
+                    = " SELECT NOME_CENTRO "
+                    + " FROM centro_vendita "
+                    + " WHERE NOME_CENTRO = ?";
+
+            ps = conn.prepareStatement(sql);
+            int i = 1;
+            ps.setString(i,centroVendita.getNomeCentro());
+
+            ResultSet resultSet = ps.executeQuery();
+
+            boolean exists;
+            exists = resultSet.next();
+            resultSet.close();
+
+            if (exists) {
+                throw new DuplicatedObjectException("CentroVenditaDAOMySQLJDCBImpl: Tentativo di inserimento di un centro vendita già esistente");
+            }
+
+            sql
+                = " INSERT INTO centro_vendita"
+                + "(NOME_CENTRO, INDIRIZZO)"
+                + " VALUES (?,?)";
+
+            ps=conn.prepareStatement(sql);
+            i = 1;
+            ps.setString(i++, centroVendita.getNomeCentro());
+            ps.setString(i, centroVendita.getIndirizzo());
+
+            ps.executeUpdate();
+            ps.close();
+
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+        return  centroVendita;
+
+    }
+
+    @Override
+    public void update(CentroVendita centroVendita) throws DuplicatedObjectException {
+
+        PreparedStatement ps;
+
+        try {
+            String sql
+                    = " SELECT NOME_CENTRO "
+                    + " FROM centro_vendita "
+                    + " WHERE NOME_CENTRO <> ?"
+                    + " AND INDIRIZZO = ?";
+
+            ps = conn.prepareStatement(sql);
+
+            int i = 1;
+            ps.setString(i++, centroVendita.getNomeCentro());
+            ps.setString(i, centroVendita.getIndirizzo());
+
+            ResultSet resultSet = ps.executeQuery();
+
+            boolean exists;
+            exists = resultSet.next();
+            resultSet.close();
+
+            if (exists) {
+                throw new DuplicatedObjectException("CentroVenditaDAOMySQLJDCBImpl: Tentativo di inserimento di un centro vendita già esistente");
+            }
+
+            sql
+                = " UPDATE centro_vendita"
+                + " SET "
+                + " INDIRIZZO = ?"
+                + " WHERE NOME_CENTRO = ?";
+
+            ps = conn.prepareStatement(sql);
+            ps.setString(i++, centroVendita.getNomeCentro());
+            ps.setString(i, centroVendita.getIndirizzo());
+
+            ps.executeUpdate();
+            ps.close();
+
+        } catch (SQLException e) {
+            throw new RuntimeException();
+        }
+
+    }
+
+    @Override
+    public CentroVendita findByNomeCentro(String nomeCentro) {
 
         PreparedStatement ps;
         CentroVendita centroVendita = null;
@@ -30,7 +129,8 @@ public class CentroVenditaDAOMySQLJDBCImpl implements CentroVenditaDAO {
                     + " NOME_CENTRO = ?";
 
             ps = conn.prepareStatement(sql);
-            ps.setString(1,nome_centro);
+            int i = 1;
+            ps.setString(i,nomeCentro);
 
             ResultSet resultSet = ps.executeQuery();
 
@@ -83,30 +183,20 @@ public class CentroVenditaDAOMySQLJDBCImpl implements CentroVenditaDAO {
         CentroVendita centroVendita = new CentroVendita();
         try{
             centroVendita.setNomecentro(rs.getString("NOME_CENTRO"));
-        } catch (SQLException e) {
-            throw new RuntimeException();
+        } catch (SQLException ignored) {
         }
         try{
             centroVendita.setIndirizzo(rs.getString("INDIRIZZO"));
-        } catch (SQLException e) {
-            throw new RuntimeException();
+        } catch (SQLException ignored) {
         }
 
         return centroVendita;
     }
 
-    @Override
-    public CentroVendita create(String nome_centro, String indirizzo) {
-        throw new UnsupportedOperationException("Not implemented yet.");
-    }
 
     @Override
     public void delete(CentroVendita centroVendita) {
         throw new UnsupportedOperationException("Not implemented yet");
     }
 
-    @Override
-    public void update(CentroVendita centroVendita) {
-        throw new UnsupportedOperationException("Not implemented yet");
-    }
 }
