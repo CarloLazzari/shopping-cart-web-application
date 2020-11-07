@@ -6,6 +6,7 @@ import model.mo.ContenutoNelMagazzino;
 import model.mo.FornitoDa;
 import model.mo.Fumetto;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 public interface FornitoDaDAO {
@@ -17,12 +18,12 @@ public interface FornitoDaDAO {
     public ArrayList<FornitoDa> findAllFornitoDa();
     public ArrayList<FornitoDa> findAllFornitoDaUnblocked();
     public ArrayList<FornitoDa> findInCart(String username);
-
     public ArrayList<FornitoDa> freeSearch(String searchString);
     public ArrayList<FornitoDa> freeSearchUnblocked(String searchString);
     public ArrayList<FornitoDa> findBy(String searchMode, String searchString);
     public ArrayList<FornitoDa> findByUnblocked(String searchMode, String searchString);
 
-    /**/
+    /* Vetrina in Home Page */
+    public ArrayList<FornitoDa> findRandomFornitoDa(ArrayList<Fumetto> fumettoArrayList);
 
 }
