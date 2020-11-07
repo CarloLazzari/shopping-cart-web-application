@@ -15,7 +15,6 @@
   List<Float> prices = (List<Float>) request.getAttribute("prices");
 
 %>
-
 <!DOCTYPE html>
 <html>
 <head>
@@ -46,14 +45,29 @@
 		}
 
 		#changeStateImage {
-		 padding-top: 0;
+		 	padding-top: 0;
 			 margin-top: 2px;
 		}
 
 		.privacy {
 			filter: blur(5px);
-	 		user-select: none;
+			user-select: none;
 		}
+
+		#orderHourglass, #orderShipped, #orderCompleted {
+	 		width: 22px;
+	 		height: 22px;
+ 			float: right;
+		}
+
+		#orderHourglass {
+	 		margin-right: 2px;
+		}
+
+		#orderCompleted {
+	 		margin-left: 3px;
+		}
+
 
 	</style>
 	<script lang="javascript">
@@ -77,8 +91,10 @@
 	<%@include file="/include/header.inc"%>
 	<main>
 		<section id="pageTitle">
+			<h1>Ordini</h1>
+		</section>
+		<section>
 			<% if(loggedUser!=null){%>
-			<h3>
 				<%if((loggedOn)&&(loggedUser.getAdmin().equals(("Y")))&&(!(whichUserUsername.equals("")))){ %>
 				<%if(prices.size()==0) {%>
 					Non sono ancora stati effettuati ordini dall'utente <%=whichUserUsername%>.
@@ -90,7 +106,6 @@
 				<% } else if(loggedOn) { %>
 				Ordini effettuati dall'utente <%=loggedUser.getUsername()%>.
 				<% } %>
-			</h3>
 			<% } %>
 		</section>
 
@@ -114,8 +129,9 @@
 
 		</script>
 
+		<%if((loggedOn)&&(loggedUser!=null)&&(loggedUser.getAdmin().equals("Y"))){%>
 		<section>
-			<label>Digitare lo username dell'utente di cui si vogliono visualizzare gli ordini:</label>
+			<label>Digitare l'username dell'utente di cui si vogliono visualizzare gli ordini:</label>
 			<label for="searchString">
 				<input type="text" id="searchString" name="searchString" maxlength="20">
 			</label>
@@ -123,8 +139,8 @@
 				<img style="margin-top: -5px" alt="search" id="searchImage" src="images/search.png" width="22" height="22">
 			</a>
 		</section>
-
 		<br>
+		<%}%>
 		<br>
 
 		<%if(ordini.size()>0){%>
@@ -165,8 +181,16 @@
 				<th><%=ordini.get(i).getData()%></th>
 				<th><%=ordini.get(i).getIndirizzoDestinazione()%></th>
 				<th><%=ordini.get(i).getUser().getUsername()%></th>
-				<th <%assert loggedUser != null;if(!ordini.get(i).getUser().getUsername().equals(loggedUser.getUsername())){%>class="privacy"<%}%>><%=ordini.get(i).getCarta().getNumeroCarta()%></th>
-				<th><%=ordini.get(i).getStato()%></th>
+				<th><%=ordini.get(i).getCarta().getNumeroCarta()%></th>
+				<th><%=ordini.get(i).getStato()%>
+					<%if(ordini.get(i).getStato().equals("In preparazione")){%>
+					<img id="orderHourglass" alt="hourGlass" src="images/order_hourglass.png">
+					<%} else if(ordini.get(i).getStato().equals("Spedito")) {%>
+					<img id="orderShipped" alt="shipped" src="images/order_shipped.gif">
+					<% } else if(ordini.get(i).getStato().equals("Completato")) { %>
+					<img id="orderCompleted" alt="completed" src="images/order_completed.png">
+					<% } %>
+				</th>
 				<th><%=prices.get(i)%> &euro;</th>
 			</tr>
 
