@@ -183,13 +183,21 @@
 				<th><%=ordini.get(i).getUser().getUsername()%></th>
 				<th><%=ordini.get(i).getCarta().getNumeroCarta()%></th>
 				<th><%=ordini.get(i).getStato()%>
-					<%if(ordini.get(i).getStato().equals("In preparazione")){%>
+					<%
+						switch (ordini.get(i).getStato()) {
+							case "In preparazione":
+					%>
 					<img id="orderHourglass" alt="hourGlass" src="images/order_hourglass.png">
-					<%} else if(ordini.get(i).getStato().equals("Spedito")) {%>
+					<%
+							break;
+						case "Spedito":
+					%>
 					<img id="orderShipped" alt="shipped" src="images/order_shipped.gif">
-					<% } else if(ordini.get(i).getStato().equals("Completato")) { %>
+					<% break;
+						case "Completato": %>
 					<img id="orderCompleted" alt="completed" src="images/order_completed.png">
-					<% } %>
+					<% break;
+					} %>
 				</th>
 				<th><%=prices.get(i)%> &euro;</th>
 			</tr>
