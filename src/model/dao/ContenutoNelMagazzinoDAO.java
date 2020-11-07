@@ -5,6 +5,7 @@ import model.mo.ContenutoNelMagazzino;
 import model.mo.Fumetto;
 import model.mo.Magazzino;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 public interface ContenutoNelMagazzinoDAO {
@@ -29,5 +30,7 @@ public interface ContenutoNelMagazzinoDAO {
     public ArrayList<ContenutoNelMagazzino> findByCNM(String searchMode, String searchString);
     public ArrayList<ContenutoNelMagazzino> findByCNMUnblocked(String searchMode, String searchString);
 
+    /* Vetrina in Home Page */
+    public ArrayList<ContenutoNelMagazzino> findRandomContenutoNelMagazzino(ArrayList<Fumetto> fumettoArrayList);
 
 }
