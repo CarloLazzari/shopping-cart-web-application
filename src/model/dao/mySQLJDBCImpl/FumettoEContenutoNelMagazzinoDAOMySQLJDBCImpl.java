@@ -4,7 +4,6 @@ package model.dao.mySQLJDBCImpl;
 import model.dao.ContenutoNelMagazzinoDAO;
 import model.dao.FumettoDAO;
 import model.dao.exception.DuplicatedObjectException;
-import model.mo.CentroVendita;
 import model.mo.ContenutoNelMagazzino;
 import model.mo.Fumetto;
 import model.mo.Magazzino;
@@ -50,7 +49,7 @@ public class FumettoEContenutoNelMagazzinoDAOMySQLJDBCImpl implements ContenutoN
             int i = 1;
 
             ps.setString(i++, contenutoNelMagazzino.getFumetto().getISBN());
-            ps.setString(i++, contenutoNelMagazzino.getMagazzino().getNomeMagazzino());
+            ps.setString(i, contenutoNelMagazzino.getMagazzino().getNomeMagazzino());
 
             ResultSet resultSet = ps.executeQuery();
 
@@ -72,7 +71,7 @@ public class FumettoEContenutoNelMagazzinoDAOMySQLJDBCImpl implements ContenutoN
             ps.setString(i++, contenutoNelMagazzino.getFumetto().getISBN());
             ps.setString(i++, contenutoNelMagazzino.getMagazzino().getNomeMagazzino());
             ps.setInt(i++, contenutoNelMagazzino.getQuantita());
-            ps.setString(i++, contenutoNelMagazzino.getDeleted());
+            ps.setString(i, contenutoNelMagazzino.getDeleted());
 
             ps.executeUpdate();
             ps.close();
@@ -108,7 +107,7 @@ public class FumettoEContenutoNelMagazzinoDAOMySQLJDBCImpl implements ContenutoN
             ps.setString(i++, contenutoNelMagazzino.getFumetto().getISBN());
             ps.setString(i++, contenutoNelMagazzino.getMagazzino().getNomeMagazzino());
             ps.setInt(i++, contenutoNelMagazzino.getQuantita());
-            ps.setString(i++, contenutoNelMagazzino.getDeleted());
+            ps.setString(i, contenutoNelMagazzino.getDeleted());
 
             ResultSet resultSet = ps.executeQuery();
 
@@ -133,7 +132,7 @@ public class FumettoEContenutoNelMagazzinoDAOMySQLJDBCImpl implements ContenutoN
             ps.setInt(i++, contenutoNelMagazzino.getQuantita());
             ps.setString(i++, contenutoNelMagazzino.getDeleted());
             ps.setString(i++, contenutoNelMagazzino.getFumetto().getISBN());
-            ps.setString(i++, contenutoNelMagazzino.getMagazzino().getNomeMagazzino());
+            ps.setString(i, contenutoNelMagazzino.getMagazzino().getNomeMagazzino());
 
             ps.executeUpdate();
             ps.close();
@@ -157,7 +156,7 @@ public class FumettoEContenutoNelMagazzinoDAOMySQLJDBCImpl implements ContenutoN
             int i = 1;
             ps = conn.prepareStatement(sql);
             ps.setString(i++, contenutoNelMagazzino.getFumetto().getISBN());
-            ps.setString(i++, contenutoNelMagazzino.getMagazzino().getNomeMagazzino());
+            ps.setString(i, contenutoNelMagazzino.getMagazzino().getNomeMagazzino());
 
             ps.executeUpdate();
             ps.close();
@@ -182,7 +181,7 @@ public class FumettoEContenutoNelMagazzinoDAOMySQLJDBCImpl implements ContenutoN
             int i = 1;
             ps = conn.prepareStatement(sql);
             ps.setString(i++, contenutoNelMagazzino.getFumetto().getISBN());
-            ps.setString(i++, contenutoNelMagazzino.getMagazzino().getNomeMagazzino());
+            ps.setString(i, contenutoNelMagazzino.getMagazzino().getNomeMagazzino());
 
             ps.executeUpdate();
             ps.close();
@@ -209,7 +208,7 @@ public class FumettoEContenutoNelMagazzinoDAOMySQLJDBCImpl implements ContenutoN
             ps = conn.prepareStatement(sql);
             int i = 1;
             ps.setString(i++,ISBNProdotto);
-            ps.setString(i++,Magazzino);
+            ps.setString(i,Magazzino);
 
             ResultSet resultSet = ps.executeQuery();
             if(resultSet.next()){
@@ -228,7 +227,7 @@ public class FumettoEContenutoNelMagazzinoDAOMySQLJDBCImpl implements ContenutoN
     @Override
     public ArrayList<ContenutoNelMagazzino> findInCartCNM(String username) {
 
-        ContenutoNelMagazzino contenutoNelMagazzino = new ContenutoNelMagazzino();
+        ContenutoNelMagazzino contenutoNelMagazzino;
         ArrayList<ContenutoNelMagazzino> contenutoNelMagazzinoArrayList = new ArrayList<>();
 
         PreparedStatement ps;
@@ -278,8 +277,9 @@ public class FumettoEContenutoNelMagazzinoDAOMySQLJDBCImpl implements ContenutoN
                     + " NOME_MAGAZZINO_REF = ?";
 
             ps = conn.prepareStatement(sql);
-            ps.setString(1, contenutoNelMagazzino.getFumetto().getISBN());
-            ps.setString(2,contenutoNelMagazzino.getMagazzino().getNomeMagazzino());
+            int i = 1;
+            ps.setString(i++, contenutoNelMagazzino.getFumetto().getISBN());
+            ps.setString(i, contenutoNelMagazzino.getMagazzino().getNomeMagazzino());
 
             ps.executeUpdate();
             ps.close();
@@ -364,7 +364,8 @@ public class FumettoEContenutoNelMagazzinoDAOMySQLJDBCImpl implements ContenutoN
 
             String sql
                     = " SELECT * "
-                    + " FROM contenuto_nel_magazzino WHERE DELETED = 'N'";
+                    + " FROM contenuto_nel_magazzino "
+                    + " WHERE DELETED = 'N'";
 
             ps = conn.prepareStatement(sql);
             ResultSet resultSet = ps.executeQuery();
@@ -438,7 +439,7 @@ public class FumettoEContenutoNelMagazzinoDAOMySQLJDBCImpl implements ContenutoN
             int i = 1;
             ps.setString(i++,searchString);
             ps.setString(i++,searchString);
-            ps.setString(i++,searchString);
+            ps.setString(i,searchString);
             ResultSet resultSet = ps.executeQuery();
 
             while(resultSet.next()){
@@ -477,7 +478,7 @@ public class FumettoEContenutoNelMagazzinoDAOMySQLJDBCImpl implements ContenutoN
             int i = 1;
             ps.setString(i++,searchString);
             ps.setString(i++,searchString);
-            ps.setString(i++,searchString);
+            ps.setString(i,searchString);
             ResultSet resultSet = ps.executeQuery();
 
             while(resultSet.next()){
@@ -519,7 +520,7 @@ public class FumettoEContenutoNelMagazzinoDAOMySQLJDBCImpl implements ContenutoN
 
                     ps = conn.prepareStatement(sql);
                     int i = 1;
-                    ps.setString(i++, searchString);
+                    ps.setString(i, searchString);
                     resultSet = ps.executeQuery();
 
                     while (resultSet.next()) {
@@ -539,7 +540,7 @@ public class FumettoEContenutoNelMagazzinoDAOMySQLJDBCImpl implements ContenutoN
 
                     ps = conn.prepareStatement(sql);
                     i = 1;
-                    ps.setString(i++, searchString);
+                    ps.setString(i, searchString);
                     resultSet = ps.executeQuery();
 
                     while (resultSet.next()) {
@@ -559,7 +560,7 @@ public class FumettoEContenutoNelMagazzinoDAOMySQLJDBCImpl implements ContenutoN
 
                     ps = conn.prepareStatement(sql);
                     i = 1;
-                    ps.setString(i++, searchString);
+                    ps.setString(i, searchString);
                     resultSet = ps.executeQuery();
 
                     while (resultSet.next()) {
@@ -602,7 +603,7 @@ public class FumettoEContenutoNelMagazzinoDAOMySQLJDBCImpl implements ContenutoN
 
                     ps = conn.prepareStatement(sql);
                     int i = 1;
-                    ps.setString(i++, searchString);
+                    ps.setString(i, searchString);
                     resultSet = ps.executeQuery();
 
                     while (resultSet.next()) {
@@ -622,7 +623,7 @@ public class FumettoEContenutoNelMagazzinoDAOMySQLJDBCImpl implements ContenutoN
 
                     ps = conn.prepareStatement(sql);
                     i = 1;
-                    ps.setString(i++, searchString);
+                    ps.setString(i, searchString);
                     resultSet = ps.executeQuery();
 
                     while (resultSet.next()) {
@@ -642,7 +643,7 @@ public class FumettoEContenutoNelMagazzinoDAOMySQLJDBCImpl implements ContenutoN
 
                     ps = conn.prepareStatement(sql);
                     i = 1;
-                    ps.setString(i++, searchString);
+                    ps.setString(i, searchString);
                     resultSet = ps.executeQuery();
 
                     while (resultSet.next()) {
@@ -663,8 +664,45 @@ public class FumettoEContenutoNelMagazzinoDAOMySQLJDBCImpl implements ContenutoN
         return contents;
     }
 
-    /* --------------------------------------------------------------------------------------------------------------*/
+    public ArrayList<ContenutoNelMagazzino> findRandomContenutoNelMagazzino(ArrayList<Fumetto> fumettoArrayList){
 
+        PreparedStatement ps = null;
+        ResultSet resultSet = null;
+        ContenutoNelMagazzino contenutoNelMagazzino;
+        ArrayList<ContenutoNelMagazzino> contents = new ArrayList<>();
+
+        try{
+
+            for(int j=0; j<fumettoArrayList.size(); j++) {
+                String sql
+                        = " SELECT * "
+                        + " FROM contenuto_nel_magazzino WHERE DELETED = 'N'"
+                        + " AND ISBN_FUMETTO = ?";
+
+                ps = conn.prepareStatement(sql);
+                int i = 1;
+                ps.setString(i,fumettoArrayList.get(j).getISBN());
+                resultSet = ps.executeQuery();
+
+                if (resultSet.next()) {
+                    contenutoNelMagazzino = read(resultSet);
+                    contents.add(contenutoNelMagazzino);
+                }
+            }
+
+            assert resultSet != null;
+            resultSet.close();
+            ps.close();
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+        return contents;
+
+    }
+
+    /* --------------------------------------------------------------------------------------------------------------*/
 
     @Override
     public Fumetto create(String ISBN, String titolo, String autore, int numero, String formato, String rilegatura, Float prezzo, Float peso, String bloccato) throws DuplicatedObjectException {
@@ -693,7 +731,7 @@ public class FumettoEContenutoNelMagazzinoDAOMySQLJDBCImpl implements ContenutoN
             ps = conn.prepareStatement(sql);
 
             int i = 1;
-            ps.setString(i++, fumetto.getISBN());
+            ps.setString(i, fumetto.getISBN());
 
             ResultSet resultSet = ps.executeQuery();
 
@@ -729,7 +767,7 @@ public class FumettoEContenutoNelMagazzinoDAOMySQLJDBCImpl implements ContenutoN
             ps.setString(i++, fumetto.getRilegatura());
             ps.setFloat(i++, fumetto.getPrezzo());
             ps.setFloat(i++, fumetto.getPeso());
-            ps.setString(i++, fumetto.getBlocked());;
+            ps.setString(i, fumetto.getBlocked());
 
             ps.executeUpdate();
             ps.close();
@@ -741,7 +779,6 @@ public class FumettoEContenutoNelMagazzinoDAOMySQLJDBCImpl implements ContenutoN
         return fumetto;
 
     }
-
 
     @Override
     public void update(Fumetto fumetto) throws DuplicatedObjectException {
@@ -775,7 +812,7 @@ public class FumettoEContenutoNelMagazzinoDAOMySQLJDBCImpl implements ContenutoN
             ps.setString(i++, fumetto.getRilegatura());
             ps.setFloat(i++, fumetto.getPrezzo());
             ps.setFloat(i++, fumetto.getPeso());
-            ps.setString(i++, fumetto.getBlocked());
+            ps.setString(i, fumetto.getBlocked());
 
             ResultSet resultSet = ps.executeQuery();
 
@@ -812,7 +849,7 @@ public class FumettoEContenutoNelMagazzinoDAOMySQLJDBCImpl implements ContenutoN
             ps.setFloat(i++, fumetto.getPrezzo());
             ps.setFloat(i++, fumetto.getPeso());
             ps.setString(i++, fumetto.getBlocked());
-            ps.setString(i++, fumetto.getISBN());
+            ps.setString(i, fumetto.getISBN());
 
             ps.executeUpdate();
             ps.close();
@@ -914,7 +951,7 @@ public class FumettoEContenutoNelMagazzinoDAOMySQLJDBCImpl implements ContenutoN
                     = " SELECT * "
                     + " FROM fumetto"
                     + " WHERE "
-                    + " ISBN= ?";
+                    + " ISBN = ?";
 
             ps = conn.prepareStatement(sql);
             ps.setString(1, ISBN);
@@ -1239,7 +1276,7 @@ public class FumettoEContenutoNelMagazzinoDAOMySQLJDBCImpl implements ContenutoN
             int i = 1;
             ps.setString(i++,searchString);
             ps.setString(i++,searchString);
-            ps.setString(i++,searchString);
+            ps.setString(i,searchString);
 
             ResultSet resultSet = ps.executeQuery();
 
@@ -1280,7 +1317,7 @@ public class FumettoEContenutoNelMagazzinoDAOMySQLJDBCImpl implements ContenutoN
             int i = 1;
             ps.setString(i++,searchString);
             ps.setString(i++,searchString);
-            ps.setString(i++,searchString);
+            ps.setString(i,searchString);
 
             ResultSet resultSet = ps.executeQuery();
 
@@ -1316,7 +1353,8 @@ public class FumettoEContenutoNelMagazzinoDAOMySQLJDBCImpl implements ContenutoN
                     + " WHERE USERNAME_UTENTE = ?";
 
             ps = conn.prepareStatement(sql);
-            ps.setString(1,username);
+            int i = 1;
+            ps.setString(i,username);
 
             ResultSet resultSet = ps.executeQuery();
 
@@ -1334,8 +1372,8 @@ public class FumettoEContenutoNelMagazzinoDAOMySQLJDBCImpl implements ContenutoN
 
         return fumetti;
     }
-    
-     public ArrayList<Fumetto> findRandomFumetti(){
+
+    public ArrayList<Fumetto> findRandomFumetti(){
 
         PreparedStatement ps;
         Fumetto fumetto;
@@ -1415,20 +1453,20 @@ public class FumettoEContenutoNelMagazzinoDAOMySQLJDBCImpl implements ContenutoN
 
         try{
             contenutoNelMagazzino.getFumetto().setISBN(rs.getString("ISBN_FUMETTO"));
-        } catch (SQLException e) {
+        } catch (SQLException ignored) {
         }
         try{
             contenutoNelMagazzino.getMagazzino().setNomeMagazzino(rs.getString("NOME_MAGAZZINO_REF"));
-        } catch (SQLException e) {
+        } catch (SQLException ignored) {
         }
         try{
             contenutoNelMagazzino.setQuantita(rs.getInt("QUANTITA"));
-        } catch (SQLException e) {
+        } catch (SQLException ignored) {
         }
         try {
             contenutoNelMagazzino.setDeleted(rs.getString("DELETED"));
         }
-        catch (SQLException e) {
+        catch (SQLException ignored) {
         }
 
         return contenutoNelMagazzino;
@@ -1441,39 +1479,39 @@ public class FumettoEContenutoNelMagazzinoDAOMySQLJDBCImpl implements ContenutoN
 
         try{
             fumetto.setISBN(rs.getString("ISBN"));
-        } catch (SQLException e) {
+        } catch (SQLException ignored) {
         }
         try{
             fumetto.setTitolo(rs.getString("TITOLO"));
-        } catch (SQLException e) {
+        } catch (SQLException ignored) {
         }
         try{
             fumetto.setAutore(rs.getString("AUTORE"));
-        } catch (SQLException e) {
+        } catch (SQLException ignored) {
         }
         try{
             fumetto.setNumero(rs.getInt("NUMERO"));
-        } catch (SQLException e) {
+        } catch (SQLException ignored) {
         }
         try{
             fumetto.setFormato(rs.getString("FORMATO"));
-        } catch (SQLException e) {
+        } catch (SQLException ignored) {
         }
         try{
             fumetto.setRilegatura(rs.getString("RILEGATURA"));
-        } catch (SQLException e) {
+        } catch (SQLException ignored) {
         }
         try{
             fumetto.setPrezzo(rs.getFloat("PREZZO"));
-        }  catch (SQLException e) {
+        }  catch (SQLException ignored) {
         }
         try{
             fumetto.setPeso(rs.getFloat("PESO"));
-        }  catch (SQLException e) {
+        }  catch (SQLException ignored) {
         }
         try{
             fumetto.setBlocked(rs.getString("BLOCCATO"));
-        } catch (SQLException e) {
+        } catch (SQLException ignored) {
         }
 
         return fumetto;
