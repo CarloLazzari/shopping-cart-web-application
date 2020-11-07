@@ -1,10 +1,8 @@
 package model.dao.mySQLJDBCImpl;
 
-import jdk.nashorn.internal.ir.annotations.Ignore;
 import model.dao.FornitoDaDAO;
 import model.dao.exception.DuplicatedObjectException;
 import model.mo.CentroVendita;
-import model.mo.ContenutoNelMagazzino;
 import model.mo.FornitoDa;
 import model.mo.Fumetto;
 
@@ -38,7 +36,7 @@ public class FornitoDaDAOMySQLJDBCImpl implements FornitoDaDAO {
 
             int i = 1;
             ps.setString(i++,fumetto.getISBN());
-            ps.setString(i++, centroVendita.getNomeCentro());
+            ps.setString(i, centroVendita.getNomeCentro());
 
             ResultSet resultSet = ps.executeQuery();
 
@@ -60,7 +58,7 @@ public class FornitoDaDAOMySQLJDBCImpl implements FornitoDaDAO {
             ps = conn.prepareStatement(sql);
             i = 1;
             ps.setString(i++,fornitoDa.getFumetto().getISBN());
-            ps.setString(i++, fornitoDa.getCentroVendita().getNomeCentro());
+            ps.setString(i, fornitoDa.getCentroVendita().getNomeCentro());
 
             ps.executeUpdate();
             ps.close();
@@ -72,51 +70,6 @@ public class FornitoDaDAOMySQLJDBCImpl implements FornitoDaDAO {
         return fornitoDa;
     }
 
-
-    /*
-    public FornitoDa update(FornitoDa fornitoDa) {
-
-        PreparedStatement ps;
-
-        try {
-
-            String sql
-                    = "SELECT ISBN_FUMETTO_REFERENZIATO, CENTRO_VENDITA_REFERENZIATO"
-                    + " FROM fornito_da "
-                    + " WHERE "
-                    + " ISBN_FUMETTO_REFERENZIATO <> ?"
-                    + " AND CENTRO_VENDITA_REFERENZIATO <> ?";
-
-            ps = conn.prepareStatement(sql);
-            int i = 1;
-            ps.setString(i++,fornitoDa.getFumetto().getISBN());
-            ps.setString(i++, fornitoDa.getCentroVendita().getNomeCentro());
-
-            ResultSet resultSet = ps.executeQuery();
-
-            boolean exists;
-            exists = resultSet.next();
-            resultSet.close();
-
-            if (exists) {
-                throw new DuplicatedObjectException("FornitoDaDAOMySQLJDCBImpl: Tentativo di inserimento di un prodotto già esistente");
-            }
-
-            sql
-                = " UPDATE fornito_da "
-                + " SET "
-                + " ISBN_FUMETTO_REFERENZIATO = ? AND"
-                + " CENTRO_VENDITA_REFERENZIATO = ?";
-
-            ps.executeUpdate();
-
-        } catch (SQLException | DuplicatedObjectException e) {
-            throw new RuntimeException(e);
-        }
-
-        return null;
-    }
-    */
 
     public FornitoDa findByFumettoISBNandCentroVenditaRef(String ISBN, String nomeCentro){
 
@@ -134,7 +87,7 @@ public class FornitoDaDAOMySQLJDBCImpl implements FornitoDaDAO {
             ps = conn.prepareStatement(sql);
             int i = 1;
             ps.setString(i++, ISBN);
-            ps.setString(i++, nomeCentro);
+            ps.setString(i, nomeCentro);
 
             ResultSet resultSet = ps.executeQuery();
 
@@ -149,6 +102,46 @@ public class FornitoDaDAOMySQLJDBCImpl implements FornitoDaDAO {
         }
 
         return fornitoDa;
+    }
+
+    @Override
+    public ArrayList<FornitoDa> findRandomFornitoDa(ArrayList<Fumetto> fumettoArrayList) {
+
+        PreparedStatement ps = null;
+        ResultSet resultSet = null;
+        FornitoDa fornitoDa;
+        ArrayList<FornitoDa> fornitoDaArrayList = new ArrayList<>();
+
+        try{
+
+            for(int j=0; j<fumettoArrayList.size(); j++) {
+                String sql
+                        = " SELECT *"
+                        + " FROM fornito_da JOIN fumetto f on f.ISBN = fornito_da.ISBN_FUMETTO_REFERENZIATO"
+                        + " JOIN contenuto_nel_magazzino cnm on f.ISBN = cnm.ISBN_FUMETTO "
+                        + " WHERE DELETED='N' AND ISBN_FUMETTO_REFERENZIATO = ?";
+
+                ps = conn.prepareStatement(sql);
+                int i = 1;
+                ps.setString(i,fumettoArrayList.get(i).getISBN());
+                resultSet = ps.executeQuery();
+
+                if (resultSet.next()) {
+                    fornitoDa = read(resultSet);
+                    fornitoDaArrayList.add(fornitoDa);
+                }
+            }
+
+            assert resultSet != null;
+            resultSet.close();
+            ps.close();
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+        return fornitoDaArrayList;
+
     }
 
     @Override
@@ -274,7 +267,7 @@ public class FornitoDaDAOMySQLJDBCImpl implements FornitoDaDAO {
             int i = 1;
             ps.setString(i++,searchString);
             ps.setString(i++,searchString);
-            ps.setString(i++,searchString);
+            ps.setString(i,searchString);
 
             ResultSet resultSet = ps.executeQuery();
 
@@ -312,7 +305,7 @@ public class FornitoDaDAOMySQLJDBCImpl implements FornitoDaDAO {
             int i = 1;
             ps.setString(i++,searchString);
             ps.setString(i++,searchString);
-            ps.setString(i++,searchString);
+            ps.setString(i,searchString);
 
             ResultSet resultSet = ps.executeQuery();
 
@@ -352,7 +345,7 @@ public class FornitoDaDAOMySQLJDBCImpl implements FornitoDaDAO {
                 ps = conn.prepareStatement(sql);
 
                 int i = 1;
-                ps.setString(i++, searchString);
+                ps.setString(i, searchString);
                 resultSet = ps.executeQuery();
 
                 while (resultSet.next()) {
@@ -373,7 +366,7 @@ public class FornitoDaDAOMySQLJDBCImpl implements FornitoDaDAO {
                 ps = conn.prepareStatement(sql);
 
                 i = 1;
-                ps.setString(i++, searchString);
+                ps.setString(i, searchString);
                 resultSet = ps.executeQuery();
 
                 while (resultSet.next()) {
@@ -394,7 +387,7 @@ public class FornitoDaDAOMySQLJDBCImpl implements FornitoDaDAO {
                 ps = conn.prepareStatement(sql);
 
                 i = 1;
-                ps.setString(i++, searchString);
+                ps.setString(i, searchString);
                 resultSet = ps.executeQuery();
 
                 while (resultSet.next()) {
@@ -435,7 +428,7 @@ public class FornitoDaDAOMySQLJDBCImpl implements FornitoDaDAO {
                     ps = conn.prepareStatement(sql);
 
                     int i = 1;
-                    ps.setString(i++, searchString);
+                    ps.setString(i, searchString);
                     resultSet = ps.executeQuery();
 
                     while (resultSet.next()) {
@@ -456,7 +449,7 @@ public class FornitoDaDAOMySQLJDBCImpl implements FornitoDaDAO {
                     ps = conn.prepareStatement(sql);
 
                     i = 1;
-                    ps.setString(i++, searchString);
+                    ps.setString(i, searchString);
                     resultSet = ps.executeQuery();
 
                     while (resultSet.next()) {
@@ -477,7 +470,7 @@ public class FornitoDaDAOMySQLJDBCImpl implements FornitoDaDAO {
                     ps = conn.prepareStatement(sql);
 
                     i = 1;
-                    ps.setString(i++, searchString);
+                    ps.setString(i, searchString);
                     resultSet = ps.executeQuery();
 
                     while (resultSet.next()) {
@@ -508,11 +501,11 @@ public class FornitoDaDAOMySQLJDBCImpl implements FornitoDaDAO {
 
         try{
             fornitoDa.getFumetto().setISBN(rs.getString("ISBN_FUMETTO_REFERENZIATO"));
-        } catch (SQLException e) {
+        } catch (SQLException ignored) {
         }
         try{
             fornitoDa.getCentroVendita().setNomecentro(rs.getString("CENTRO_VENDITA_REFERENZIATO"));
-        } catch (SQLException e) {
+        } catch (SQLException ignored) {
         }
         
         return fornitoDa;
