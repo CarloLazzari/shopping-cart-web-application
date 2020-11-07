@@ -16,6 +16,7 @@ public interface FumettoDAO {
     public Fumetto create(String ISBN, String titolo, String autore, int numero, String formato, String rilegatura, Float prezzo, Float peso, String bloccato) throws DuplicatedObjectException;
     public Fumetto showFumetto(String ISBN);
     public Fumetto findByFumettoISBN(String ISBN);
+    public Fumetto findByFumettoISBNNotYetCreated(String ISBN);
     public ArrayList<Fumetto> findBy(String searchMode, String searchString);
     public ArrayList<Fumetto> findByUnblocked(String searchMode, String searchString);
     public ArrayList<Fumetto> findAllFumetti();
@@ -23,6 +24,9 @@ public interface FumettoDAO {
     public ArrayList<Fumetto> freeSearch(String searchString);
     public ArrayList<Fumetto> freeSearchUnblocked(String searchString);
     public ArrayList<Fumetto> findInCart(String username);
-    public Fumetto findByFumettoISBNNotYetCreated(String ISBN);
+
+    /* Vetrina in Home Page */
+    public ArrayList<Fumetto> findRandomFumetti();
+    public ArrayList<Fumetto> findRandomFumettiUnblocked();
 
 }
