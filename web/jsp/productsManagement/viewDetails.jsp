@@ -104,13 +104,13 @@
          </h1>
       </section>
 
-      <div style="margin-right: 50px; text-align: right; color:#ffbc00; font-family: 'Open Sans','Helvetica Neue',Helvetica,Arial,sans-serif">
+      <div style="margin-right: 95px; text-align: right; color:#ffbc00; font-family: 'Open Sans','Helvetica Neue',Helvetica,Arial,sans-serif">
       <%if(contenutoNelMagazzino.getQuantita()==0){ %>
-      <strong>NON DISPONIBILE</strong>
+      <strong>OUT OF STOCK</strong>
       <% } %>
       </div>
       <div id="immagine" style="margin-top: 5px">
-         <img id="prodotto" alt="<%=fumetto.getISBN()%>" src="productImages/<%=fumetto.getISBN()%>.jpg" width="200" height="286">
+         <img id="prodotto" alt="<%=fumetto.getISBN()%>" src="productImages/<%=fumetto.getISBN()%>.jpg" width="269" height="385">
       </div>
 
       <section id="Product">
@@ -143,7 +143,7 @@
             <p> <strong>Magazzino:</strong> <%=contenutoNelMagazzino.getMagazzino().getNomeMagazzino()%></p>
          </div>
          <div class="field clearfix">
-            <p><strong>Quantit&agrave in magazzino:</strong> <%=contenutoNelMagazzino.getQuantita()%></p>
+            <p><strong>Quantit&agrave; in magazzino:</strong> <%=contenutoNelMagazzino.getQuantita()%></p>
          </div>
          <div>
             <p><strong>Disponibile:</strong> <%=disponibilita%></p>
@@ -154,7 +154,23 @@
          <div class="field clearfix">
             <p> <strong>Cancellato:</strong> <%=contenutoNelMagazzino.getDeleted()%></p>
          </div>
-         <% } %>
+         <% } else {%>
+         <div class="field clearfix" style="visibility: hidden">
+            <p> <strong>Magazzino:</strong> <%=contenutoNelMagazzino.getMagazzino().getNomeMagazzino()%></p>
+         </div>
+         <div class="field clearfix" style="visibility: hidden">
+            <p><strong>Quantit&agrave; in magazzino:</strong> <%=contenutoNelMagazzino.getQuantita()%></p>
+         </div>
+         <div class="field clearfix" style="visibility: hidden">
+            <p><strong>Disponibile:</strong> <%=disponibilita%></p>
+         </div>
+         <div class="field clearfix" style="visibility: hidden">
+            <p> <strong>Bloccato:</strong> <%=fumetto.getBlocked()%></p>
+         </div>
+         <div class="field clearfix" style="visibility: hidden">
+            <p> <strong>Cancellato:</strong> <%=contenutoNelMagazzino.getDeleted()%></p>
+         </div>
+         <%}%>
          <div class="field clearfix">
             <a href="http://www.google.com/search?q=<%=fumetto.getTitolo()%>+<%=fumetto.getAutore()%>"><strong>Leggi di più</strong></a>
          </div>
