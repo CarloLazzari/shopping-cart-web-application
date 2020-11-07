@@ -9,10 +9,10 @@ import java.util.Date;
 
 public interface CartaDAO {
 
-    public void Delete(Carta carta) throws SQLException;
-    public Carta findByNumeroCarta(String numeroCarta);
-    public Carta findByNumeroCartaAndIntestatario(String numeroCarta, String intestatario);
-    public ArrayList<Carta> findByCartaIntestatario(String intestatario) throws SQLException;
+    public void delete(Carta carta) throws SQLException;
+    public Carta findByCardNumber(String numeroCarta);
+    public Carta findByCardNumberAndOwner(String numeroCarta, String intestatario);
+    public ArrayList<Carta> findByCardOwner(String intestatario) throws SQLException;
     public ArrayList<Carta> findAllCarte();
 
 }
