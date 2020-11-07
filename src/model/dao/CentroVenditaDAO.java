@@ -1,15 +1,16 @@
 package model.dao;
 
+import model.dao.exception.DuplicatedObjectException;
 import model.mo.CentroVendita;
 
 import java.util.ArrayList;
 
 public interface CentroVenditaDAO {
 
-    public CentroVendita findByNomeCentro(String nome_centro);
-    public ArrayList<CentroVendita> findAllCentri();
-    public CentroVendita create(String nome_centro, String indirizzo);
+    public CentroVendita create(String nomeCentro, String indirizzo) throws DuplicatedObjectException;
+    public CentroVendita findByNomeCentro(String nomeCentro);
+    public void update(CentroVendita centroVendita) throws DuplicatedObjectException;
     public void delete(CentroVendita centroVendita);
-    public void update(CentroVendita centroVendita);
-
+    public ArrayList<CentroVendita> findAllCentri();
+    
 }
