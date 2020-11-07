@@ -50,6 +50,11 @@
 			 margin-top: 2px;
 		}
 
+		.privacy {
+			filter: blur(5px);
+	 		user-select: none;
+		}
+
 	</style>
 	<script lang="javascript">
 
@@ -75,11 +80,11 @@
 			<% if(loggedUser!=null){%>
 			<h3>
 				<%if((loggedOn)&&(loggedUser.getAdmin().equals(("Y")))&&(!(whichUserUsername.equals("")))){ %>
-					<%if(prices.size()==0) {%>
-						Non sono ancora stati effettuati ordini dall'utente <%=whichUserUsername%>.
-					<% } else { %>
-						Ordini effettuati dall'utente <%=whichUserUsername%>.
-					<% } %>
+				<%if(prices.size()==0) {%>
+					Non sono ancora stati effettuati ordini dall'utente <%=whichUserUsername%>.
+				<% } else { %>
+					Ordini effettuati dall'utente <%=whichUserUsername%>.
+				<% } %>
 				<% } else if((loggedOn)&&(loggedUser.getAdmin().equals(("Y")))){%>
 				Ordini effettuati da tutti gli utenti.
 				<% } else if(loggedOn) { %>
@@ -149,7 +154,7 @@
 						<img alt="changeState" id="changeStateImage" src="images/pencil.svg" width="18" height="18">
 					</a>
 				</span>
-					<% } %>
+				<% } %>
 
 				<span style="margin-top: 2px">
 					<a href="javascript:viewDetails(<%=ordini.get(i).getOrderID()%>)">
@@ -160,7 +165,7 @@
 				<th><%=ordini.get(i).getData()%></th>
 				<th><%=ordini.get(i).getIndirizzoDestinazione()%></th>
 				<th><%=ordini.get(i).getUser().getUsername()%></th>
-				<th><%=ordini.get(i).getCarta().getNumeroCarta()%></th>
+				<th <%assert loggedUser != null;if(!ordini.get(i).getUser().getUsername().equals(loggedUser.getUsername())){%>class="privacy"<%}%>><%=ordini.get(i).getCarta().getNumeroCarta()%></th>
 				<th><%=ordini.get(i).getStato()%></th>
 				<th><%=prices.get(i)%> &euro;</th>
 			</tr>
