@@ -15,14 +15,13 @@ public interface OrdineDAO {
                          String stato,
                          Date data) throws DuplicatedObjectException;
 
-    public ArrayList<Ordine> findAllOrdiniByNomeEffettuante(String Nome_Effettuante);
+    public Ordine findByOrderID(int OrderID);
+    public ArrayList<Ordine> findAllOrdiniByUsername(String username);
     public ArrayList<Ordine> findAllOrdini();
     public float calculatePrice(int OrderID);
-    public Ordine findByOrderIdentificativo(int OrderID);
-    public int selectMaxOrderId();
-    public int countOrdersByUsername(String username);
     public void update(Ordine ordine);
     public void delete(Ordine ordine);
     public void updateStatus(Ordine ordine, String stato);
+    public int selectMaxOrderID();
 
 }
