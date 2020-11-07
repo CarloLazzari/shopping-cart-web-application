@@ -93,6 +93,13 @@
             <a href = "Dispatcher?controllerAction=UsersManagement.view">Utenti</a>
             </li>
             <% } %>
+            
+            <%if((loggedOn)&&(loggedUser.getAdmin().equals("Y"))){%>
+            <li <%=menuActiveLink.equals("Gestione Centri")?"class=\"active\"":""%>>
+            <a href = "Dispatcher?controllerAction=FacilitiesManagement.view">Gestione</a>
+            </li>
+            <% } %>
+            
         </ul>
         <%if(loggedOn){%>
         <a id ="logout" href = "javascript:logoutForm.submit()">Logout </a>
