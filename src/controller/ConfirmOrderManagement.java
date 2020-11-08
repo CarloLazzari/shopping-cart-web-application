@@ -255,8 +255,8 @@ public class ConfirmOrderManagement {
 
                 /* Lists */
                 ArrayList<Fumetto> fumettoArrayList = fumettoDAO.findRandomFumetti();
-                ArrayList<ContenutoNelMagazzino> contents = contenutoNelMagazzinoDAO.findRandomContenutoNelMagazzino();
-                ArrayList<FornitoDa> forniture = fornitoDaDAO.findRandomFornitoDa();
+                ArrayList<ContenutoNelMagazzino> contents = contenutoNelMagazzinoDAO.findRandomContenutoNelMagazzino(fumettoArrayList);
+                ArrayList<FornitoDa> forniture = fornitoDaDAO.findRandomFornitoDa(fumettoArrayList);
 
                 request.setAttribute("loggedOn", true);
                 request.setAttribute("loggedUser", loggedUser);
