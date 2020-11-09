@@ -12,7 +12,7 @@ public class Configuration {
     public static final String DAO_IMPL=DAOFactory.MYSQLJDBCIMPL;
     public static final String DATABASE_DRIVER="com.mysql.cj.jdbc.Driver";
     public static final String SERVER_TIMEZONE=Calendar.getInstance().getTimeZone().getID();
-    public static final String DATABASE_URL="jdbc:mysql://localhost/fumetti?user=fumetti&password=mywaifusaber1304&useSSL=false&serverTimezone="+SERVER_TIMEZONE;
+    public static final String DATABASE_URL="jdbc:mysql://localhost/fumetti?user=root&password&useSSL=false&serverTimezone="+SERVER_TIMEZONE;
 
     /* Session Configuration */
     public static final String COOKIE_IMPL=DAOFactory.COOKIEIMPL;
