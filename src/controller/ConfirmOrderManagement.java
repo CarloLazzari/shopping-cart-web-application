@@ -178,7 +178,7 @@ public class ConfirmOrderManagement {
 
             int max = ordineDAO.selectMaxOrderID();
             int newOrderID = max+1;
-            /* Seleziono l'id più grande, e aggiungo 1, in modo da non avere duplicati*/
+            /* Seleziono l'id più grande, e aggiungo 1, in modo da non avere duplicati */
 
             /* Setto i parametri*/
             User user = userDAO.findByUsername(loggedUser.getUsername());
@@ -197,7 +197,7 @@ public class ConfirmOrderManagement {
                 else  errorMessage.append(comicsInCart.get(i).getTitolo()).append(" ").append(comicsInCart.get(i).getNumero()).append(" non e' disponibile o non è disponibile con quella quantità.").append(" ");
             }
 
-            /* Se il messaggio di errore esiste, lo setto come attributo da passare alla view*/
+            /* Se il messaggio di errore esiste, lo setto come attributo da passare alla view */
             if(errorMessage.length()!=0){
 
                 errorMessage.append("Impossibile effettuare l'ordine.");
@@ -316,7 +316,7 @@ public class ConfirmOrderManagement {
         request.setAttribute("totalPrice",totalPrice);
         request.setAttribute("fumetti",fumetti);
         request.setAttribute("cartItems",cartItems);
-        /* Passo tutti i prodotti nel carrello e calcolo la somma dei singoli prezzi per il prezzo totale*/
+        /* Passo tutti i prodotti nel carrello e calcolo la somma dei singoli prezzi per il prezzo totale */
 
     }
     
