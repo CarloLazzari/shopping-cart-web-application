@@ -1,5 +1,5 @@
 # Shopping-Cart-Web-Application
-Shopping cart web type application built using the mvc pattern. 
+Shopping cart web type application built using the mvc pattern and Java. 
 
 These are the **requirements** for the application:
 
