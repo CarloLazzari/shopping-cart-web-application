@@ -20,7 +20,6 @@
 	ArrayList<User> users = (ArrayList<User>) request.getAttribute("users");
 	ArrayList<Integer> usersOrdersCount = (ArrayList<Integer>) request.getAttribute("usersOrdersCount");
 
-
 %>
 
 <html>
