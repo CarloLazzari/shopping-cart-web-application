@@ -102,7 +102,7 @@ public class OrdersManagement {
 
             int ORDER_ID = Integer.parseInt(request.getParameter("ORDER_ID"));
             ContenutoNellOrdineDAO contenutoNellOrdineDAO = daoFactory.getContenutoNellOrdineDAO();
-            ArrayList<ContenutoNellOrdine> contenutoNellOrdine = contenutoNellOrdineDAO.findByOrderIDCNO(ORDER_ID);
+            ArrayList<ContenutoNellOrdine> contenutoNellOrdineArrayList = contenutoNellOrdineDAO.findByOrderIDCNO(ORDER_ID);
 
             OrdineDAO ordineDAO = daoFactory.getOrdineDao();
             float prezzo = ordineDAO.calculatePrice(ORDER_ID);
@@ -115,7 +115,7 @@ public class OrdersManagement {
 
             request.setAttribute("loggedOn",loggedUser!=null);
             request.setAttribute("loggedUser",loggedUser);
-            request.setAttribute("contenutoNellOrdine",contenutoNellOrdine);
+            request.setAttribute("contenutoNellOrdineArrayList",contenutoNellOrdineArrayList);
             request.setAttribute("prezzo",prezzo);
             request.setAttribute("prices",prices);
             request.setAttribute("viewUrl","ordersManagement/viewDetails");
