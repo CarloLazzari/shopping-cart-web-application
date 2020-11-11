@@ -192,9 +192,13 @@ public class ConfirmOrderManagement {
             int i;
             for(i=0; i< cartItems.size(); i++){
                 if((contenutoNelMagazzinoDAO.getAvailability(cartItems.get(i).getFumetto().getISBN(),contenutoNelMagazzinoArrayList.get(i).getMagazzino().getNomeMagazzino()) >= cartItems.get(i).getQuantita())){
-                    /*Do nothing*/
                 }
-                else  errorMessage.append(comicsInCart.get(i).getTitolo()).append(" ").append(comicsInCart.get(i).getNumero()).append(" non e' disponibile o non è disponibile con quella quantità.").append(" ");
+                else {
+                    if(loggedUser.getAdmin().equals("Y"))
+                        errorMessage.append(comicsInCart.get(i).getTitolo()).append(" ").append(comicsInCart.get(i).getNumero()).append(" non e' disponibile o non è disponibile con quella quantità(").append(cartItems.get(i).getQuantita()).append("), ").append(contenutoNelMagazzinoDAO.getAvailability(cartItems.get(i).getFumetto().getISBN(),contenutoNelMagazzinoArrayList.get(i).getMagazzino().getNomeMagazzino())).append(" disponibili. ");
+                    else
+                        errorMessage.append(comicsInCart.get(i).getTitolo()).append(" ").append(comicsInCart.get(i).getNumero()).append(" non e' disponibile o non è disponibile con quella quantità.").append(" ");
+                }
             }
 
             /* Se il messaggio di errore esiste, lo setto come attributo da passare alla view */
