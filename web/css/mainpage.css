@@ -68,7 +68,6 @@ a:link, a:active, a:visited {
     text-decoration: none;
 }
 
-
 header nav ul > li:hover, nav ul > li.active {
     color:mediumpurple;
 }
@@ -110,7 +109,6 @@ header nav ul > li:hover > a {
     outline: none;
 }
 
-
 #login form input[type="submit"] {
     text-align: center;
     margin-left: 8px;
@@ -126,7 +124,6 @@ header nav ul > li:hover > a {
 }
 
 /* Main Section */
-
 main {
     background-color: #b9b9bc;
     margin-top: -10px;
@@ -175,5 +172,3 @@ footer #privacy {
 footer a:hover {
     color: white;
 }
-
-
