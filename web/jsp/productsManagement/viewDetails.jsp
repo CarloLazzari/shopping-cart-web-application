@@ -44,15 +44,6 @@
          margin: 5px 0;
       }
 
-      label {
-         float: left;
-         width: 56px;
-         font-size: 0.8em;
-         margin-right: 10px;
-         padding-top: 3px;
-         text-align: left;
-      }
-
       p {
          width: 50%;
          border: none;
