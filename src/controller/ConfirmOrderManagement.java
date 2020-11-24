@@ -8,8 +8,6 @@ import services.logservice.LogService;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
 import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -34,12 +32,14 @@ public class ConfirmOrderManagement {
             sessionFactoryParameters.put("request",request);
             sessionFactoryParameters.put("response",response);
             sessionDAOFactory = DAOFactory.getDAOFactory(Configuration.COOKIE_IMPL,sessionFactoryParameters);
+            assert sessionDAOFactory != null;
             sessionDAOFactory.beginTransaction();
 
             UserDAO sessionUserDAO = sessionDAOFactory.getUserDAO();
             loggedUser = sessionUserDAO.findLoggedUser();
 
             daoFactory = DAOFactory.getDAOFactory(Configuration.DAO_IMPL,null);
+            assert daoFactory != null;
             daoFactory.beginTransaction();
 
             commonView(daoFactory,sessionDAOFactory,request);
@@ -56,7 +56,7 @@ public class ConfirmOrderManagement {
             try {
                 if (daoFactory != null) daoFactory.rollbackTransaction();
                 if (sessionDAOFactory != null) sessionDAOFactory.rollbackTransaction();
-            } catch (Throwable t) {
+            } catch (Throwable ignored) {
             }
             throw new RuntimeException(e);
 
@@ -64,7 +64,7 @@ public class ConfirmOrderManagement {
             try {
                 if (daoFactory != null) daoFactory.closeTransaction();
                 if (sessionDAOFactory != null) sessionDAOFactory.closeTransaction();
-            } catch (Throwable t) {
+            } catch (Throwable ignored) {
             }
         }
     }
@@ -83,12 +83,14 @@ public class ConfirmOrderManagement {
             sessionFactoryParameters.put("request",request);
             sessionFactoryParameters.put("response",response);
             sessionDAOFactory = DAOFactory.getDAOFactory(Configuration.COOKIE_IMPL,sessionFactoryParameters);
+            assert sessionDAOFactory != null;
             sessionDAOFactory.beginTransaction();
 
             UserDAO sessionUserDAO = sessionDAOFactory.getUserDAO();
             loggedUser = sessionUserDAO.findLoggedUser();
 
             daoFactory = DAOFactory.getDAOFactory(Configuration.DAO_IMPL,null);
+            assert daoFactory != null;
             daoFactory.beginTransaction();
 
             String ISBN = request.getParameter("ISBN");
@@ -117,7 +119,7 @@ public class ConfirmOrderManagement {
             try {
                 if (daoFactory != null) daoFactory.rollbackTransaction();
                 if (sessionDAOFactory != null) sessionDAOFactory.rollbackTransaction();
-            } catch (Throwable t) {
+            } catch (Throwable ignored) {
             }
             throw new RuntimeException(e);
 
@@ -125,7 +127,7 @@ public class ConfirmOrderManagement {
             try {
                 if (daoFactory != null) daoFactory.closeTransaction();
                 if (sessionDAOFactory != null) sessionDAOFactory.closeTransaction();
-            } catch (Throwable t) {
+            } catch (Throwable ignored) {
             }
         }
     }
@@ -144,12 +146,14 @@ public class ConfirmOrderManagement {
             sessionFactoryParameters.put("request",request);
             sessionFactoryParameters.put("response",response);
             sessionDAOFactory = DAOFactory.getDAOFactory(Configuration.COOKIE_IMPL,sessionFactoryParameters);
+            assert sessionDAOFactory != null;
             sessionDAOFactory.beginTransaction();
 
             UserDAO sessionUserDAO = sessionDAOFactory.getUserDAO();
             loggedUser = sessionUserDAO.findLoggedUser();
 
             daoFactory = DAOFactory.getDAOFactory(Configuration.DAO_IMPL,null);
+            assert daoFactory != null;
             daoFactory.beginTransaction();
 
             /* DAO */
@@ -173,7 +177,7 @@ public class ConfirmOrderManagement {
             String metodoPagamento = request.getParameter("metodoPagamento");
 
             ArrayList<Carrello> cartItems = carrelloDAO.viewCart(loggedUser.getUsername());
-            ArrayList<Fumetto> comicsInCart = new ArrayList<>();
+            ArrayList<Fumetto> comicsInCart;
             comicsInCart = fumettoDAO.findInCart(loggedUser.getUsername());
 
             int max = ordineDAO.selectMaxOrderID();
@@ -184,24 +188,18 @@ public class ConfirmOrderManagement {
             User user = userDAO.findByUsername(loggedUser.getUsername());
             Carta carta = cartaDAO.findByCardNumber(metodoPagamento);
 
-            /* Setto la data dell'ordine a quella corrente*/
+            /* Setto la data dell'ordine a quella corrente */
             java.sql.Date sqlDate = new java.sql.Date(System.currentTimeMillis());
 
-            /* Controllo della disponibilita' di magazzino*/
+            /* Controllo della disponibilita' di magazzino */
             StringBuilder errorMessage = new StringBuilder();
             int i;
-            for(i=0; i< cartItems.size(); i++){
-                if((contenutoNelMagazzinoDAO.getAvailability(cartItems.get(i).getFumetto().getISBN(),contenutoNelMagazzinoArrayList.get(i).getMagazzino().getNomeMagazzino()) >= cartItems.get(i).getQuantita())){
-                }
-                else {
-                    if(loggedUser.getAdmin().equals("Y"))
-                        errorMessage.append(comicsInCart.get(i).getTitolo()).append(" ").append(comicsInCart.get(i).getNumero()).append(" non e' disponibile o non è disponibile con quella quantità(").append(cartItems.get(i).getQuantita()).append("), ").append(contenutoNelMagazzinoDAO.getAvailability(cartItems.get(i).getFumetto().getISBN(),contenutoNelMagazzinoArrayList.get(i).getMagazzino().getNomeMagazzino())).append(" disponibili. ");
-                    else
-                        errorMessage.append(comicsInCart.get(i).getTitolo()).append(" ").append(comicsInCart.get(i).getNumero()).append(" non e' disponibile o non è disponibile con quella quantità.").append(" ");
-                }
+            for(i=0; i< cartItems.size(); i++) {
+                if((contenutoNelMagazzinoDAO.getAvailability(cartItems.get(i).getFumetto().getISBN(),contenutoNelMagazzinoArrayList.get(i).getMagazzino().getNomeMagazzino()) < cartItems.get(i).getQuantita()))
+                    errorMessage.append(comicsInCart.get(i).getTitolo()).append(" ").append(comicsInCart.get(i).getNumero()).append(" non e' disponibile o non è disponibile con quella quantità(").append(cartItems.get(i).getQuantita()).append("), ").append(contenutoNelMagazzinoDAO.getAvailability(cartItems.get(i).getFumetto().getISBN(),contenutoNelMagazzinoArrayList.get(i).getMagazzino().getNomeMagazzino())).append(" disponibili. ");
             }
 
-            /* Se il messaggio di errore esiste, lo setto come attributo da passare alla view */
+            /* Se il messaggio di errore esiste, lo setto come attributo da passare alla view*/
             if(errorMessage.length()!=0){
 
                 errorMessage.append("Impossibile effettuare l'ordine.");
@@ -234,12 +232,10 @@ public class ConfirmOrderManagement {
                         contenutoNellOrdineDAO.create(ordine, cartItems.get(i).getFumetto(), cartItems.get(i).getQuantita(),centroVendita, magazzino);
                         /* Devo rimuovere anche i prodotti comprati dal magazzino */
                         /* Per ogni prodotto nel carrello rimuovo di una certa quantità nel magazzino */
-                        /* Questa quantità è pari alla quantità presente nel carrello quindi ciclo su essa*/
-                        int index;
-                        for(index=0; index<cartItems.get(i).getQuantita(); index++) {
-                            ContenutoNelMagazzino contenutoNelMagazzino = contenutoNelMagazzinoDAO.findByFumettoISBNRefAndMagazzinoRef(cartItems.get(i).getFumetto().getISBN(), contenutoNelMagazzinoArrayList.get(i).getMagazzino().getNomeMagazzino());
-                            contenutoNelMagazzinoDAO.removeQuantityFromWarehouse(contenutoNelMagazzino);
-                        }
+                        /* Questa quantità è pari alla quantità presente nel carrello */
+                        ContenutoNelMagazzino contenutoNelMagazzino = contenutoNelMagazzinoDAO.findByFumettoISBNRefAndMagazzinoRef(cartItems.get(i).getFumetto().getISBN(), contenutoNelMagazzinoArrayList.get(i).getMagazzino().getNomeMagazzino());
+                        contenutoNelMagazzinoDAO.removeQuantityFromWarehouse(contenutoNelMagazzino,cartItems.get(i).getQuantita());
+
                     }
                     carrelloDAO.flushCart(loggedUser.getUsername());
                     applicationMessage = "L'effettuazione dell'ordine è andata a buon fine.";
@@ -291,7 +287,7 @@ public class ConfirmOrderManagement {
             try {
                 if (daoFactory != null) daoFactory.rollbackTransaction();
                 if (sessionDAOFactory != null) sessionDAOFactory.rollbackTransaction();
-            } catch (Throwable t) {
+            } catch (Throwable ignored) {
             }
             throw new RuntimeException(e);
 
@@ -299,7 +295,7 @@ public class ConfirmOrderManagement {
             try {
                 if (daoFactory != null) daoFactory.closeTransaction();
                 if (sessionDAOFactory != null) sessionDAOFactory.closeTransaction();
-            } catch (Throwable t) {
+            } catch (Throwable ignored) {
             }
         }
 
@@ -320,7 +316,7 @@ public class ConfirmOrderManagement {
         request.setAttribute("totalPrice",totalPrice);
         request.setAttribute("fumetti",fumetti);
         request.setAttribute("cartItems",cartItems);
-        /* Passo tutti i prodotti nel carrello e calcolo la somma dei singoli prezzi per il prezzo totale */
+        /* Passo tutti i prodotti nel carrello e calcolo la somma dei singoli prezzi per il prezzo totale*/
 
     }
     
