@@ -27,6 +27,13 @@ public class Dispatcher extends HttpServlet {
             if (controllerAction==null) controllerAction="HomeManagement.view";
 
             String[] splittedAction=controllerAction.split("\\.");
+            
+            /* The java.lang.Class.forName(String name, boolean initialize, ClassLoader loader) method returns the Class object associated 
+                with the class or interface with the given string name, using the given class loader.
+            The specified class loader is used to load the class or interface. 
+            If the parameter loader is null, the class is loaded through the bootstrap class loader. 
+            The class is initialized only if the initialize parameter is true and if it has not been initialized earlier. */
+            
             Class<?> controllerClass=Class.forName("controller."+splittedAction[0]);
             Method controllerMethod=controllerClass.getMethod(splittedAction[1],HttpServletRequest.class,HttpServletResponse.class);
             LogService.getApplicationLogger().log(Level.INFO,splittedAction[0]+" "+splittedAction[1]);
