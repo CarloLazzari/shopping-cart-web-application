@@ -16,8 +16,9 @@ import services.logservice.LogService;
 @WebServlet(name = "Dispatcher", urlPatterns = {"/Dispatcher"})
 public class Dispatcher extends HttpServlet {
 
-    protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+    protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException 
+    {
+        
         response.setContentType("text/html;charset=UTF-8");
         PrintWriter out = response.getWriter();
         try {
@@ -29,13 +30,20 @@ public class Dispatcher extends HttpServlet {
             String[] splittedAction=controllerAction.split("\\.");
             
             /* The java.lang.Class.forName(String name, boolean initialize, ClassLoader loader) method returns the Class object associated 
-                with the class or interface with the given string name, using the given class loader.
+                - with the class or interface with the given string name, using the given class loader.
             The specified class loader is used to load the class or interface. 
             If the parameter loader is null, the class is loaded through the bootstrap class loader. 
             The class is initialized only if the initialize parameter is true and if it has not been initialized earlier. */
             
             Class<?> controllerClass=Class.forName("controller."+splittedAction[0]);
-            Method controllerMethod=controllerClass.getMethod(splittedAction[1],HttpServletRequest.class,HttpServletResponse.class);
+            Method controllerMethod=controllerClass.getMethod(splittedAction[1], HttpServletRequest.class, HttpServletResponse.class);
+            
+            /*  The java.lang.Class.getMethod() returns a Method object that reflects the specified public member method of the class 
+                - or interface represented by this Class object. 
+            The name parameter is a String specifying the simple name of the desired method.
+            The parameterTypes parameter is an array of Class objects that identify the method's formal parameter types, in declared order. 
+            If parameterTypes is null, it is treated as if it were an empty array. */
+            
             LogService.getApplicationLogger().log(Level.INFO,splittedAction[0]+" "+splittedAction[1]);
             controllerMethod.invoke(null,request,response);
 
