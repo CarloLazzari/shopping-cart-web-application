@@ -10,12 +10,12 @@ import java.util.Map;
 By mapping application calls to the persistence layer, the DAO provides some specific data operations without exposing details of the database. 
 This isolation supports the single responsibility principle. 
 It separates what data access the application needs, in terms of domain-specific objects and data types (the public interface of the DAO), 
-    from how these needs can be satisfied with a specific DBMS, database schema, etc. (the implementation of the DAO). */
+    - from how these needs can be satisfied with a specific DBMS, database schema, etc. (the implementation of the DAO). */
 
 /* In class-based programming, the factory method pattern is a creational pattern that uses factory methods to deal with the problem of creating objects
-    without having to specify the exact class of the object that will be created. 
+    - without having to specify the exact class of the object that will be created. 
 This is done by creating objects by calling a factory method—either specified in an interface and implemented by child classes, 
-    or implemented in a base class and optionally overridden by derived classes—rather than by calling a constructor. */
+    - or implemented in a base class and optionally overridden by derived classes—rather than by calling a constructor. */
 
 public abstract class DAOFactory {
 
