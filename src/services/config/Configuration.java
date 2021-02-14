@@ -19,9 +19,7 @@ public class Configuration {
 
     /* Logger Configuration */
     public static final String GLOBAL_LOGGER_NAME = "Fumettodb";
-
     public static final String GLOBAL_LOGGER_FILE = "C:\\Users\\Carlo\\Documents\\logs\\fumetti_log.%g.%u.txt";
-
     public static final Level GLOBAL_LOGGER_LEVEL = Level.ALL;
 
 }
