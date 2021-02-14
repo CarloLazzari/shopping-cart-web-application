@@ -7,6 +7,11 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@page session="false"%>
+
+<%--
+  request.getContextPath()- returns root path of your application, while ../ - returns parent directory of a file.
+--%>
+
 <%String contextPath=request.getContextPath();%>
 <!DOCTYPE HTML>
 <html lang="it-IT">
