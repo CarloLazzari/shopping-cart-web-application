@@ -35,10 +35,14 @@ public class CartManagement {
 
         try{
 
+            /* A HashMap stores items in "key/value" pairs, and you can access them by an index of another type (e.g. a String).
+            One object is used as a key (index) to another object (value). 
+            It can store different types: String keys and Integer values, or the same type, like: String keys and String values */
+            
             Map sessionFactoryParameters = new HashMap<String, Object>();
-            sessionFactoryParameters.put("request",request);
-            sessionFactoryParameters.put("response",response);
-            sessionDAOFactory = DAOFactory.getDAOFactory(Configuration.COOKIE_IMPL,sessionFactoryParameters);
+            sessionFactoryParameters.put("request", request);
+            sessionFactoryParameters.put("response", response);
+            sessionDAOFactory = DAOFactory.getDAOFactory(Configuration.COOKIE_IMPL, sessionFactoryParameters);
             sessionDAOFactory.beginTransaction();
 
             UserDAO sessionUserDao = sessionDAOFactory.getUserDAO();
