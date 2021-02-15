@@ -30,7 +30,6 @@ public class CartManagement {
         User loggedUser;
         String applicationMessage = null;
 
-
         Logger logger = LogService.getApplicationLogger();
 
         try{
@@ -83,7 +82,6 @@ public class CartManagement {
         DAOFactory daoFactory;
         User loggedUser;
         String applicationMessage = null;
-
 
         Logger logger = LogService.getApplicationLogger();
 
@@ -139,7 +137,6 @@ public class CartManagement {
         DAOFactory daoFactory = null;
         User loggedUser;
         String applicationMessage = null;
-
 
         Logger logger = LogService.getApplicationLogger();
 
@@ -201,7 +198,6 @@ public class CartManagement {
         User loggedUser;
         String applicationMessage = null;
 
-
         Logger logger = LogService.getApplicationLogger();
 
         try{
@@ -255,7 +251,6 @@ public class CartManagement {
         DAOFactory daoFactory = null;
         User loggedUser;
         String applicationMessage = null;
-
 
         Logger logger = LogService.getApplicationLogger();
 
