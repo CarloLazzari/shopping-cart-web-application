@@ -15,7 +15,6 @@ import java.util.logging.Logger;
 
 public class ConfirmOrderManagement {
 
-
     private ConfirmOrderManagement() {}
 
     public static void view(HttpServletRequest request, HttpServletResponse response){
