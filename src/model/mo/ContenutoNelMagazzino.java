@@ -7,7 +7,6 @@ public class ContenutoNelMagazzino {
     private String deleted;
     private int quantita;
 
-
     /* 1:1  */
     private Fumetto fumetto;
     /* N:1 */
