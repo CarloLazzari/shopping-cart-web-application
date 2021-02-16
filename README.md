@@ -10,3 +10,7 @@ These are the **requirements** for the application:
 **5.** The site administrator can block/unblock other users, making them unable to login.   
 
 This project was done using IntelliJ Idea 2019, MySQLWorkBench and GlassFish 5.1.
+
+What **isn't** implemented:  
+**1.** Registration of a user
+**2,** Addind/removing a payment method (credit card)
