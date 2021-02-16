@@ -12,5 +12,5 @@ These are the **requirements** for the application:
 This project was done using IntelliJ Idea 2019, MySQLWorkBench and GlassFish 5.1.
 
 What **isn't** implemented:  
-**1.** Registration of a user  
-**2.** Addind/removing a payment method (credit card)  
+**1.** User registration 
+**2.** Adding/removing a payment method (credit card)  
