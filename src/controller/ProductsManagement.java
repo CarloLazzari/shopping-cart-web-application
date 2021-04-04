@@ -847,7 +847,6 @@ public class ProductsManagement {
             daoFactory = DAOFactory.getDAOFactory(Configuration.DAO_IMPL,null);
             daoFactory.beginTransaction();
 
-            /**/
             String ISBN = request.getParameter("ISBN");
             UserDAO userDAO = daoFactory.getUserDAO();
             FumettoDAO fumettoDAO = daoFactory.getFumettoDAO();
