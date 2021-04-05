@@ -20,5 +20,4 @@ What **isn't** implemented:
 After passing the exam for which this project was requested, I noticed at second glance:
 - Some things are hardcoded.
 - Bad use of variable names.
-- Somethings aren't implemented.
 - The database is not in full normal form.
