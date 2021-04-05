@@ -21,3 +21,5 @@ After passing the exam for which this project was requested, I noticed at second
 - Some things are hardcoded.
 - Bad use of variable names.
 - The database is not in full normal form.
+
+Final mark: 27/30
