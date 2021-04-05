@@ -15,6 +15,8 @@ What **isn't** implemented:
 **1.** User registration   
 **2.** Adding/removing a payment method (credit card)    
 
+* * *
+
 After passing the exam for which this project was requested, I noticed at second glance:
 - Some things are hardcoded.
 - Bad use of variable names.
